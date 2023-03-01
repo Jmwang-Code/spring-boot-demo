@@ -1,4 +1,4 @@
-package com.xkcoding.helloworld;
+package com.cn.jmw;
 
 import cn.hutool.core.util.StrUtil;
 import org.springframework.boot.SpringApplication;
