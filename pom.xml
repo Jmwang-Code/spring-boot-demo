@@ -4,14 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.xkcoding</groupId>
+  <groupId>com.cn.jmw</groupId>
   <artifactId>spring-boot-demo</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <modules>
     <module>demo-helloworld</module>
     <module>demo-properties</module>
-<!--    <module>demo-actuator</module>-->
-<!--    <module>demo-admin</module>-->
+    <module>demo-spring-security/spring-security-01</module>
 <!--    <module>demo-logback</module>-->
 <!--    <module>demo-log-aop</module>-->
 <!--    <module>demo-exception-handler</module>-->
@@ -27,7 +26,7 @@
 <!--    <module>demo-orm-beetlsql</module>-->
 <!--    <module>demo-upload</module>-->
 <!--    <module>demo-cache-redis</module>-->
-<!--    <module>demo-cache-ehcache</module>-->
+    <module>demo-cache-ehcache</module>
 <!--    <module>demo-email</module>-->
 <!--    <module>demo-task</module>-->
 <!--    <module>demo-task-quartz</module>-->
