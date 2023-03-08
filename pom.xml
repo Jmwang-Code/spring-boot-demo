@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.0.3</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
 
   <groupId>com.cn.jmw</groupId>
   <artifactId>spring-boot-demo</artifactId>
@@ -11,6 +17,7 @@
     <module>demo-helloworld</module>
     <module>demo-properties</module>
     <module>demo-spring-security/spring-security-01</module>
+    <module>demo-spring-security/spring-security-02</module>
 <!--    <module>demo-logback</module>-->
 <!--    <module>demo-log-aop</module>-->
 <!--    <module>demo-exception-handler</module>-->
@@ -81,7 +88,7 @@
     <java.version>19</java.version>
     <maven.compiler.source>19</maven.compiler.source>
     <maven.compiler.target>19</maven.compiler.target>
-    <spring.boot.version>3.0.0</spring.boot.version>
+    <spring.boot.version>3.0.3</spring.boot.version>
     <mysql.version>8.0.21</mysql.version>
     <hutool.version>5.4.5</hutool.version>
     <guava.version>29.0-jre</guava.version>
