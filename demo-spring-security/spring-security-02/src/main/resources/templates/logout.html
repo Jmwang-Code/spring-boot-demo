@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>注销登录</title>
+</head>
+<body>
+
+<h1>注销登录</h1>
+<form method="post" th:action="@{/bb}">
+    <input type="submit" value="注销登录">
+</form>
+
+<hr>
+<h1>获取认证用户信息</h1>
+<!--获取认证用户名-->
+<ul>
+    <li sec:authentication="principal.username"></li>
+    <li sec:authentication="principal.authorities"></li>
+    <li sec:authentication="principal.accountNonExpired"></li>
+    <li sec:authentication="principal.accountNonLocked"></li>
+    <li sec:authentication="principal.credentialsNonExpired"></li>
+</ul>
+
+</body>
+</html>
