@@ -90,6 +90,7 @@ public class WebSecurityConfigurer {
         return NoOpPasswordEncoder.getInstance();
     }
 
+
 //LDAP 身份验证
 //    @Bean
 //    public DataSource dataSource() {
