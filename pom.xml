@@ -16,6 +16,7 @@
   <modules>
     <module>demo-helloworld</module>
     <module>demo-properties</module>
+    <module>demo-spring-security/spring-security-00SourceCode</module>
     <module>demo-spring-security/spring-security-01</module>
     <module>demo-spring-security/spring-security-02</module>
     <module>demo-spring-security/spring-security-03web</module>
