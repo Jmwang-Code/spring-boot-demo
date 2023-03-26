@@ -1,10 +1,12 @@
 package com.cn.jmw.demodesignmode.proxy.dynamic.jdkproxy;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-
+@Slf4j
 /**
  * Created by Tom on 2019/3/10.
  */
@@ -25,11 +27,11 @@ public class JDKMeipo implements InvocationHandler {
     }
 
     private void before(){
-        System.out.println("我是媒婆，我要给你找对象，现在已经确认你的需求");
-        System.out.println("开始物色");
+        log.info("我是媒婆，我要给你找对象，现在已经确认你的需求");
+        log.info("开始物色");
     }
 
     private void after(){
-        System.out.println("OK的话，准备办事");
+        log.info("OK的话，准备办事");
     }
 }

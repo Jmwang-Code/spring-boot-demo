@@ -1,13 +1,15 @@
 package com.cn.jmw.demodesignmode.proxy.staticproxy;
 
 /**
- * Created by Tom on 2019/3/10.
+ * @author jmw
+ * @Description TODO
+ * @date 2023年03月24日 10:47
+ * @Version 1.0
  */
-public class FatherProxyTest {
-
+public class ATest {
     public static void main(String[] args) {
 
-        Father father = new Father(new Son());
+        ProxyA father = new ProxyA(new RealA());
         father.findLove();
 
         //农村，媒婆
@@ -18,5 +20,4 @@ public class FatherProxyTest {
         //ThreadLocal
         //进行数据源动态切换
     }
-
 }

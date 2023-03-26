@@ -1,5 +1,8 @@
 package com.cn.jmw.demodesignmode.proxy.dbroute;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 /**
  * Created by Tom.
  */
@@ -13,7 +16,7 @@ public class OrderService implements IOrderService {
     }
 
     public int createOrder(Order order) {
-        System.out.println("OrderService调用orderDao创建订单");
+        log.info("OrderService调用orderDao创建订单");
         return orderDao.insert(order);
     }
 }

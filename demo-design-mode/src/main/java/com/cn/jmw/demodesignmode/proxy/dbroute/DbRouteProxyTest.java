@@ -2,6 +2,7 @@ package com.cn.jmw.demodesignmode.proxy.dbroute;
 
 
 import com.cn.jmw.demodesignmode.proxy.dbroute.proxy.OrderServiceDynamicProxy;
+import com.cn.jmw.demodesignmode.proxy.dbroute.proxy.OrderServiceStaticProxy;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,8 +21,13 @@ public class DbRouteProxyTest {
             Date date = sdf.parse("2017/02/01");
             order.setCreateTime(date.getTime());
 
+            //动态代理
             IOrderService orderService = (IOrderService)new OrderServiceDynamicProxy().getInstance(new OrderService());
             orderService.createOrder(order);
+
+            System.out.println();
+            //静态代理
+            new OrderServiceStaticProxy(new OrderService()).createOrder(order);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -4,11 +4,12 @@ import com.cn.jmw.demodesignmode.proxy.dbroute.db.DynamicDataSourceEntity;
 import com.cn.jmw.demodesignmode.proxy.dynamic.gpproxy.GPClassLoader;
 import com.cn.jmw.demodesignmode.proxy.dynamic.gpproxy.GPInvocationHandler;
 import com.cn.jmw.demodesignmode.proxy.dynamic.gpproxy.GPProxy;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+@Slf4j
 /**
  * Created by Tom on 2019/3/10.
  */
@@ -31,7 +32,7 @@ public class OrderServiceDynamicProxy implements GPInvocationHandler {
     }
 
     private void after() {
-        System.out.println("Proxy after method");
+        log.info("Proxy after method");
         //还原成默认的数据源
         DynamicDataSourceEntity.restore();
     }
@@ -40,12 +41,12 @@ public class OrderServiceDynamicProxy implements GPInvocationHandler {
     private void before(Object target) {
         try {
             //进行数据源的切换
-            System.out.println("Proxy before method");
+            log.info("Proxy before method");
 
             //约定优于配置
             Long time = (Long) target.getClass().getMethod("getCreateTime").invoke(target);
             Integer dbRouter = Integer.valueOf(yearFormat.format(new Date(time)));
-            System.out.println("静态代理类自动分配到【DB_" + dbRouter + "】数据源处理数据");
+            log.info("静态代理类自动分配到【DB_" + dbRouter + "】数据源处理数据");
             DynamicDataSourceEntity.set(dbRouter);
         }catch (Exception e){
             e.printStackTrace();
