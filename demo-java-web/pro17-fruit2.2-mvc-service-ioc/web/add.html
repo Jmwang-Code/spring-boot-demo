@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/add.css">
+</head>
+<body>
+<div id="div_container">
+    <div id="div_fruit_list">
+        <p class="center f30">添加库存信息</p>
+        <form action="fruit.do" method="post">
+            <input type="hidden" name="operate" value="add"/>
+            <!--
+            方式一：正常
+            <form action="add.do" method="post">
+            方式二：页面不跳转？？？
+            <form th:action="@{/add.do}" method="post" >
+            -->
+            <table id="tbl_fruit" >
+                <tr>
+                    <th class="w20">名称:</th>
+                    <td><input type="input" name="fname"/></td>
+                </tr>
+                <tr>
+                    <th class="w20">单价:</th>
+                    <td><input type="input" name="price"/></td>
+                </tr>
+                <tr>
+                    <th class="w20">库存:</th>
+                    <td><input type="input" name="fcount"/></td>
+                </tr>
+                <tr>
+                    <th class="w20">备注:</th>
+                    <td><input type="input" name="remark"/></td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <input type="submit" value="添加"/>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+</form>
