@@ -114,12 +114,12 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    public static void main(String[] args) {
-        DispatcherServlet dispatcherServlet = new DispatcherServlet();
-        try {
-            dispatcherServlet.init();
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static void main(String[] args) {
+//        DispatcherServlet dispatcherServlet = new DispatcherServlet();
+//        try {
+//            dispatcherServlet.init();
+//        } catch (ServletException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }
