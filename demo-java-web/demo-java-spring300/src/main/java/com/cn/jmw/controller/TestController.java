@@ -7,8 +7,6 @@ import com.cn.jmw.annotation.JMWRequestParam;
 import com.cn.jmw.service.TestService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author jmw

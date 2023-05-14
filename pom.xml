@@ -40,6 +40,7 @@
     <module>demo-design-mode</module>
       <module>demo-java-web/java-web01-servlet</module>
       <module>demo-java-web/demo-java-spring300</module>
+      <module>demo-java-web/demo-java-init-ioc</module>
       <!--    <module>demo-email</module>-->
 <!--    <module>demo-task</module>-->
 <!--    <module>demo-task-quartz</module>-->

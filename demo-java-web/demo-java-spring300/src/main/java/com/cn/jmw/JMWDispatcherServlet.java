@@ -252,6 +252,7 @@ public class JMWDispatcherServlet extends HttpServlet {
     }
 
     private String toLowerFirstCase(String simpleName) {
+        if (simpleName.isEmpty() || "".equals(simpleName))return "";
         char [] chars = simpleName.toCharArray();
         //之所以加，是因为大小写字母的ASCII码相差32，
         // 而且大写字母的ASCII码要小于小写字母的ASCII码
