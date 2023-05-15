@@ -5,9 +5,11 @@
 1. 实例化：为Bean分配内存空间，调用构造器或工厂方法创建Bean对象；
 2. 属性赋值：将当前类依赖的Bean属性，进行注入和装配，可以通过XML配置，注解或Java配置来指定属性值；
 3.
+
 初始化：执行各种通知，如BeanPostProcessor的前置和后置方法，执行初始化的前置方法，如@PostConstruct注解或InitializingBean接口的afterPropertiesSet()
 方法，执行初始化方法，如init-method属性或@PostConstruct注解或@Bean注解的initMethod属性指定的方法，执行初始化的后置方法，如@PreDestroy注解或DisposableBean接口的destroy()
 方法；
+
 4. 销毁：执行各种通知，如DestructionAwareBeanPostProcessor的postProcessBeforeDestruction()
    方法，执行销毁方法，如destroy-method属性或@PreDestroy注解或@Bean注解的destroyMethod属性指定的方法。
 
@@ -100,16 +102,21 @@ BeanDefintionReader 来完成，最后看看 Spring 中 BeanDefintionReader 的�
 ## 1.4 Spring IOC 初始化三部曲
 
 1.
+
 Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口，比如ClassPathResource,
 FileSystemResource等。
+
 2.
+
 BeanDefinition的载入：这个过程是将Resource定位到的信息，转换成IoC容器内部的数据结构，也就是BeanDefinition对象。BeanDefinition对象是用来描述Bean实例的属性，如类名，构造器参数，依赖的bean等。
+
 3.
+
 BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。
 ![img_3.png](img_3.png)
 ![img_4.png](img_4.png)
 
-## 1.5web ioc容器初始化
+## 1.5web ioc容器初始化(BeanDefinition的载入和注册)
 
 ### 1.5.1 DispatcherServlet
 
@@ -191,7 +198,7 @@ public class JMW {
 
 ```
 
-### 1.6.2 ClassPathXmlApplicationContext
+### 1.6.2 获得配置路径
 
 ```java
 public class ClassPathXmlApplicationContext {
@@ -208,5 +215,115 @@ public class ClassPathXmlApplicationContext {
         }
     }
 }
+```
 
+```java
+public abstract class AbstractApplicationContext extends DefaultResourceLoader
+        implements ConfigurableApplicationContext {
+    //静态初始化块，在整个容器创建过程中只执行一次
+    static {
+//为了避免应用程序在 Weblogic8.1 关闭时出现类加载异常加载问题，加载 IOC 容
+//器关闭事件(ContextClosedEvent)类
+        ContextClosedEvent.class.getName();
+    }
 
+    public AbstractApplicationContext() {
+        this.resourcePatternResolver = getResourcePatternResolver();
+    }
+
+    public AbstractApplicationContext(@Nullable ApplicationContext parent) {
+        this();
+        setParent(parent);
+    }
+
+    //获取一个 Spring Source 的加载器用于读入 Spring Bean 配置信息
+    protected ResourcePatternResolver getResourcePatternResolver() {
+//AbstractApplicationContext 继承 DefaultResourceLoader，因此也是一个资源加载器
+//Spring 资源加载器，其 getResource(String location)方法用于载入资源
+        return new PathMatchingResourcePatternResolver(this);
+    }
+//...
+}
+```
+
+### 1.6.3 开始启动 refresh()
+SpringIOC 容器对 Bean 配置资源的载入是从 refresh()函数开始的，refresh()是一个模板方法，规定了
+IOC 容 器 的 启 动 流 程 ， 有 些 逻 辑 要 交 给 其 子 类 去 实 现 。 它 对 Bean 配 置 资 源 进 行 载 入
+ClassPathXmlApplicationContext 通过调用其父类 AbstractApplicationContext 的 refresh()函数启
+动整个 IOC 容器对 Bean 定义的载入过程
+```java
+public class AbstractApplicationContext {
+    @Override
+    public void refresh() throws BeansException, IllegalStateException {
+        synchronized (this.startupShutdownMonitor) {
+            // Prepare this context for refreshing.
+            //1、调用容器准备刷新的方法，获取容器的当时时间，同时给容器设置同步标识
+            prepareRefresh();
+            // Tell the subclass to refresh the internal bean factory.
+            //2、告诉子类启动 refreshBeanFactory()方法，Bean 定义资源文件的载入从
+            //子类的 refreshBeanFactory()方法启动
+            ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+            // Prepare the bean factory for use in this context.
+            //3、为 BeanFactory 配置容器特性，例如类加载器、事件处理器等
+            prepareBeanFactory(beanFactory);
+            try {
+                // Allows post-processing of the bean factory in context subclasses.
+                //4、为容器的某些子类指定特殊的 BeanPost 事件处理器
+                postProcessBeanFactory(beanFactory);
+                // Invoke factory processors registered as beans in the context.
+                //5、调用所有注册的 BeanFactoryPostProcessor 的 Bean
+                invokeBeanFactoryPostProcessors(beanFactory);
+                // Register bean processors that intercept bean creation.
+                //6、为 BeanFactory 注册 BeanPost 事件处理器.
+                //BeanPostProcessor 是 Bean 后置处理器，用于监听容器触发的事件
+                registerBeanPostProcessors(beanFactory);
+                // Initialize message source for this context.
+                //7、初始化信息源，和国际化相关.
+                initMessageSource();
+                // Initialize event multicaster for this context.
+                //8、初始化容器事件传播器.
+                initApplicationEventMulticaster();
+                // Initialize other special beans in specific context subclasses.
+                //9、调用子类的某些特殊 Bean 初始化方法
+                onRefresh();
+                // Check for listener beans and register them.
+                //10、为事件传播器注册事件监听器. 
+                registerListeners();
+                // Instantiate all remaining (non-lazy-init) singletons.
+                //11、初始化所有剩余的单例 Bean
+                finishBeanFactoryInitialization(beanFactory);
+                // Last step: publish corresponding event.
+                //12、初始化容器的生命周期事件处理器，并发布容器的生命周期事件
+                finishRefresh();
+            } catch (BeansException ex) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Exception encountered during context initialization - " +
+                            "cancelling refresh attempt: " + ex);
+                }
+                // Destroy already created singletons to avoid dangling resources.
+                //13、销毁已创建的 Bean
+                destroyBeans();
+                // Reset 'active' flag.
+                //14、取消 refresh 操作，重置容器的同步标识.
+                cancelRefresh(ex);
+                // Propagate exception to caller.
+                throw ex;
+            } finally {
+                // Reset common introspection caches in Spring's core, since we
+                // might not ever need metadata for singleton beans anymore...
+                //15、重设公共缓存
+                resetCommonCaches();
+            }
+        }
+    }
+}
+```
+refresh()方法主要为 IOC 容器 Bean 的生命周期管理提供条件，Spring IOC 容器载入 Bean 配置信息
+从 其 子 类 容 器 的 refreshBeanFactory() 方 法 启 动 ， 所 以 整 个 refresh() 中
+“ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();”这句以后代码的
+都是注册容器的信息源和生命周期事件，我们前面说的载入就是从这句代码开始启动。
+refresh()方法的主要作用是：在创建 IOC 容器前，如果已经有容器存在，则需要把已有的容器销毁和
+关闭，以保证在 refresh 之后使用的是新建立起来的 IOC 容器。它类似于对 IOC 容器的重启，在新建立
+好的容器中对容器进行初始化，对 Bean 配置资源进行载入。
+
+### 1.6.4 创建容器
