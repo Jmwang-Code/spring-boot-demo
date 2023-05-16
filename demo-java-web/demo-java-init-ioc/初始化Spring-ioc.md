@@ -190,7 +190,7 @@ public class JMW {
 
     public static void main(String[] args) {
 //        applicationContext = SpringApplication.run(JMW.class, args);
-        //1.入口
+        //TODO 1.入口
         applicationContext = new ClassPathXmlApplicationContext("application.xml");
 
     }
@@ -211,6 +211,7 @@ public class ClassPathXmlApplicationContext {
         super(parent);
         this.setConfigLocations(configLocations);
         if (refresh) {
+            //TODO 3.1 开始启动
             this.refresh();
         }
     }
@@ -222,7 +223,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         implements ConfigurableApplicationContext {
     //静态初始化块，在整个容器创建过程中只执行一次
     static {
-//为了避免应用程序在 Weblogic8.1 关闭时出现类加载异常加载问题，加载 IOC 容
+//为了避免应用程序在 Web logic8.1 关闭时出现类加载异常加载问题，加载 IOC 容
 //器关闭事件(ContextClosedEvent)类
         ContextClosedEvent.class.getName();
     }
@@ -240,6 +241,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     protected ResourcePatternResolver getResourcePatternResolver() {
 //AbstractApplicationContext 继承 DefaultResourceLoader，因此也是一个资源加载器
 //Spring 资源加载器，其 getResource(String location)方法用于载入资源
+        //TODO 2 创建 Spring 资源加载器 + setConfigLocations() 方法进行执行
         return new PathMatchingResourcePatternResolver(this);
     }
 //...
@@ -247,10 +249,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 ```
 
 ### 1.6.3 开始启动 refresh()
+
 SpringIOC 容器对 Bean 配置资源的载入是从 refresh()函数开始的，refresh()是一个模板方法，规定了
 IOC 容 器 的 启 动 流 程 ， 有 些 逻 辑 要 交 给 其 子 类 去 实 现 。 它 对 Bean 配 置 资 源 进 行 载 入
 ClassPathXmlApplicationContext 通过调用其父类 AbstractApplicationContext 的 refresh()函数启
 动整个 IOC 容器对 Bean 定义的载入过程
+
 ```java
 public class AbstractApplicationContext {
     @Override
@@ -318,6 +322,7 @@ public class AbstractApplicationContext {
     }
 }
 ```
+
 refresh()方法主要为 IOC 容器 Bean 的生命周期管理提供条件，Spring IOC 容器载入 Bean 配置信息
 从 其 子 类 容 器 的 refreshBeanFactory() 方 法 启 动 ， 所 以 整 个 refresh() 中
 “ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();”这句以后代码的
@@ -327,3 +332,199 @@ refresh()方法的主要作用是：在创建 IOC 容器前，如果已经有容
 好的容器中对容器进行初始化，对 Bean 配置资源进行载入。
 
 ### 1.6.4 创建容器
+
+obtainFreshBeanFactory()方法调用子类容器的 refreshBeanFactory()方法，启动容器载入 Bean 配置信息的过程
+
+```java
+public class AbstractApplicationContext {
+    protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+        //这里使用了委派设计模式，父类定义了抽象的 refreshBeanFactory()方法，具体实现调用子类容器的 refreshBeanFactory()方法
+        this.refreshBeanFactory();
+        return this.getBeanFactory();
+    }
+}
+```
+
+AbstractApplicationContext 类中只抽象定义了 refreshBeanFactory()方法，容器真正调用的是
+其子类 AbstractRefreshableApplicationContext 实现的 refreshBeanFactory()方法
+
+```java
+public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext {
+    protected final void refreshBeanFactory() throws BeansException {
+        //如果已经有容器，销毁容器中的 bean，关闭容器
+        if (hasBeanFactory()) {
+            destroyBeans();
+            closeBeanFactory();
+        }
+        try {
+            //创建 IOC 容器N TODO 4. 创建ioc容器
+            DefaultListableBeanFactory beanFactory = this.createBeanFactory();
+            beanFactory.setSerializationId(this.getId());
+            //对 IOC 容器进行定制化，如设置启动参数，开启注解的自动装配等
+            this.customizeBeanFactory(beanFactory);
+            //调用载入 Bean 定义的方法，主要这里又使用了一个委派模式，在当前类中只定义了抽象的 loadBeanDefinitions 方法，具体
+            //的实现调用子类容器
+            //TODO 5.载入配置路径
+            this.loadBeanDefinitions(beanFactory);
+            this.beanFactory = beanFactory;
+        } catch (IOException ex) {
+            throw new ApplicationContextException("I/O error parsing bean definition source for " + getDisplayName(), ex);
+        }
+    }
+}
+```
+
+在这个方法中，先判断 BeanFactory 是否存在，如果存在则先销毁 beans 并关闭 beanFactory，接着
+创建 DefaultListableBeanFactory，并调用 loadBeanDefinitions(beanFactory)装载 bean 定义。
+
+### 1.6.5 载入配置路径
+
+BeanDefinition
+
+```java
+    public abstract class AbstractXmlApplicationContext extends AbstractRefreshableConfigApplicationContext {
+
+    //实现父类抽象的载入 Bean 定义方法
+    //TODO 5.1 载入配置路径
+    @Override
+    protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
+        //创建 XmlBeanDefinitionReader，即创建 Bean 读取器，并通过回调设置到容器中去，容器使用该读取器读取 Bean 配置资源
+        //TODO 6. 分配路径处理策略
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        //为 Bean 读取器设置 Spring 资源加载器，AbstractXmlApplicationContext 的
+        //祖先父类 AbstractApplicationContext 继承 DefaultResourceLoader，因此，容器本身也是一个资源加载器
+        beanDefinitionReader.setEnvironment(this.getEnvironment());
+        beanDefinitionReader.setResourceLoader(this);
+        //为 Bean 读取器设置 SAX xml 解析器
+        beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
+        //当 Bean 读取器读取 Bean 定义的 Xml 资源文件时，启用 Xml 的校验机制
+        initBeanDefinitionReader(beanDefinitionReader);
+        //Bean 读取器真正实现加载的方法
+        loadBeanDefinitions(beanDefinitionReader);
+    }
+
+    protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
+        reader.setValidating(this.validating);
+    }
+
+    //Xml Bean 读取器加载 Bean 配置资源
+    protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
+        //获取 Bean 配置资源的定位
+        Resource[] configResources = getConfigResources();
+        if (configResources != null) {
+            //Xml Bean 读取器调用其父类 AbstractBeanDefinitionReader 读取定位的 Bean 配置资源
+            reader.loadBeanDefinitions(configResources);
+        }
+        // 如果子类中获取的 Bean 配置资源定位为空，则获取 ClassPathXmlApplicationContext
+        // 构造方法中 setConfigLocations 方法设置的资源
+        String[] configLocations = getConfigLocations();
+        if (configLocations != null) {
+            //Xml Bean 读取器调用其父类 AbstractBeanDefinitionReader 读取定位
+            //的 Bean 配置资源
+            reader.loadBeanDefinitions(configLocations);
+        }
+    }
+
+    //这里又使用了一个委托模式，调用子类的获取 Bean 配置资源定位的方法
+    //该方法在 ClassPathXmlApplicationContext 中进行实现，对于我们
+    //举例分析源码的 ClassPathXmlApplicationContext 没有使用该方法
+    @Nullable
+    protected Resource[] getConfigResources() {
+        return null;
+    }
+}
+```
+
+以 XmlBean 读取器的其中一种策略 XmlBeanDefinitionReader 为例。XmlBeanDefinitionReader 调
+用其父类AbstractBeanDefinitionReader的 reader.loadBeanDefinitions()方法读取Bean配置资源。
+由于我们使用 ClassPathXmlApplicationContext 作为例子分析，因此 getConfigResources 的返回值
+为 null，因此程序执行 reader.loadBeanDefinitions(configLocations)分支
+
+### 1.6.6 分配路径处理策略
+
+在 XmlBeanDefinitionReader 的抽象父类 AbstractBeanDefinitionReader 中定义了载入过程。
+AbstractBeanDefinitionReader 的 loadBeanDefinitions()方法源码如下：
+
+```java
+public abstract class AbstractBeanDefinitionReader implements BeanDefinitionReader, EnvironmentCapable {
+    //重载方法，调用下面的 loadBeanDefinitions(String, Set<Resource>);方法
+    @Override
+    public int loadBeanDefinitions(String location) throws BeanDefinitionStoreException {
+        return loadBeanDefinitions(location, null);
+    }
+
+    public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws
+            BeanDefinitionStoreException {
+        //获取在 IOC 容器初始化过程中设置的资源加载器
+        ResourceLoader resourceLoader = getResourceLoader();
+        if (resourceLoader == null) {
+            throw new BeanDefinitionStoreException(
+                    "Cannot import bean definitions from location [" + location + "]: no ResourceLoader available");
+        }
+        if (resourceLoader instanceof ResourcePatternResolver) {
+            // Resource pattern matching available.
+            try {
+                //将指定位置的 Bean 配置信息解析为 Spring IOC 容器封装的资源
+                //加载多个指定位置的 Bean 配置信息
+                Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+                //委派调用其子类 XmlBeanDefinitionReader 的方法，实现加载功能
+                int loadCount = loadBeanDefinitions(resources);
+                if (actualResources != null) {
+                    for (Resource resource : resources) {
+                        actualResources.add(resource);
+                    }
+                }
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Loaded " + loadCount + " bean definitions from location pattern [" + location + "]");
+                }
+                return loadCount;
+            } catch (IOException ex) {
+                throw new BeanDefinitionStoreException(
+                        "Could not resolve bean definition resource pattern [" + location + "]", ex);
+            }
+        } else {
+            // Can only load single resources by absolute URL.
+            //将指定位置的 Bean 配置信息解析为 Spring IOC 容器封装的资源
+            //加载单个指定位置的 Bean 配置信息
+            Resource resource = resourceLoader.getResource(location);
+            //委派调用其子类 XmlBeanDefinitionReader 的方法，实现加载功能
+            int loadCount = loadBeanDefinitions(resource);
+            if (actualResources != null) {
+                actualResources.add(resource);
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("Loaded " + loadCount + " bean definitions from location [" + location + "]");
+            }
+            return loadCount;
+        }
+    }
+
+    //重载方法，调用 loadBeanDefinitions(String);
+    @Override
+    public int loadBeanDefinitions(String... locations) throws BeanDefinitionStoreException {
+        Assert.notNull(locations, "Location array must not be null");
+        int counter = 0;
+        for (String location : locations) {
+            counter += loadBeanDefinitions(location);
+        }
+        return counter;
+    }
+}
+```
+AbstractRefreshableConfigApplicationContext 的 loadBeanDefinitions(Resource...resources) 方
+法实际上是调用 AbstractBeanDefinitionReader 的 loadBeanDefinitions()方法。
+从对 AbstractBeanDefinitionReader 的 loadBeanDefinitions()方法源码分析可以看出该方法就做了
+两件事：
+首先，调用资源加载器的获取资源方法 resourceLoader.getResource(location)，获取到要加载的资源。
+其次，真正执行加载功能是其子类 XmlBeanDefinitionReader 的 loadBeanDefinitions()方法。在
+loadBeanDefinitions()方法中调用了 AbstractApplicationContext 的 getResources()方法，跟进去之
+后发现 getResources()方法其实定义在 ResourcePatternResolver 中，此时，我们有必要来看一下
+ResourcePatternResolver 的全类图
+
+![img_6.png](img_6.png)
+
+从上面可以看到 ResourceLoader 与 ApplicationContext 的继承关系，可以看出其实际调用的是
+DefaultResourceLoader 中 的 getSource() 方 法 定 位 Resource ， 因 为
+ClassPathXmlApplicationContext 本身就是 DefaultResourceLoader 的实现类，所以此时又回到了
+ClassPathXmlApplicationContext 中来。
+
