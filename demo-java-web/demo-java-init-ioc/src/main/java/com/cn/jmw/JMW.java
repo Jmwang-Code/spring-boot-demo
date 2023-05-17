@@ -18,7 +18,7 @@ public class JMW {
     private static ApplicationContext applicationContext;
 
     public static void main(String[] args) {
-//        applicationContext = SpringApplication.run(JMW.class, args);
+        applicationContext = SpringApplication.run(JMW.class, args);
         //1.入口
         ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
 
