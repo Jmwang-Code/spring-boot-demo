@@ -82,3 +82,6 @@
 - ★★☆ Flink核心原理
 - ★☆☆ Kafka
 - ★☆☆ Zookeeper
+- ★☆☆ Linux
+- ★☆☆ Docker
+- ★☆☆ Kubernetes
