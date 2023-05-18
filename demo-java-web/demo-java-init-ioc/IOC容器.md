@@ -1,6 +1,8 @@
 # 谁定义了bean的生命周期
+
 实现InitializingBean Or DisposableBean接口，分别实现afterPropertiesSet()和destroy()方法，完成bean的初始化和销毁
-实现BeanPostProcessor接口，分别实现postProcessBeforeInitialization()和postProcessAfterInitialization()方法，完成bean的初始化前后的处理工作
+实现BeanPostProcessor接口，分别实现postProcessBeforeInitialization()和postProcessAfterInitialization()
+方法，完成bean的初始化前后的处理工作
 
 ```
 执行步骤：
@@ -13,60 +15,194 @@ postProcessAfterInitialization（）
 destroy（）
 ```
 
-# IOC初始化 IOC启动阶段
-1. Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(加载、Parse解析)
-2. BeanDefinition的载入：这个过程是将Resource定位到的信息，转换成IoC容器内部的数据结构，也就是BeanDefinition对象。BeanDefinition对象是用来描述Bean实例的属性，如类名，构造器参数，依赖的bean等。BeanDefinition生成
-3. BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。BeanDefinitionRegistry注册
+# IOC初始化 IOC启动阶段 (Spring容器的启动流程)
 
+1.
+
+Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(
+加载、Parse解析)
+
+2.
+
+BeanDefinition的载入：这个过程是将Resource定位到的信息，转换成IoC容器内部的数据结构，也就是BeanDefinition对象。BeanDefinition对象是用来描述Bean实例的属性，如类名，构造器参数，依赖的bean等。BeanDefinition生成
+
+3.
+
+BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。BeanDefinitionRegistry注册
 
 ![img_7.png](img_7.png)
 
 # Spring-IOC是什么
+
 Spring-IOC是Spring框架的核心，是一个容器，它负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。
 
 ## IOC是什么
+
 - 控制反转，指的是将对象的控制权交给Spring容器，由Spring来控制对象的生命周期和对象间的关系，而不是由对象自己控制。
-（原来是自己去new开辟空间等创建，自己通过close等方法进行销毁。）
+  （原来是自己去new开辟空间等创建，自己通过close等方法进行销毁。）
 - 自己控制对象缺点：使得代码耦合度高，不易于维护，不易于测试。
 - IOC容器控制对象优点：使得代码耦合度低，易于维护，易于测试。
 
 ## DI是什么
+
 依赖注入，指的是由Spring容器在运行期间，动态地将某种依赖关系注入到对象之中。
 
 # 依赖注入 DI的三种方式
+
 1. 构造器注入:通过构造器传入依赖对象。
 2. Setter方法注入:通过Setter方法传入依赖对象。
 3. 接口注入:通过接口的Setter方法传入依赖对象。
 
 # Spring-AOP是什么
+
 Spring-AOP是Spring框架的一个重要组成部分，它提供了面向切面的编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的技术。
 （比如HandlerInterceptor实现之后，就是通过动态代理，从调用接口实时的获得handler对象，而这个拦截器的接口就是切面）
 
 ## OOP
+
 面向对象编程，允许开发者定义纵向关系，但并不适用于定义横向的关系，会导致大量代码的重复，而不利于各个模块的重用。
 
 ## AOP
+
 面向切面编程，是对OOP的补充，它允许开发者定义横向关系，将系统中的关注点分离出来形成一个独立的模块，这个模块被称为切面，它的作用是与业务逻辑无关的，但是又为业务逻辑模块所共同调用。
 “切面”（Aspect）可用于权限认证、日志、事务处理。
 
 ## AOP实现方式
+
 AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动态代理。静态代理的代表为AspectJ；动态代理则以Spring AOP为代表。
 
 （1）AspectJ是静态代理，也称为编译时增强，AOP框架会在编译阶段生成AOP代理类，并将AspectJ(切面)织入到Java字节码中，运行的时候就是增强之后的AOP对象。
 
 （2）Spring AOP使用的动态代理，所谓的动态代理就是说AOP框架不会去修改字节码，而是每次运行时在内存中临时为方法生成一个AOP对象，这个AOP对象包含了目标对象的全部方法，并且在特定的切点做了增强处理，并回调原对象的方法。
 
-（3）静态代理与动态代理区别在于生成AOP代理对象的时机不同，相对来说AspectJ的静态代理方式具有更好的性能，但是AspectJ需要特定的编译器进行处理，而Spring AOP则无需特定的编译器处理。
-
+（3）静态代理与动态代理区别在于生成AOP代理对象的时机不同，相对来说AspectJ的静态代理方式具有更好的性能，但是AspectJ需要特定的编译器进行处理，而Spring
+AOP则无需特定的编译器处理。
 
 ### 动JDK动态代理和CGLIB动态代理 JDK动态代理和CGLIB动态代理
-① JDK动态代理只提供接口的代理，不支持类的代理，要求被代理类实现接口。JDK动态代理的核心是InvocationHandler接口和Proxy类，在获取代理对象时，使用Proxy类来动态创建目标类的代理类（即最终真正的代理类，这个类继承自Proxy并实现了我们定义的接口），当代理对象调用真实对象的方法时， InvocationHandler 通过invoke()方法反射来调用目标类中的代码，动态地将横切逻辑和业务编织在一起；
 
-InvocationHandler 的 invoke(Object  proxy,Method  method,Object[] args)：proxy是最终生成的代理对象;  method 是被代理目标实例的某个具体方法;  args 是被代理目标实例某个方法的具体入参, 在方法反射调用时使用。
+①
+JDK动态代理只提供接口的代理，不支持类的代理，要求被代理类实现接口。JDK动态代理的核心是InvocationHandler接口和Proxy类，在获取代理对象时，使用Proxy类来动态创建目标类的代理类（即最终真正的代理类，这个类继承自Proxy并实现了我们定义的接口），当代理对象调用真实对象的方法时，
+InvocationHandler 通过invoke()方法反射来调用目标类中的代码，动态地将横切逻辑和业务编织在一起；
 
-② 如果被代理类没有实现接口，那么Spring AOP会选择使用CGLIB来动态代理目标类。CGLIB（Code Generation Library），是一个代码生成的类库，可以在运行时动态的生成指定类的一个子类对象，并覆盖其中特定方法并添加增强代码，从而实现AOP。CGLIB是通过继承的方式做的动态代理，因此如果某个类被标记为final，那么它是无法使用CGLIB做动态代理的。
+InvocationHandler 的 invoke(Object proxy,Method method,Object[] args)：proxy是最终生成的代理对象; method 是被代理目标实例的某个具体方法;
+args 是被代理目标实例某个方法的具体入参, 在方法反射调用时使用。
 
-# IOC 和 AOP 的联系和区别
+② 如果被代理类没有实现接口，那么Spring AOP会选择使用CGLIB来动态代理目标类。CGLIB（Code Generation
+Library），是一个代码生成的类库，可以在运行时动态的生成指定类的一个子类对象，并覆盖其中特定方法并添加增强代码，从而实现AOP。CGLIB是通过继承的方式做的动态代理，因此如果某个类被标记为final，那么它是无法使用CGLIB做动态代理的。
+
+### IOC 和 AOP 的联系和区别
+
 IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。
 
+![](af602a222f414127b7afcb9b8edc0f08.png)
 
+# BeanFactory和ApplicationContext有什么区别？
+
+BeanFactory <span style="color:darkorange">(轻量级)</span> 和ApplicationContext<span style="color:darkorange">(高级特性和框架)</span>是Spring的两大核心接口，都可以当做Spring的容器。
+（1）BeanFactory是Spring里面最底层的接口，是IoC的核心，定义了IoC的基本功能，包含了各种Bean的定义、加载、实例化，依赖注入和生命周期管理。ApplicationContext接口作为BeanFactory的子类，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：
+（2）
+
+1. BeanFactroy采用的是延迟加载形式来注入Bean的，只有在使用到某个Bean时(调用getBean())
+   ，才对该Bean进行加载实例化。这样，我们就不能提前发现一些存在的Spring的配置问题。如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常。
+2. ApplicationContext，它是在容器启动时，一次性创建了所有的Bean。这样，在容器启动时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。
+3. ApplicationContext启动后预载入所有的单实例Bean，所以在运行的时候速度比较快，因为它们已经创建好了。相对于BeanFactory，ApplicationContext
+   唯一的不足是占用内存空间，当应用程序配置Bean较多时，程序启动较慢。
+   （3）BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor的使用，但两者之间的区别是：BeanFactory需要手动注册，而ApplicationContext则是自动注册。
+   （4）BeanFactory通常以编程的方式被创建，ApplicationContext还能以声明的方式创建，如使用ContextLoader。
+
+```java
+class A {
+    void a() {
+        // 创建BeanFactory容器
+        BeanFactory factory = new XmlBeanFactory(new ClassPathResource("bean.xml"));
+
+        // 从BeanFactory获取Bean实例
+        UserService userService = factory.getBean("userService", UserService.class);
+        userService.save();
+
+        // 手动销毁Bean
+        ((ConfigurableBeanFactory) factory).destroyBean("userService", userService);
+
+        // 或者在bean.xml中配置destroy-method,在关闭容器时自动调用
+        factory.close();
+    }
+}
+```
+
+# Spring的单例bean是线程安全的吗？
+
+Spring的单例bean是线程安全的，因为Spring的单例bean是在创建的时候就创建了一个对象，之后就不再改变，所以是线程安全的。
+
+# Spring的Bean单例模式（分为无状态bean 和有状态bean）
+
+Spring的Bean单例模式分为无状态bean
+和有状态bean，无状态bean是指没有实例变量的bean，有状态bean是指有实例变量的bean。Spring的单例bean是线程安全的，因为Spring的单例bean是在创建的时候就创建了一个对象，之后就不再改变，所以是线程安全的。但是有状态bean是线程不安全的，因为有状态bean是有实例变量的，如果有多个线程同时访问这个有状态bean，那么就会出现线程安全问题。
+
+# Spring的Bean的生命周期
+
+![img_9.png](img_9.png)
+Spring的Bean的生命周期包括以下阶段：
+
+- （1）实例化Instantiation
+- （2）填充属性Populate properties
+- （3）处理Aware接口的回调处理
+- （4）BeanPostProcessor的前置处理
+- （5）InitializingBean的afterPropertiesSet()方法
+- （6）init-method属性指定的初始化方法
+- （7）BeanPostProcessor的后置处理
+- （8）DisposableBean的destroy()方法
+- （9）destroy-method属性指定的初始化方法
+
+bean四个阶段: 实例化、属性填充、初始化、销毁
+
+1. [ ] 实例化Bean：
+
+对于BeanFactory容器，当客户向容器请求一个尚未初始化的bean时，或初始化bean的时候需要注入另一个尚未初始化的依赖时，容器就会调用createBean进行实例化。
+
+对于ApplicationContext容器，当容器启动结束后，通过获取BeanDefinition对象中的信息，实例化所有的bean。
+
+2. [ ] 设置对象属性（依赖注入）：
+
+实例化后的对象被封装在BeanWrapper对象中，紧接着，Spring根据BeanDefinition中的信息 以及 通过BeanWrapper提供的设置属性的接口完成属性设置与依赖注入。
+
+3. [ ] 处理Aware接口：
+
+Spring会检测该对象是否实现了xxxAware接口，通过Aware类型的接口，可以让我们拿到Spring容器的一些资源：
+
+①如果这个Bean实现了BeanNameAware接口，会调用它实现的setBeanName(String beanId)方法，传入Bean的名字；
+②如果这个Bean实现了BeanClassLoaderAware接口，调用setBeanClassLoader()方法，传入ClassLoader对象的实例。
+②如果这个Bean实现了BeanFactoryAware接口，会调用它实现的setBeanFactory()方法，传递的是Spring工厂自身。
+③如果这个Bean实现了ApplicationContextAware接口，会调用setApplicationContext(ApplicationContext)方法，传入Spring上下文；
+
+4. [ ] BeanPostProcessor前置处理：
+   如果想对Bean进行一些自定义的前置处理，那么可以让Bean实现了BeanPostProcessor接口，那将会调用postProcessBeforeInitialization(
+   Object obj, String s)方法。
+
+5. [ ] InitializingBean的afterPropertiesSet()方法：
+   如果Bean实现了InitializingBean接口，执行afeterPropertiesSet()方法。
+
+6. [ ] init-method属性指定的初始化方法：
+   如果Bean在Spring配置文件中配置了 init-method 属性，则会自动调用其配置的初始化方法。
+
+7. [ ] BeanPostProcessor后置处理：
+   如果这个Bean实现了BeanPostProcessor接口，将会调用postProcessAfterInitialization(Object obj, String s)
+   方法；由于这个方法是在Bean初始化结束时调用的，所以可以被应用于内存或缓存技术；
+
+<span style="color: yellow">以上几个步骤完成后，Bean就已经被正确创建了，之后就可以使用这个Bean了。</span>
+
+8. [ ] DisposableBean的destroy()方法：
+   当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用其实现的destroy()方法；
+
+9. [ ] destroy-method属性指定的初始化方法：
+   最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。
+
+# Spring的Bean的作用域
+
+Spring的Bean的作用域包括以下几种：
+
+- （1）singleton：单例模式，一个BeanFactory有且仅有一个实例。
+- （2）prototype：原型模式，每次从BeanFactory获取Bean时，都会创建一个新的实例。(多例，原型的原理克隆拷贝)
+- （3）request：每次request请求都会创建一个新的Bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。
+- （4）session：每次session请求都会创建一个新的Bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。
+- （5）application：所有会话共享一个Bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。
+  在编写代码时通常使用ApplicationContext容器，以便能够享受更多的功能和便利性。
