@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.springframework.context.event.ApplicationContextEvent</OriginalElement>
+  <nodes>
+    <node x="444.0" y="220.0">org.springframework.web.context.support.RequestHandledEvent</node>
+    <node x="200.0" y="220.0">org.springframework.context.event.ApplicationContextEvent</node>
+    <node x="102.0" y="298.0">org.springframework.context.event.ContextStoppedEvent</node>
+    <node x="325.0" y="298.0">org.springframework.context.event.ContextClosedEvent</node>
+    <node x="536.0" y="298.0">org.springframework.context.event.ContextRefreshedEvent</node>
+    <node x="364.5" y="-14.0">java.io.Serializable</node>
+    <node x="361.5" y="64.0">java.util.EventObject</node>
+    <node x="344.5" y="142.0">org.springframework.context.ApplicationEvent</node>
+    <node x="-112.0" y="298.0">org.springframework.context.event.ContextStartedEvent</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.springframework.context.ApplicationEvent" target="java.util.EventObject" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="org.springframework.context.event.ApplicationContextEvent" target="org.springframework.context.ApplicationEvent" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="312.0" y="195.0" />
+      <point x="429.0" y="195.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="org.springframework.context.event.ContextClosedEvent" target="org.springframework.context.event.ApplicationContextEvent" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="420.5" y="273.0" />
+      <point x="312.0" y="273.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="org.springframework.context.event.ContextStartedEvent" target="org.springframework.context.event.ApplicationContextEvent" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="-15.0" y="273.0" />
+      <point x="312.0" y="273.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="org.springframework.web.context.support.RequestHandledEvent" target="org.springframework.context.ApplicationEvent" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="546.0" y="195.0" />
+      <point x="429.0" y="195.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="org.springframework.context.event.ContextRefreshedEvent" target="org.springframework.context.event.ApplicationContextEvent" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="642.5" y="273.0" />
+      <point x="312.0" y="273.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="org.springframework.context.event.ContextStoppedEvent" target="org.springframework.context.event.ApplicationContextEvent" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="203.5" y="273.0" />
+      <point x="312.0" y="273.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.util.EventObject" target="java.io.Serializable" relationship="REALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.363888888888889" showDependencies="false" x="214.12118126272912" y="163.0672097759674" />
+  <SelectedNodes>
+    <node>org.springframework.context.event.ApplicationContextEvent</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

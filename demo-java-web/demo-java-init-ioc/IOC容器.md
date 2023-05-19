@@ -251,7 +251,24 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
    无法做到细粒度的事务控制，无法做到像编程式事务那样可以作用到代码块级别。比如一个事务方法调用了多个DAO方法，希望其中某个DAO方法独立成为一个事务，这时候就办不到了。
 ```
 
+# Spring 框架中都用到了哪些设计模式
+1. 工厂模式：Spring使用工厂模式通过BeanFactory、ApplicationContext创建bean对象。
+2. 代理模式：Spring AOP功能的实现。
+3. 单例模式：Spring中的Bean默认都是单例的。
+4. 模板方法模式：Spring中JdbcTemplate、HibernateTemplate等以Template结尾的对数据库操作的类，它们就使用到了模板模式。
+5. 包装器模式：Spring中对Bean的装饰就使用到了装饰器模式，如各个ApplicationContext实现类中对Bean的装饰。
+6. <span style="color:yellow">没了解过 </span>观察者模式：Spring事件驱动模型就是观察者模式很经典的一个应用。
+7. <span style="color:yellow">没了解过 </span>适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
+8. <span style="color:yellow">没了解过 </span>迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
 
 
-
+# Spring框架中有哪些不同类型的事件
+Spring 提供了以下5种标准的事件：
+1. 上下文更新事件（ContextRefreshedEvent）：在调用ConfigurableApplicationContext 接口中的refresh()方法时被触发。
+2. 上下文开始事件（ContextStartedEvent）：当容器调用ConfigurableApplicationContext的Start()方法开始/重新开始容器时触发该事件。
+3. 上下文停止事件（ContextStoppedEvent）：当容器调用ConfigurableApplicationContext的Stop()方法停止容器时触发该事件。
+4. 上下文关闭事件（ContextClosedEvent）：当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
+5. 请求处理事件（RequestHandledEvent）：在Web应用中，当一个http请求（request）结束触发该事件。
+如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
+![img_10.png](img_10.png)
 
