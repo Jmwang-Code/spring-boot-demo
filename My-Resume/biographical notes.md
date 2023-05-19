@@ -69,12 +69,13 @@
 
 - ★★★ Java
 - ★☆☆ C++、Python
+- ★☆☆ JavaScript
 
-- ★★★ MySQL
-- ★★★ ClickHouse
+- ★★★ MySQL核心原理
+- ★★★ ClickHouse核心原理
 - ★★★ Redis核心原理
 - ★★★ Spring核心原理
-- ★★☆ JavaScript
+- ★★☆ SpringCloud、SpringBoot
 - ★★☆ Hadoop核心原理
 - ★★☆ Hive核心原理
 - ★★☆ HBase核心原理
