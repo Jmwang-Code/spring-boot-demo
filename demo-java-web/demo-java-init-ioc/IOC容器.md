@@ -272,3 +272,28 @@ Spring 提供了以下5种标准的事件：
 如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
 ![img_10.png](img_10.png)
 
+
+# Spring支持哪些Aware接口?
+- ApplicationContextAware:获取ApplicationContext对象
+- BeanFactoryAware:获取BeanFactory对象
+- BeanNameAware:获取Bean的名称
+- EnvironmentAware:获取Environment对象
+- ResourceLoaderAware:获取ResourceLoader对象
+- ServletContextAware:在Web应用中获取ServletContext对象
+- BeanClassLoaderAware:获取加载当前Bean的ClassLoader对象
+![img_12.png](img_12.png)
+
+# Aware接口的优点
+- 可以取得Spring容器中的各种对象和资源,如其他Bean、文件资源、环境变量等。
+- 可以管理项目中的共享资源,如数据库连接池、配置属性等。
+- 与Spring容器实现深度集成,可以根据运行环境动态调整Bean的行为。
+- 简单而有效地扩展Spring Bean的功能。
+
+# ApplicationContextAware和BeanFactoryAware的区别
+这两个的区别不如说是ApplicationContext和BeanFactory的区别。
+- ApplicationContext是BeanFactory的子接口，提供了更多的功能，比如国际化处理、事件传播、Bean自动装配等。
+- ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory能做的ApplicationContext都能做，但是BeanFactory不能做的ApplicationContext不一定能做。
+- ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的性能比ApplicationContext好。
+- ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的扩展性比ApplicationContext好。
+- ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的轻量级比ApplicationContext好。
+- ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的灵活性比ApplicationContext好。
