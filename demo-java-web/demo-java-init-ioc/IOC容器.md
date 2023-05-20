@@ -297,3 +297,4 @@ Spring 提供了以下5种标准的事件：
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的扩展性比ApplicationContext好。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的轻量级比ApplicationContext好。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的灵活性比ApplicationContext好。
+
