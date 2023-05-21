@@ -22,7 +22,10 @@ public class JDKProxyTest {
 //            FileOutputStream os = new FileOutputStream("E://$Proxy0.class");
 //            os.write(bytes);
 //            os.close();
-
+            if (obj instanceof Girl){
+                Girl girl = (Girl)obj;
+            }
+            System.out.println();
         }catch (Exception e){
             e.printStackTrace();
         }
