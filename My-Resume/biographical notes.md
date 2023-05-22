@@ -44,26 +44,31 @@
    
    1. 数据收集、数据治理、数据加工、数据品控。
    
-   2. 业务沉淀共性抽离为指导思想，独立开发公共服务 “Validation” 、“Label”、“Monitor”（校验、标签、监控）。
-   
+   2. 业务沉淀共性抽离为指导思想，独立开发公共服务 “Validation” 、“Label”、“Monitor”（校验、标签、监控）。设计、研发、维护。
+
+   3. 算法服务:实体识别树的设计、研发、维护。   
       
    
 
-- **北京擎创科技有限公司，北区共研开发部，后端开发工程师 **
+- **北京擎创科技有限公司，北区共研开发部，后端开发工程师**
 
-  **2020.9~2022.7**
+  **2022.8~至今**
 
   主要负责：
 
-  1. 
+  1. 数据报表项目的核心数据源提供者的设计、研发、维护。
+  
+  2. Flink算子开发、以及Aviator数据接入处理。
 
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/project-diagram-solid.svg" width="30px"> 项目经历
 
-- **XXXX 项目**
+- **实体识别树**
 
-  *使用到的技术*
+  *Spring SpringBoot Sqlite SpringCloud Nacos Feign*
 
-  使用一两句话描述项目的主要功能，然后介绍自己在项目中的角色，解决了什么问题，使用什么方式解决，比别人的方法相比有什么优势（尽量用数据来说明）。
+1. [ ] 参与流程：架构设计、详细设计、编码实现、单元测试、部署上线、维护。
+2. [ ] 解决问题：补全了在公司人工智能部实体识别树之外的实体识别树，NPL训练的模型识别目的性强，但是速度较慢，在大数据的场景下需要更快的速度。
+3. [ ] 使用方法：核心使用算法树，使得项目的检索速度达到1ms级别,时间复杂度在公司场景下常数，并且使用“荷官（哨兵）”服务同步数据。
 
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/tools-solid.svg" width="30px"> 技能清单
 
