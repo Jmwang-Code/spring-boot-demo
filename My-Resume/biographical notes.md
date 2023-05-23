@@ -23,7 +23,7 @@
 
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/info-circle-solid.svg" width="30px"> 个人信息
 
-- 男，1998 年出生
+- 男，26岁
 - 求职意向：Java 研发工程师 、Java 大数据工程师
 - 工作经验：3 年
 - 期望薪资：22-25k
@@ -63,7 +63,7 @@
 
 - **实体识别树**
 
-  *Spring SpringBoot Sqlite SpringCloud Nacos Feign*
+  *Springboot Sqlite Redis ElasticSearch JDBC SpringCloud Nacos Feign*
 
 1. [ ] 参与流程：架构设计、详细设计、编码实现、单元测试、部署上线、维护。
 2. [ ] 解决问题：补全了在公司人工智能部实体识别树之外的实体识别树，NPL训练的模型识别目的性强，但是速度较慢，在大数据的场景下需要更快的速度。
@@ -72,20 +72,29 @@
 
 - **数据报表**
 
-  **
+  *Springboot Redis ElasticSearch JDBC H2*
+
+1. [ ] 参与流程：架构设计、详细设计、编码实现、单元测试、部署上线、维护。
+2. [ ] 解决问题：解决了数据报表的展示数据问题，数据源的数据量大，数据源的数据结构复杂，数据源的数据格式类型多样,通过高扩展的设计将多种优势数据源接入并且统一展示类型，聚合计算、以及对应数据源特性计算。
+3. [ ] 使用方法：使用了我的<span style="color:yellow;">[Data-Provider](https://github.com/Jmwang-Code/Data-Provider)开源项目</span>的设计原稿，将数据源的数据格式类型转换为统一的展示类型。
+
 
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/github-brands.svg" width="30px"> 个人开源
 
-| \   | 开源项目名称                                                                             | 版本  |   描述    |
-|-----|------------------------------------------------------------------------------------|-----|-----------|
-| 1   | [spring-boot-starter-trie](https://github.com/Jmwang-Code/spring-boot-starter-trie) | pom |   特定需求下查询速度远超开源检索工具，innodb下B+树或者ES中倒排索引无法与之比拟.      |
-| 2   | [spring-boot-starter-trie](https://github.com/Jmwang-Code/spring-boot-trie-service) | jar |     提供了基于SpringCloud的服务节点，可以通过Nacos注册中心进行服务发现，实现了树的动态扩容与缩容，以及服务的动态上下线。    |
-| 3   | [Data-Provider](https://github.com/Jmwang-Code/Data-Provider) | pom |      提供了多种数据源的查询，以及数据的类型同步，作为一个Jar可以依赖在其他服务上动态的提供数据。   |
-| 4   | [EasyExcel](https://github.com/alibaba/easyexcel) | pom |     alibaba开源项目，基于POI的Excel工具，可以实现大数据量的Excel导入导出，加入开源团队，跟着大佬学习进步。    |
+| \   | 开源项目名称                                                                             | 依赖类型 | 版本号            | 描述                                                            |
+|-----|------------------------------------------------------------------------------------|------|----------------|-----------|
+| 1   | [spring-boot-starter-trie](https://github.com/Jmwang-Code/spring-boot-starter-trie) | pom  | 1.0.0-SNAPSHOT | 特定需求下查询速度远超开源检索工具，innodb下B+树或者ES中倒排索引无法与之比拟.                       |
+| 2   | [spring-boot-starter-trie](https://github.com/Jmwang-Code/spring-boot-trie-service) | jar  | 1.0.0-M1       | 提供了基于SpringCloud的服务节点，可以通过Nacos注册中心进行服务发现，实现了树的动态扩容与缩容，以及服务的动态上下线。 |
+| 3   | [Data-Provider](https://github.com/Jmwang-Code/Data-Provider) | pom  | 1.0.0-SNAPSHOT | 提供了多种数据源的查询，以及数据的类型同步，作为一个Jar可以依赖在其他服务上动态的提供数据。               |
+| 4   | [EasyExcel](https://github.com/alibaba/easyexcel) | pom  | 3.3.1          | alibaba开源项目，基于POI的Excel工具，可以实现大数据量的Excel导入导出，加入开源团队。 |
 
 <center><img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/github-contribution-grid-snake.svg" alt="snake"></center>
 
+
+
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/tools-solid.svg" width="30px"> 技能清单
+
+
 
 - ★★★ Java
 - ★☆☆ C++、Python
@@ -101,6 +110,7 @@
 - ★★☆ HBase核心原理
 - ★★☆ Spark核心原理
 - ★★☆ Flink核心原理
+- ★☆☆ ElasticSearch
 - ★☆☆ Kafka
 - ★☆☆ Zookeeper
 - ★☆☆ Linux
