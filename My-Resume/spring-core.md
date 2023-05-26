@@ -17,16 +17,10 @@ destroy（）
 
 # IOC初始化 IOC启动阶段 (Spring容器的启动流程)
 
-1.
-
 Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(
 加载、Parse解析)
 
-2.
-
 BeanDefinition的载入：这个过程是将Resource定位到的信息，转换成IoC容器内部的数据结构，也就是BeanDefinition对象。BeanDefinition对象是用来描述Bean实例的属性，如类名，构造器参数，依赖的bean等。BeanDefinition生成
-
-3.
 
 BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。BeanDefinitionRegistry注册
 
@@ -98,7 +92,7 @@ IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍�
 
 # BeanFactory和ApplicationContext有什么区别？
 
-BeanFactory <span style="color:darkorange">(轻量级)</span> 和ApplicationContext<span style="color:darkorange">(高级特性和框架)</span>是Spring的两大核心接口，都可以当做Spring的容器。
+BeanFactory `<span style="color:darkorange">`(轻量级) 和ApplicationContext `<span style="color:darkorange">`(高级特性和框架)是Spring的两大核心接口，都可以当做Spring的容器。
 （1）BeanFactory是Spring里面最底层的接口，是IoC的核心，定义了IoC的基本功能，包含了各种Bean的定义、加载、实例化，依赖注入和生命周期管理。ApplicationContext接口作为BeanFactory的子类，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：
 （2）
 
@@ -130,16 +124,18 @@ class A {
 ```
 
 # Spring框架中的Bean是线程安全的么？如果线程不安全，那么如何处理？
+
 1. 对于prototype作用域的Bean，每次都创建一个新对象，也就是线程之间不存在Bean共享，因此不会有线程安全问题。
 2. 对于singleton作用域的Bean，所有的线程都共享一个单例实例的Bean，因此是存在线程安全问题的。但是如果单例Bean是一个无状态Bean，也就是线程中的操作不会对Bean的成员执行查询以外的操作，那么这个单例Bean是线程安全的。比如Controller类、Service类和Dao等，这些Bean大多是无状态的，只关注于方法本身。
+
 ```
     无状态Bean(Stateless Bean)：就是没有实例变量的对象，不能保存数据，是不变类，是线程安全的。
     有状态Bean(Stateful Bean) ：就是有实例变量的对象，可以保存数据，是非线程安全的。
 ```
 
 # 单例bean有状态，采用ThreadLocal解决线程安全问题
-ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。同步机制采用了“时间换空间”的方式，仅提供一份变量，不同的线程在访问前需要获取锁，没获得锁的线程则需要排队。而ThreadLocal采用了“空间换时间”的方式。ThreadLocal会为每一个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。
 
+ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。同步机制采用了“时间换空间”的方式，仅提供一份变量，不同的线程在访问前需要获取锁，没获得锁的线程则需要排队。而ThreadLocal采用了“空间换时间”的方式。ThreadLocal会为每一个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。
 
 # Spring的Bean的生命周期
 
@@ -178,26 +174,22 @@ Spring会检测该对象是否实现了xxxAware接口，通过Aware类型的接�
 ③如果这个Bean实现了ApplicationContextAware接口，会调用setApplicationContext(ApplicationContext)方法，传入Spring上下文；
 
 4. [ ] BeanPostProcessor前置处理：
-   如果想对Bean进行一些自定义的前置处理，那么可以让Bean实现了BeanPostProcessor接口，那将会调用postProcessBeforeInitialization(
-   Object obj, String s)方法。
-
+    如果想对Bean进行一些自定义的前置处理，那么可以让Bean实现了BeanPostProcessor接口，那将会调用postProcessBeforeInitialization(
+    Object obj, String s)方法。
 5. [ ] InitializingBean的afterPropertiesSet()方法：
-   如果Bean实现了InitializingBean接口，执行afeterPropertiesSet()方法。
-
+    如果Bean实现了InitializingBean接口，执行afeterPropertiesSet()方法。
 6. [ ] init-method属性指定的初始化方法：
-   如果Bean在Spring配置文件中配置了 init-method 属性，则会自动调用其配置的初始化方法。
-
+    如果Bean在Spring配置文件中配置了 init-method 属性，则会自动调用其配置的初始化方法。
 7. [ ] BeanPostProcessor后置处理：
-   如果这个Bean实现了BeanPostProcessor接口，将会调用postProcessAfterInitialization(Object obj, String s)
-   方法；由于这个方法是在Bean初始化结束时调用的，所以可以被应用于内存或缓存技术；
+    如果这个Bean实现了BeanPostProcessor接口，将会调用postProcessAfterInitialization(Object obj, String s)
+    方法；由于这个方法是在Bean初始化结束时调用的，所以可以被应用于内存或缓存技术；
 
-<span style="color: yellow">以上几个步骤完成后，Bean就已经被正确创建了，之后就可以使用这个Bean了。</span>
+`<span style="color: yellow">`以上几个步骤完成后，Bean就已经被正确创建了，之后就可以使用这个Bean了。
 
 8. [ ] DisposableBean的destroy()方法：
-   当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用其实现的destroy()方法；
-
+    当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用其实现的destroy()方法；
 9. [ ] destroy-method属性指定的初始化方法：
-   最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。
+    最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。
 
 # Spring的Bean的作用域
 
@@ -211,6 +203,7 @@ Spring的Bean的作用域包括以下几种：
   在编写代码时通常使用ApplicationContext容器，以便能够享受更多的功能和便利性。
 
 # Spring如何解决循环依赖问题
+
 循环依赖问题在Spring中主要有三种情况：
 
 （1）通过构造方法进行依赖注入时产生的循环依赖问题。
@@ -224,11 +217,11 @@ Spring的Bean的作用域包括以下几种：
 Spring在单例模式下的setter方法依赖注入引起的循环依赖问题，主要是通过二级缓存和三级缓存来解决的，其中三级缓存是主要功臣。解决的核心原理就是：在对象实例化之后，依赖注入之前，Spring提前暴露的Bean实例的引用在第三级缓存中进行存储。
 
 1. 通过@Lazy注解构造方法解决循环依赖问题
-2. setter方法进行依赖注入且是在多例（原型）模式，给所用的属性套用包装类型ObjectProvider<XXX>延迟获取的Bean接口，proAProvider.getIfAvailable();解决
+2. setter方法进行依赖注入且是在多例（原型）模式，给所用的属性套用包装类型ObjectProvider `<XXX>`延迟获取的Bean接口，proAProvider.getIfAvailable();解决
 3. 通过setter方法进行依赖注入且是在单例模式,改用构造方法注入@Lazy解决，或者@Autowired+@Lazy，一起解决。
 
-
 # 自动装配
+
 - 自动装配:在@Autowired注入点不指定Bean,Spring自动选择。
 - 依赖注入:在@Qualifier或XML中明确指定要注入的Bean,然后由Spring注入。
   基于注解的自动装配
@@ -239,11 +232,14 @@ Spring在单例模式下的setter方法依赖注入引起的循环依赖问题�
 - @Inject:自动装配,默认按照类型注入,如果有多个Bean匹配,则按照属性名注入。（类型->属性）
 
 # Spring事务的实现方式
+
 Spring事务是和数据库事务保持一致
 
 Spring事务的实现方式主要有两种：编程式事务管理和声明式事务管理。
+
 - ①编程式事务管理使用TransactionTemplate。
 - ②声明式事务管理建立在AOP之上的。其本质是通过AOP功能，对方法前后进行拦截，将事务处理的功能编织到拦截的方法中，也就是在目标方法开始之前启动一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。
+
 ```
 声明式事务管理的优点：
    不需要掺杂业务逻辑代码，@Transactional注解可以被添加到类级别和方法级别上。
@@ -252,18 +248,20 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
 ```
 
 # Spring 框架中都用到了哪些设计模式
+
 1. 工厂模式：Spring使用工厂模式通过BeanFactory、ApplicationContext创建bean对象。
 2. 代理模式：Spring AOP功能的实现。
 3. 单例模式：Spring中的Bean默认都是单例的。
 4. 模板方法模式：Spring中JdbcTemplate、HibernateTemplate等以Template结尾的对数据库操作的类，它们就使用到了模板模式。
 5. 包装器模式：Spring中对Bean的装饰就使用到了装饰器模式，如各个ApplicationContext实现类中对Bean的装饰。
-6. <span style="color:yellow">没了解过 </span>观察者模式：Spring事件驱动模型就是观察者模式很经典的一个应用。
-7. <span style="color:yellow">没了解过 </span>适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
-8. <span style="color:yellow">没了解过 </span>迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
-
+6. `<span style="color:yellow">`没了解过 观察者模式：Spring事件驱动模型就是观察者模式很经典的一个应用。
+7. `<span style="color:yellow">`没了解过 适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
+8. `<span style="color:yellow">`没了解过 迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
 
 # Spring框架中有哪些不同类型的事件
+
 Spring 提供了以下5种标准的事件：
+
 1. 上下文更新事件（ContextRefreshedEvent）：在调用ConfigurableApplicationContext 接口中的refresh()方法时被触发。
 2. 上下文开始事件（ContextStartedEvent）：当容器调用ConfigurableApplicationContext的Start()方法开始/重新开始容器时触发该事件。
 3. 上下文停止事件（ContextStoppedEvent）：当容器调用ConfigurableApplicationContext的Stop()方法停止容器时触发该事件。
@@ -272,8 +270,8 @@ Spring 提供了以下5种标准的事件：
    如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
    ![img_10.png](img_10.png)
 
-
 # Spring支持哪些Aware接口?
+
 - ApplicationContextAware:获取ApplicationContext对象
 - BeanFactoryAware:获取BeanFactory对象
 - BeanNameAware:获取Bean的名称
@@ -284,17 +282,19 @@ Spring 提供了以下5种标准的事件：
   ![img_12.png](img_12.png)
 
 # Aware接口的优点
+
 - 可以取得Spring容器中的各种对象和资源,如其他Bean、文件资源、环境变量等。
 - 可以管理项目中的共享资源,如数据库连接池、配置属性等。
 - 与Spring容器实现深度集成,可以根据运行环境动态调整Bean的行为。
 - 简单而有效地扩展Spring Bean的功能。
 
 # ApplicationContextAware和BeanFactoryAware的区别
+
 这两个的区别不如说是ApplicationContext和BeanFactory的区别。
+
 - ApplicationContext是BeanFactory的子接口，提供了更多的功能，比如国际化处理、事件传播、Bean自动装配等。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory能做的ApplicationContext都能做，但是BeanFactory不能做的ApplicationContext不一定能做。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的性能比ApplicationContext好。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的扩展性比ApplicationContext好。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的轻量级比ApplicationContext好。
 - ApplicationContext是在BeanFactory的基础上实现的，所以BeanFactory的灵活性比ApplicationContext好。
-
