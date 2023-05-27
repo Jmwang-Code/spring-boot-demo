@@ -1,4 +1,4 @@
-# 谁定义了bean的生命周期
+# 1. 谁定义了bean的生命周期
 
 实现InitializingBean Or DisposableBean接口，分别实现afterPropertiesSet()和destroy()方法，完成bean的初始化和销毁
 实现BeanPostProcessor接口，分别实现postProcessBeforeInitialization()和postProcessAfterInitialization()
@@ -15,7 +15,7 @@ postProcessAfterInitialization（）
 destroy（）
 ```
 
-# IOC初始化 IOC启动阶段 (Spring容器的启动流程)
+# 2. IOC初始化 IOC启动阶段 (Spring容器的启动流程)
 
 Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(
 加载、Parse解析)
@@ -26,42 +26,42 @@ BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefiniti
 
 ![img_7.png](../images/img_7.png)
 
-# Spring-IOC是什么
+# 3. Spring-IOC是什么
 
 Spring-IOC是Spring框架的核心，是一个容器，它负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。
 
-## IOC是什么
+## 3.1 IOC是什么
 
 - 控制反转，指的是将对象的控制权交给Spring容器，由Spring来控制对象的生命周期和对象间的关系，而不是由对象自己控制。
   （原来是自己去new开辟空间等创建，自己通过close等方法进行销毁。）
 - 自己控制对象缺点：使得代码耦合度高，不易于维护，不易于测试。
 - IOC容器控制对象优点：使得代码耦合度低，易于维护，易于测试。
 
-## DI是什么
+## 3.2 DI是什么
 
 依赖注入，指的是由Spring容器在运行期间，动态地将某种依赖关系注入到对象之中。
 
-# 依赖注入 DI的三种方式
+### 3.2.1 依赖注入 DI的三种方式
 
 1. 构造器注入:通过构造器传入依赖对象。
 2. Setter方法注入:通过Setter方法传入依赖对象。
 3. 接口注入:通过接口的Setter方法传入依赖对象。
 
-# Spring-AOP是什么
+## 3.3 Spring-AOP是什么
 
 Spring-AOP是Spring框架的一个重要组成部分，它提供了面向切面的编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的技术。
 （比如HandlerInterceptor实现之后，就是通过动态代理，从调用接口实时的获得handler对象，而这个拦截器的接口就是切面）
 
-## OOP
+### 3.3.1 OOP
 
 面向对象编程，允许开发者定义纵向关系，但并不适用于定义横向的关系，会导致大量代码的重复，而不利于各个模块的重用。
 
-## AOP
+### 3.3.2 AOP
 
 面向切面编程，是对OOP的补充，它允许开发者定义横向关系，将系统中的关注点分离出来形成一个独立的模块，这个模块被称为切面，它的作用是与业务逻辑无关的，但是又为业务逻辑模块所共同调用。
 “切面”（Aspect）可用于权限认证、日志、事务处理。
 
-## AOP实现方式
+## 3.4 AOP实现方式
 
 AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动态代理。静态代理的代表为AspectJ；动态代理则以Spring AOP为代表。
 
@@ -72,25 +72,14 @@ AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动�
 （3）静态代理与动态代理区别在于生成AOP代理对象的时机不同，相对来说AspectJ的静态代理方式具有更好的性能，但是AspectJ需要特定的编译器进行处理，而Spring
 AOP则无需特定的编译器处理。
 
-### 动JDK动态代理和CGLIB动态代理 JDK动态代理和CGLIB动态代理
 
-①
-JDK动态代理只提供接口的代理，不支持类的代理，要求被代理类实现接口。JDK动态代理的核心是InvocationHandler接口和Proxy类，在获取代理对象时，使用Proxy类来动态创建目标类的代理类（即最终真正的代理类，这个类继承自Proxy并实现了我们定义的接口），当代理对象调用真实对象的方法时，
-InvocationHandler 通过invoke()方法反射来调用目标类中的代码，动态地将横切逻辑和业务编织在一起；
-
-InvocationHandler 的 invoke(Object proxy,Method method,Object[] args)：proxy是最终生成的代理对象; method 是被代理目标实例的某个具体方法;
-args 是被代理目标实例某个方法的具体入参, 在方法反射调用时使用。
-
-② 如果被代理类没有实现接口，那么Spring AOP会选择使用CGLIB来动态代理目标类。CGLIB（Code Generation
-Library），是一个代码生成的类库，可以在运行时动态的生成指定类的一个子类对象，并覆盖其中特定方法并添加增强代码，从而实现AOP。CGLIB是通过继承的方式做的动态代理，因此如果某个类被标记为final，那么它是无法使用CGLIB做动态代理的。
-
-### IOC 和 AOP 的联系和区别
+## 3.5 IOC 和 AOP 的联系和区别
 
 IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。
 
 ![](../images/af602a222f414127b7afcb9b8edc0f08.png)
 
-# BeanFactory和ApplicationContext有什么区别？
+# 4. BeanFactory和ApplicationContext有什么区别？
 
 BeanFactory `<span style="color:darkorange">`(轻量级) 和ApplicationContext `<span style="color:darkorange">`(高级特性和框架)是Spring的两大核心接口，都可以当做Spring的容器。
 （1）BeanFactory是Spring里面最底层的接口，是IoC的核心，定义了IoC的基本功能，包含了各种Bean的定义、加载、实例化，依赖注入和生命周期管理。ApplicationContext接口作为BeanFactory的子类，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：
@@ -123,7 +112,7 @@ class A {
 }
 ```
 
-# Spring框架中的Bean是线程安全的么？如果线程不安全，那么如何处理？
+# 5. Spring框架中的Bean是线程安全的么？如果线程不安全，那么如何处理？
 
 1. 对于prototype作用域的Bean，每次都创建一个新对象，也就是线程之间不存在Bean共享，因此不会有线程安全问题。
 2. 对于singleton作用域的Bean，所有的线程都共享一个单例实例的Bean，因此是存在线程安全问题的。但是如果单例Bean是一个无状态Bean，也就是线程中的操作不会对Bean的成员执行查询以外的操作，那么这个单例Bean是线程安全的。比如Controller类、Service类和Dao等，这些Bean大多是无状态的，只关注于方法本身。
@@ -133,11 +122,11 @@ class A {
     有状态Bean(Stateful Bean) ：就是有实例变量的对象，可以保存数据，是非线程安全的。
 ```
 
-# 单例bean有状态，采用ThreadLocal解决线程安全问题
+# 6. 单例bean有状态，采用ThreadLocal解决线程安全问题
 
 ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。同步机制采用了“时间换空间”的方式，仅提供一份变量，不同的线程在访问前需要获取锁，没获得锁的线程则需要排队。而ThreadLocal采用了“空间换时间”的方式。ThreadLocal会为每一个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。
 
-# Spring的Bean的生命周期
+# 7. Spring的Bean的生命周期
 
 ![img_9.png](../images/img_9.png)
 Spring的Bean的生命周期包括以下阶段：
@@ -191,7 +180,7 @@ Spring会检测该对象是否实现了xxxAware接口，通过Aware类型的接�
 9. [ ] destroy-method属性指定的初始化方法：
     最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。
 
-# Spring的Bean的作用域
+# 8. Spring的Bean的作用域
 
 Spring的Bean的作用域包括以下几种：
 
@@ -202,7 +191,7 @@ Spring的Bean的作用域包括以下几种：
 - （5）application：所有会话共享一个Bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。
   在编写代码时通常使用ApplicationContext容器，以便能够享受更多的功能和便利性。
 
-# Spring如何解决循环依赖问题
+# 9. Spring如何解决循环依赖问题
 
 循环依赖问题在Spring中主要有三种情况：
 
@@ -220,7 +209,7 @@ Spring在单例模式下的setter方法依赖注入引起的循环依赖问题�
 2. setter方法进行依赖注入且是在多例（原型）模式，给所用的属性套用包装类型ObjectProvider `<XXX>`延迟获取的Bean接口，proAProvider.getIfAvailable();解决
 3. 通过setter方法进行依赖注入且是在单例模式,改用构造方法注入@Lazy解决，或者@Autowired+@Lazy，一起解决。
 
-# 自动装配
+# 10. 自动装配
 
 - 自动装配:在@Autowired注入点不指定Bean,Spring自动选择。
 - 依赖注入:在@Qualifier或XML中明确指定要注入的Bean,然后由Spring注入。
@@ -231,7 +220,7 @@ Spring在单例模式下的setter方法依赖注入引起的循环依赖问题�
 - @Resource:自动装配,默认按照名称注入,如果没有匹配的Bean,则按照类型注入。（名->类型）
 - @Inject:自动装配,默认按照类型注入,如果有多个Bean匹配,则按照属性名注入。（类型->属性）
 
-# Spring事务的实现方式
+# 11. Spring事务的实现方式
 
 Spring事务是和数据库事务保持一致
 
@@ -247,7 +236,7 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
    无法做到细粒度的事务控制，无法做到像编程式事务那样可以作用到代码块级别。比如一个事务方法调用了多个DAO方法，希望其中某个DAO方法独立成为一个事务，这时候就办不到了。
 ```
 
-# Spring 框架中都用到了哪些设计模式
+# 12. Spring 框架中都用到了哪些设计模式
 
 1. 工厂模式：Spring使用工厂模式通过BeanFactory、ApplicationContext创建bean对象。
 2. 代理模式：Spring AOP功能的实现。
@@ -258,7 +247,7 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
 7. `<span style="color:yellow">`没了解过 适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
 8. `<span style="color:yellow">`没了解过 迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
 
-# Spring框架中有哪些不同类型的事件
+# Spring框架中有哪些不同类型的事件（不重要）
 
 Spring 提供了以下5种标准的事件：
 
@@ -270,7 +259,7 @@ Spring 提供了以下5种标准的事件：
    如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
    ![img_10.png](../images/img_10.png)
 
-# Spring支持哪些Aware接口?
+# 13. Spring支持哪些Aware接口?
 
 - ApplicationContextAware:获取ApplicationContext对象
 - BeanFactoryAware:获取BeanFactory对象
@@ -281,14 +270,14 @@ Spring 提供了以下5种标准的事件：
 - BeanClassLoaderAware:获取加载当前Bean的ClassLoader对象
   ![img_12.png](../images/img_12.png)
 
-# Aware接口的优点
+# 14. Aware接口的优点
 
 - 可以取得Spring容器中的各种对象和资源,如其他Bean、文件资源、环境变量等。
 - 可以管理项目中的共享资源,如数据库连接池、配置属性等。
 - 与Spring容器实现深度集成,可以根据运行环境动态调整Bean的行为。
 - 简单而有效地扩展Spring Bean的功能。
 
-# ApplicationContextAware和BeanFactoryAware的区别
+# 15. ApplicationContextAware和BeanFactoryAware的区别
 
 这两个的区别不如说是ApplicationContext和BeanFactory的区别。
 
