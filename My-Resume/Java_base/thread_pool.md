@@ -11,7 +11,7 @@
 
 `Future`接口，`FutureTask`类都可以代表异步计算的结果。
 
-![Executor 框架的使用示意图](images/image1008611.png)
+![Executor 框架的使用示意图](../images/image1008611.png)
 
 # 2.`ThreadPoolExecutor` 类 线程池执行器 （核心）
 `ThreadPoolExecutor`类是`ExecutorService`接口的实现类，是线程池的核心实现类，用来执行被提交的任务。

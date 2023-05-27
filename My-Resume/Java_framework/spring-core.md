@@ -24,7 +24,7 @@ BeanDefinition的载入：这个过程是将Resource定位到的信息，转换�
 
 BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。BeanDefinitionRegistry注册
 
-![img_7.png](img_7.png)
+![img_7.png](../images/img_7.png)
 
 # Spring-IOC是什么
 
@@ -88,7 +88,7 @@ Library），是一个代码生成的类库，可以在运行时动态的生成�
 
 IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。
 
-![](af602a222f414127b7afcb9b8edc0f08.png)
+![](../images/af602a222f414127b7afcb9b8edc0f08.png)
 
 # BeanFactory和ApplicationContext有什么区别？
 
@@ -139,7 +139,7 @@ ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访
 
 # Spring的Bean的生命周期
 
-![img_9.png](img_9.png)
+![img_9.png](../images/img_9.png)
 Spring的Bean的生命周期包括以下阶段：
 
 - （1）实例化Instantiation
@@ -268,7 +268,7 @@ Spring 提供了以下5种标准的事件：
 4. 上下文关闭事件（ContextClosedEvent）：当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
 5. 请求处理事件（RequestHandledEvent）：在Web应用中，当一个http请求（request）结束触发该事件。
    如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
-   ![img_10.png](img_10.png)
+   ![img_10.png](../images/img_10.png)
 
 # Spring支持哪些Aware接口?
 
@@ -279,7 +279,7 @@ Spring 提供了以下5种标准的事件：
 - ResourceLoaderAware:获取ResourceLoader对象
 - ServletContextAware:在Web应用中获取ServletContext对象
 - BeanClassLoaderAware:获取加载当前Bean的ClassLoader对象
-  ![img_12.png](img_12.png)
+  ![img_12.png](../images/img_12.png)
 
 # Aware接口的优点
 

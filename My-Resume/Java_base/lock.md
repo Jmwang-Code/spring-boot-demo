@@ -1,13 +1,16 @@
 # 1. 锁
 
+常用和锁、线程安全相关的工具：synchronized、ReentrantLock、AtomicInteger、AtomicLong、CopyOnWriteArrayList、CopyOnWriteArraySet、ConcurrentHashMap、ConcurrentSkipListMap、ConcurrentSkipListSet
+
 # 2. ReentrantLock
-![Alt text](images/imagehello.png)
+![Alt text](../images/imagehello.png)
 
 ## 2.1 ReentrantLock 的实现原理
 ReentrantLock 是基于 AQS（AbstractQueuedSynchronizer）实现的，AQS 是一个用于构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器，比如常用的 ReentrantLock、Semaphore、CountDownLatch、ReentrantReadWriteLock、ThreadPoolExecutor 等。
 
 ## 2.2 AQS 是什么？
 AQS 内部维护了一个 volatile int state 和一个 FIFO 队列，state 用于表示同步状态，FIFO 队列用于存放获取同步状态失败的线程。
+
 
 ## 2.3 CAS 是什么？
 CAS（Compare And Swap）是一种无锁算法，当多个线程尝试使用 CAS 同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败，失败的线程并不会被挂起，而是被告知这次竞争中失败，并可以再次尝试。
@@ -22,8 +25,18 @@ Java 中的对象监视器（monitor）实现的。每个对象都有一个 moni
 线程执行 notify() ：会从等待队列中随机选择一个线程，并将其唤醒，被唤醒的线程则进入 monitor 的锁定队列，等待获取 monitor 上的锁。当线程执行完毕退出 synchronized 代码块时，会释放 monitor 上的所有锁，此时被唤醒的线程可以获取 monitor 上的锁，继续执行。
 
 ## 3.2 synchronized 的锁升级过程
-![Alt text](images/image-111.png)
+![Alt text](../images/image-111.png)
 synchronized 的锁升级过程分为四个阶段：无锁、偏向锁、轻量级锁和重量级锁。
+
+
+简述升级过程：
+无锁
+↓
+偏向锁：当一个线程访问同步块并获取锁时，如果该同步块没有被锁定，那么该线程会尝试获取该同步块的偏向锁，并将对象头中的 Mark Word 设置为偏向锁。如果该同步块已经被其他线程锁定，那么该线程会尝试获取该同步块的轻量级锁。
+↓
+轻量级锁：当一个线程尝试获取一个同步块的锁时，如果该同步块没有被锁定，那么该线程会尝试获取该同步块的轻量级锁，并将对象头中的 Mark Word 设置为指向线程栈帧的指针。如果该同步块已经被其他线程锁定，那么该线程会尝试获取该同步块的重量级锁。
+↓
+重量级锁：当一个线程尝试获取一个同步块的锁时，如果该同步块已经被其他线程锁定，那么该线程会进入阻塞状态，直到该同步块的锁被释放。在重量级锁的实现中，JVM 会将对象的 Mark Word 指向一个互斥量，从而实现线程的阻塞和唤醒。
 
 ### 3.2.1 无锁
 无锁状态下，线程可以随意进入临界区，不需要进行任何同步操作。
