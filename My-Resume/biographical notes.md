@@ -76,7 +76,7 @@
 
 1. [ ] 参与流程：架构设计、详细设计、编码实现、单元测试、部署上线、维护。
 2. [ ] 解决问题：解决了数据报表的展示数据问题，数据源的数据量大，数据源的数据结构复杂，数据源的数据格式类型多样,通过高扩展的设计将多种优势数据源接入并且统一展示类型，聚合计算、以及对应数据源特性计算。
-3. [ ] 使用方法：使用了我的<span style="color:yellow;">[Data-Provider](https://github.com/Jmwang-Code/Data-Provider)开源项目</span>的设计原稿，将数据源的数据格式类型转换为统一的展示类型。
+3. [ ] 使用方法：使用了我的<span style="color:grey;">[Data-Provider](https://github.com/Jmwang-Code/Data-Provider)**开源项目**</span>的设计原稿，将数据源的数据格式类型转换为统一的展示类型。
 
 
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/github-brands.svg" width="30px"> 个人开源
@@ -95,24 +95,17 @@
 ## <img src="https://raw.githubusercontent.com/Jmwang-Code/Jmwang-Code/main/assets/icon/tools-solid.svg" width="30px"> 技能清单
 
 
+**语言**
+- ★★★ Java&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★☆☆ C++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★☆☆Python&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★☆☆ JavaScript
 
-- ★★★ Java
-- ★☆☆ C++、Python
-- ★☆☆ JavaScript
+**框架**
+- ★★★ Spring&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★★☆ SpringBoot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★☆☆ SpringCloud
 
-- ★★★ MySQL核心原理
-- ★★★ ClickHouse核心原理
-- ★★★ Redis核心原理
-- ★★★ Spring核心原理
-- ★★☆ SpringCloud、SpringBoot
-- ★★☆ Hadoop核心原理
-- ★★☆ Hive核心原理
-- ★★☆ HBase核心原理
-- ★★☆ Spark核心原理
-- ★★☆ Flink核心原理
-- ★☆☆ ElasticSearch
-- ★☆☆ Kafka
-- ★☆☆ Zookeeper
-- ★☆☆ Linux
-- ★☆☆ Docker
-- ★☆☆ Kubernetes
+**数据库**
+- ★★☆ MySQL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★★☆ClickHouse
+
+**中间件**
+- ★★☆ Redis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★☆☆ ElasticSearch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★☆☆ Kafka
+
+**大数据体系**
+- ★★☆ Hadoop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★★☆ Hive&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★★☆ HBase&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★★☆ Spark&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★★☆ Flink
