@@ -22,6 +22,7 @@
     <module>demo-spring-security/spring-security-03web</module>
 <!--    <module>demo-spring-security/spring-security-04split</module>-->
     <module>demo-spring/spring-aop</module>
+    <module>demo-spring/spring-bean-life-cycle</module>
 <!--    <module>demo-logback</module>-->
 <!--    <module>demo-log-aop</module>-->
 <!--    <module>demo-exception-handler</module>-->

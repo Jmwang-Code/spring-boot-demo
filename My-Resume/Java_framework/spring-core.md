@@ -1,24 +1,8 @@
-# 1. 谁定义了bean的生命周期
 
-实现InitializingBean Or DisposableBean接口，分别实现afterPropertiesSet()和destroy()方法，完成bean的初始化和销毁
-实现BeanPostProcessor接口，分别实现postProcessBeforeInitialization()和postProcessAfterInitialization()
-方法，完成bean的初始化前后的处理工作
-
-```
-执行步骤：
-postProcessBeforeInitialization（）
-↓
-afterPropertiesSet（）
-↓
-postProcessAfterInitialization（）
-↓
-destroy（）
-```
 
 # 2. IOC初始化 IOC启动阶段 (Spring容器的启动流程)
 
-Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(
-加载、Parse解析)
+Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(加载、Parse解析)
 
 BeanDefinition的载入：这个过程是将Resource定位到的信息，转换成IoC容器内部的数据结构，也就是BeanDefinition对象。BeanDefinition对象是用来描述Bean实例的属性，如类名，构造器参数，依赖的bean等。BeanDefinition生成
 
@@ -126,14 +110,14 @@ class A {
 
 ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。同步机制采用了“时间换空间”的方式，仅提供一份变量，不同的线程在访问前需要获取锁，没获得锁的线程则需要排队。而ThreadLocal采用了“空间换时间”的方式。ThreadLocal会为每一个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。
 
-# 7. Spring的Bean的生命周期
+# 7. Spring的Bean的生命周期 (面试)
 
 ![img_9.png](../images/img_9.png)
 Spring的Bean的生命周期包括以下阶段：
 
-- （1）实例化Instantiation
+- （1）实例化Bean,反射生成对象。
 - （2）填充属性Populate properties
-- （3）处理Aware接口的回调处理
+- （3）处理Aware接口的回调处理,
 - （4）BeanPostProcessor的前置处理
 - （5）InitializingBean的afterPropertiesSet()方法
 - （6）init-method属性指定的初始化方法
