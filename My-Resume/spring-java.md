@@ -1,14 +1,14 @@
-# ∏ˆ»À∏¥≈Ã
+# ‰∏™‰∫∫Â§çÁõò
 
-**FIRST µ⁄“ª¬÷∏¥≈Ã**
+**FIRST Á¨¨‰∏ÄËΩÆÂ§çÁõò**
 
 | \                                        | <span style="color:purple">Spring | <span style="color:purple">Transaction | <span style="color:purple">Bean-life-cycle | <span style="color:purple">Spring-boot |
 |------------------------------------------|-----------------------------------|----------------------------------------|--------------------------------------------|----------------------------------------|
-| <span style="color:red">**◊Èº˛¿Ì¬€**  |                                   |                                        |                                            |                                        |
-| <span style="color:red">**Œ Ã‚∂®Œª**  |                                   |                                        |                                            |                                        |
-| <span style="color:red">**µ˜”≈≈‰÷√**  |                                   |                                        |                                            |                                        |
-| <span style="color:red">**ª˘¥°¿Ì¬€**  |                                   |                                        |                                            |                                        |
-| <span style="color:red">**œÓƒø≥°æ∞**  |                                   |                                        |                                            |                                        |
-| <span style="color:red">**Ãÿ…´Œ Ã‚1** |                                   |                                        |                                            |                                        |
-| <span style="color:red">**Ãÿ…´Œ Ã‚2** |                                   |                                        |                                            |                                        |
+| <span style="color:red">**ÁªÑ‰ª∂ÁêÜËÆ∫**  |                                   |                                        |                                            |                                        |
+| <span style="color:red">**ÈóÆÈ¢òÂÆö‰Ωç**  |                                   |                                        |                                            |                                        |
+| <span style="color:red">**Ë∞É‰ºòÈÖçÁΩÆ**  |                                   |                                        |                                            |                                        |
+| <span style="color:red">**Âü∫Á°ÄÁêÜËÆ∫**  |                                   |                                        |                                            |                                        |
+| <span style="color:red">**È°πÁõÆÂú∫ÊôØ**  |                                   |                                        |                                            |                                        |
+| <span style="color:red">**ÁâπËâ≤ÈóÆÈ¢ò1** |                                   |                                        |                                            |                                        |
+| <span style="color:red">**ÁâπËâ≤ÈóÆÈ¢ò2** |                                   |                                        |                                            |                                        |
 

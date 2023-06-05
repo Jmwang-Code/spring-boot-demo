@@ -1,55 +1,55 @@
-# ×é¼þ¿ò¼ÜÔ­Àí²ãÃæ
+# ç»„ä»¶æ¡†æž¶åŽŸç†å±‚é¢
 
-**ÃæÊÔÎÊÌâÒ»°ãÕâÑù´îÅä£º 2¸ö»ù´¡Ô­Àí + ÀëÏß¼ÆËã¿ò¼Ü + ÊµÊ±¼ÆËã¿ò¼Ü**
+**é¢è¯•é—®é¢˜ä¸€èˆ¬è¿™æ ·æ­é…ï¼š 2ä¸ªåŸºç¡€åŽŸç† + ç¦»çº¿è®¡ç®—æ¡†æž¶ + å®žæ—¶è®¡ç®—æ¡†æž¶**
 
-## 1.×é¼þ»ù´¡Ô­Àí
+## 1.ç»„ä»¶åŸºç¡€åŽŸç†
 
 HDFS YARN HBASE HIVE
-ÈçºÎ¿ìËÙ¶¨Î»
+å¦‚ä½•å¿«é€Ÿå®šä½
 
-## 2.¼ÆËã¿ò¼Ü¼ÆËãÁ÷³Ì
+## 2.è®¡ç®—æ¡†æž¶è®¡ç®—æµç¨‹
 
 MapReduce Spark Flink
-ÈçºÎ¿ìËÙ¶¨Î»
-ÈçºÎµ÷ÓÅ
-±à³ÌÀ©Õ¹
+å¦‚ä½•å¿«é€Ÿå®šä½
+å¦‚ä½•è°ƒä¼˜
+ç¼–ç¨‹æ‰©å±•
 
-## 3.¿ª·¢µ÷ÓÅ
+## 3.å¼€å‘è°ƒä¼˜
 
-1. Õë¶Ô hive spark flink ¼ÆËã¿ò¼Üµ÷ÓÅ £¨Ïà¶ÔÖ÷Òª£©
-Êý¾ÝÇãÐ± ¼ÆËãÐ§ÂÊ shuffle ²ÎÊýµ÷ÓÅ
+1. é’ˆå¯¹ hive spark flink è®¡ç®—æ¡†æž¶è°ƒä¼˜ ï¼ˆç›¸å¯¹ä¸»è¦ï¼‰
+æ•°æ®å€¾æ–œ è®¡ç®—æ•ˆçŽ‡ shuffle å‚æ•°è°ƒä¼˜
 
-2. ´úÂë²ãÃæ¿ª·¢
-SQL³¡¾°¿ª·¢ Ëã×Ó¿ª·¢ ºÍ Ëã×ÓÐÔÄÜ£¬Ö§³ÖJava¿ª·¢
+2. ä»£ç å±‚é¢å¼€å‘
+SQLåœºæ™¯å¼€å‘ ç®—å­å¼€å‘ å’Œ ç®—å­æ€§èƒ½ï¼Œæ”¯æŒJavaå¼€å‘
 
-## 4.»ù´¡ÀíÂÛ
+## 4.åŸºç¡€ç†è®º
 
-1. Êý²Ö½¨Éè
-Êý¾Ý¼¯³É¡¢·Ö²ã¡¢½¨Ä£¡¢Ö÷Ìå
-2. Êý¾ÝÖÎÀí
-Êý¾ÝÖÊÁ¿¡¢ÔªÊý¾Ý¹ÜÀí¡¢×Ê²ú¹ÜÀí¡¢Êý¾Ý°²È«
+1. æ•°ä»“å»ºè®¾
+æ•°æ®é›†æˆã€åˆ†å±‚ã€å»ºæ¨¡ã€ä¸»ä½“
+2. æ•°æ®æ²»ç†
+æ•°æ®è´¨é‡ã€å…ƒæ•°æ®ç®¡ç†ã€èµ„äº§ç®¡ç†ã€æ•°æ®å®‰å…¨
 
-## 5.ÏîÄ¿³¡¾°¼ÛÖµ
+## 5.é¡¹ç›®åœºæ™¯ä»·å€¼
 
-1. ÒµÎñÌåÏµ
-»ùÓÚ±³¾° ÊµÏÖ¼ÛÖµ
-2. ¼Ü¹¹Á÷³Ì
-ÕûÌåÁ÷³Ì ²ÎÓëÁ÷³Ì
-3. ÍÅ¶Ó³ÉÔ±
-ÍÅ¶Ó¹æÄ£¡¢ÍÅ¶Ó·Ö¹¤¡¢ÍÅ¶ÓÐ­×÷
-4. ¹¤×÷Ï¸½Ú
-Êý¾ÝÁ¿¡¢±í¶àÉÙ¡¢Ö¸±ê¡¢Óöµ½ÎÊÌâ¡¢½â¾ö·½°¸¡¢·´ÏòË¼¿¼
+1. ä¸šåŠ¡ä½“ç³»
+åŸºäºŽèƒŒæ™¯ å®žçŽ°ä»·å€¼
+2. æž¶æž„æµç¨‹
+æ•´ä½“æµç¨‹ å‚ä¸Žæµç¨‹
+3. å›¢é˜Ÿæˆå‘˜
+å›¢é˜Ÿè§„æ¨¡ã€å›¢é˜Ÿåˆ†å·¥ã€å›¢é˜Ÿåä½œ
+4. å·¥ä½œç»†èŠ‚
+æ•°æ®é‡ã€è¡¨å¤šå°‘ã€æŒ‡æ ‡ã€é‡åˆ°é—®é¢˜ã€è§£å†³æ–¹æ¡ˆã€åå‘æ€è€ƒ
 
-# ¸öÈË¸´ÅÌ
+# ä¸ªäººå¤ç›˜
 
-**FIRST µÚÒ»ÂÖ¸´ÅÌ**
+**FIRST ç¬¬ä¸€è½®å¤ç›˜**
 
 | \                                        | <span style="color:purple">HDFS |   <span style="color:purple">YARN   |   <span style="color:purple">HBASE   |   <span style="color:purple">HIVE   |   <span style="color:purple">MapReduce   |   <span style="color:purple">Spark   | <span style="color:purple">Flink |
 |------------------------------------------|---------------------------------| ---- | ---- | ---- | ---- | ---- |-------|
-| <span style="color:red">**×é¼þÀíÂÛ**  |                                 |      |      |      |      |       |       |
-| <span style="color:red">**ÎÊÌâ¶¨Î»**  |                                 |      |      |      |      |       |       |
-| <span style="color:red">**µ÷ÓÅÅäÖÃ**  |                                 |      |      |      |      |       |       |
-| <span style="color:red">**»ù´¡ÀíÂÛ**  |                                 |      |      |      |      |       |       |
-| <span style="color:red">**ÏîÄ¿³¡¾°**  |                                 |      |      |      |      |       |       |
-| <span style="color:red">**ÌØÉ«ÎÊÌâ1** |                                 |      |      |      |      |       |       |
-| <span style="color:red">**ÌØÉ«ÎÊÌâ2** |                                 |      |      |      |      |       |       |
+| <span style="color:red">**ç»„ä»¶ç†è®º**  |                                 |      |      |      |      |       |       |
+| <span style="color:red">**é—®é¢˜å®šä½**  |                                 |      |      |      |      |       |       |
+| <span style="color:red">**è°ƒä¼˜é…ç½®**  |                                 |      |      |      |      |       |       |
+| <span style="color:red">**åŸºç¡€ç†è®º**  |                                 |      |      |      |      |       |       |
+| <span style="color:red">**é¡¹ç›®åœºæ™¯**  |                                 |      |      |      |      |       |       |
+| <span style="color:red">**ç‰¹è‰²é—®é¢˜1** |                                 |      |      |      |      |       |       |
+| <span style="color:red">**ç‰¹è‰²é—®é¢˜2** |                                 |      |      |      |      |       |       |
