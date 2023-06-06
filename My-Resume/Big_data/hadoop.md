@@ -1,5 +1,6 @@
 # 1 HDFS架构
 
+HDFS是Hadoop分布式文件系统。
 
 ## 1.1 HDFS 2.0 架构
 ![img_1.png](img_1.png)
@@ -63,6 +64,9 @@ Client就近原则，选择datanode01下载block01，选择datanode01下载block
 
 
 # 2. Yarn架构
+
+Yarn是Hadoop的资源调度平台，负责集群资源的管理和调度。
+
 ![img_11.png](img_11.png)
 1. ResourceManager（RM）
    RM 是一个全局的资源管理器，负责整个系统的资源管理和分配，它主要有两个组件构成：
@@ -90,3 +94,6 @@ MapReduce 就是原生支持 ON YARN 的一种框架，可以在 YARN 上运行 
 4. Container
    Container 是 YARN 中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等，当 AM 向 RM 申请资源时，RM 为 AM 返回的资源便是用 Container 表示的。 YARN 会为每个任务分配一个 Container 且该任务只能使用该 Container 中描述的资源。
 
+# 3. MapReduce架构
+
+MapReduce是Hadoop的分布式计算框架，负责集群的计算任务。
