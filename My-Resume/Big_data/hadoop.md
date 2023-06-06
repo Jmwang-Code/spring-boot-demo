@@ -36,10 +36,10 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 
 ![img_3.png](img_3.png)
 
-1. Client向NameNode发送RPC请求，请求上传文件
+1. Client向NameNode发送请求，请求上传文件
 2. NameNode检查元数据文件目录树
 3. 告诉Client，可以上传
-4. Client向NameNode发送RPC请求，请求上传第一个block
+4. Client向NameNode发送请求，请求上传第一个block
 5. NameNode检查DateNode，就近原则
 6. 告诉Client可用的DateNode列表
 7. 建立管道pipeline，从近到远连接所有DateNode
@@ -66,6 +66,8 @@ Client就近原则，选择datanode01下载block01，选择datanode01下载block
 # 2. Yarn架构
 
 Yarn是Hadoop的资源调度平台，负责集群资源的管理和调度。
+
+## 2.1 基础架构
 
 ![img_11.png](img_11.png)
 1. ResourceManager（RM）
@@ -94,6 +96,53 @@ MapReduce 就是原生支持 ON YARN 的一种框架，可以在 YARN 上运行 
 4. Container
    Container 是 YARN 中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等，当 AM 向 RM 申请资源时，RM 为 AM 返回的资源便是用 Container 表示的。 YARN 会为每个任务分配一个 Container 且该任务只能使用该 Container 中描述的资源。
 
+## 2.2 ResourceManager和NodeManager比例?
+（也叫做 Master 和 worker的比例）
+RM:NM = 1:n (n>=1)
+比如我的经历：16个服务器节点，RM2个（一主一从），NM14个
+
+1：2
+
+## 2.3 简单命令（了解一下）
+    
+    ```shell
+    # 查看任务
+    yarn application -list
+    # 查看任务详情
+    yarn application -status application_1616588888888_0001
+
+    # 杀死任务
+    yarn application -kill application_1616588888888_0001
+
+    # 查看任务日志
+    yarn logs -applicationId application_1616588888888_0001
+    ```
+
+# 2.4 Yarn的工作流程
+？
+![Alt text](image-1.png)
+
+![img_7.png](img_7.png)
+
+1. Client 和 ResourceManager 交互进行任务提交。
+2. ResourceManager 预备提供开辟容器。
+3. ResourceManager 为 任务分配 容器。
+4. NodeManager 为任务启动容器和计算。
+5. 任务完毕，将开辟的容器资源释放。框架更新计算的进度和状态
+
+
 # 3. MapReduce架构
 
-MapReduce是Hadoop的分布式计算框架，负责集群的计算任务。
+分而治之
+
+MapReduce是Hadoop的分布式计算框架，用于大数据的离线计算。
+
+## 3.1 基础架构
+
+![Alt text](image.png)
+
+Map：将数据切分成一个个小的数据块，然后由多个MapTask并行处理。
+Shuffle：将MapTask的输出结果按照key进行排序，然后分区，最后将数据发送给ReduceTask。
+Reduce：将Shuffle的结果进行合并，最终得到最终结果。
+
+
