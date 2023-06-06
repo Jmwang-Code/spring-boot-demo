@@ -1,25 +1,7 @@
 # 1 HDFS架构
 
-## 1.1 HDFS 1.0 架构
-![img.png](img.png)
-NameNode 负责管理整个分布式系统的元数据，主要包括：
-- 目录树结构；
-- 文件到数据库 Block 的映射关系；
-- Block 副本及其存储位置等管理数据；
-- DataNode 的状态监控，两者通过段时间间隔的心跳来传递管理信息和数据信息，通过这种方式的信息传递，NameNode 可以获知每个 DataNode 保存的 Block 信息、DataNode 的健康状况、命令 DataNode 启动停止等（如果发现某个 DataNode 节点故障，NameNode 会将其负责的 block 在其他 DataNode 上进行备份）。
 
-这些数据保存在内存中，同时在磁盘保存两个元数据管理文件：fsimage 和 editlog。
-- fsimage：是内存命名空间元数据在外存的镜像文件；
-- editlog：则是各种元数据操作的 write-ahead-log 文件，在体现到内存数据变化前首先会将操作记入 editlog 中，以防止数据丢失。
-这两个文件相结合可以构造完整的内存数据。
-
-Secondary NameNode
-Secondary NameNode 并不是 NameNode 的热备机，而是定期从 NameNode 拉取 fsimage 和 editlog 文件，并对两个文件进行合并，形成新的 fsimage 文件并传回 NameNode，这样做的目的是减轻 NameNod 的工作压力，本质上 SNN 是一个提供检查点功能服务的服务点。
-
-DataNode
-负责数据块的实际存储和读写工作，Block 默认是64MB（HDFS2.0改成了128MB），当客户端上传一个大文件时，HDFS 会自动将其切割成固定大小的 Block，为了保证数据可用性，每个 Block 会以多备份的形式存储，默认是3份。
-
-## 1.2 HDFS 2.0 架构
+## 1.1 HDFS 2.0 架构
 ![img_1.png](img_1.png)
 Active NameNode 和 Standby NameNode：两台 NameNode 形成互备，一台处于 Active 状态，为主 NameNode，另外一台处于 Standby 状态，为备 NameNode，只有主 NameNode 才能对外提供读写服务；
 
@@ -30,6 +12,54 @@ Zookeeper 集群：为主备切换控制器提供主备选举支持；
 共享存储系统：共享存储系统是实现 NameNode 的高可用最为关键的部分，共享存储系统保存了 NameNode 在运行过程中所产生的 HDFS 的元数据。主 NameNode 和备 NameNode 通过共享存储系统实现元数据同步。在进行主备切换的时候，新的主 NameNode 在确认元数据完全同步之后才能继续对外提供服务。
 
 DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据块和 DataNode 之间的映射关系，为了使故障切换能够快速进行，DataNode 会同时向主 NameNode 和备 NameNode 上报数据块的位置信息。
+
+## 1.2 HDFS 基本架构
+![img_4.png](img_4.png)
+- NameNode: 管理许多元数据（内存中），会定期持久化到磁盘（文件名称fsimage（内存命名空间元数据在外存的镜像文件） edits（内存数据变化前首先会将操作记入 editlog）：可以用作回复任务）。
+
+- SecondaryNameNode: 辅助NameNode元数据（一条150字节）管理，对fsimage edits进行操作，形成新的 fsimage 文件并传回 NameNode，减轻NameNode的压力。
+
+- DataNode: 与NameNode维持心跳发送，负责数据块的存储和读写。Block默认大小为64M，每个Block默认存储 3个副本（HDFS2.0改为128）。
+
+## 1.3 存储副本应该放入那一台DataNode? 机架感知?
+
+![img_6.png](img_6.png)
+
+- 机架：机架是一种物理结构，机架中有多个节点，节点之间通过交换机连接。
+
+- 机架感知：在同一个机架内的DataNode之间进行数据块的复制，减少网络IO，提高效率。
+
+
+## 1.4 HDFS 读写流程
+<h1>Write</h1>
+
+![img_3.png](img_3.png)
+
+1. Client向NameNode发送RPC请求，请求上传文件
+2. NameNode检查元数据文件目录树
+3. 告诉Client，可以上传
+4. Client向NameNode发送RPC请求，请求上传第一个block
+5. NameNode检查DateNode，就近原则
+6. 告诉Client可用的DateNode列表
+7. 建立管道pipeline，从近到远连接所有DateNode
+8. 告诉Client，管道pipeline建立完成
+9. Client向DateNode建立数据传输流
+10. Client以package（64k）不断的发送数据
+11. 告诉返回Client，ACK确认信息
+12. 通知客户端block发送完毕，发送下一个block，直至完毕。
+
+<h1>Read</h1>
+
+![img_5.png](img_5.png)
+
+1. Client向NameNode发送RPC请求，请求下载文件
+2. 告诉Client，block地址列表
+   block01: datanode01, datanode02, datanode03
+   block02: datanode02, datanode01, datanode03
+   block03: datanode03, datanode01, datanode02
+Client就近原则，选择datanode01下载block01，选择datanode01下载block02，选择datanode01下载block03
+3. Client向DateNode建立数据流，读取block
+4. Client合并block，形成文件
 
 
 # 2. Yarn架构
