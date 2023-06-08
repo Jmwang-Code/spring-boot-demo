@@ -1,3 +1,41 @@
+# 0 Hadoop
+
+## 0.1 Hadoop 1.x 和 2.x 的区别
+![](../../demo-hadoop/img.png)
+
+资源调度方式的改变
+
+在1.x, 使用Jobtracker负责任务调度和资源管理,单点负担过重,在2.x中,新增了yarn作为集群的调度工具.在yarn中,使用ResourceManager进行 资源管理, 单独开启一个Container作为ApplicationMaster来进行任务管理.
+
+HA模式
+
+在1.x中没有HA模式,集群中只有一个NameNode,而在2.x中可以启用HA模式,存在一个Active NameNode 和Standby NameNode.
+
+HDFS Federation
+
+Hadoop 2.0中对HDFS进行了改进，使NameNode可以横向扩展成多个，每个NameNode分管一部分目录，进而产生了HDFS Federation，该机制的引入不仅增强了HDFS的扩展性，也使HDFS具备了隔离性
+
+## 0.2 大数据技术生态圈
+![](../../demo-hadoop/img_5.png)
+负责的就是数据计算层、数据库可视化、业务应用
+
+## 0.3 hadoop HA介绍
+![img_8.png](img_8.png)
+Active NameNode 和 Standby NameNode：两台 NameNode 形成互备，一台处于 Active 状态，为主 NameNode，另外一台处于 Standby 状态，为备 NameNode，只有主 NameNode 才能对外提供读写服务；
+ZKFailoverController（主备切换控制器，FC）：ZKFailoverController 作为独立的进程运行，对 NameNode 的主备切换进行总体控制。ZKFailoverController 能及时检测到 NameNode 的健康状况，在主 NameNode 故障时借助 Zookeeper 实现自动的主备选举和切换（当然 NameNode 目前也支持不依赖于 Zookeeper 的手动主备切换）；
+Zookeeper 集群：为主备切换控制器提供主备选举支持；
+共享存储系统：共享存储系统是实现 NameNode 的高可用最为关键的部分，共享存储系统保存了 NameNode 在运行过程中所产生的 HDFS 的元数据。主 NameNode 和备 NameNode 通过共享存储系统实现元数据同步。在进行主备切换的时候，新的主 NameNode 在确认元数据完全同步之后才能继续对外提供服务。
+DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据块和 DataNode 之间的映射关系，为了使故障切换能够快速进行，DataNode 会同时向主 NameNode 和备 NameNode 上报数据块的位置信息。
+
+## 0.4 小文件过多会有什么危害,如何避免?
+Hadoop上大量HDFS元数据信息存储在NameNode内存中,因此过多的小文件必定会压垮NameNode的内存.
+
+每个元数据对象约占150byte，所以如果有1千万个小文件，每个文件占用一个block，则NameNode大约需要2G空间。如果存储1亿个文件，则NameNode需要20G空间.
+
+显而易见的解决这个问题的方法就是合并小文件,可以选择在客户端上传时执行一定的策略先合并,或者是使用Hadoop的CombineFileInputFormat<K,V>实现小文件的合并
+
+
+
 # 1 HDFS架构
 
 HDFS是Hadoop分布式文件系统。
@@ -24,7 +62,7 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 
 ## 1.3 存储副本应该放入那一台DataNode? 机架感知?
 
-![img_6.png](img_6.png)
+![img_6.png](img_6.png) 
 
 - 机架：机架是一种物理结构，机架中有多个节点，节点之间通过交换机连接。
 
