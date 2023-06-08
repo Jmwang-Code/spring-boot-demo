@@ -39,7 +39,6 @@
 <!--    <module>demo-upload</module>-->
 <!--    <module>demo-cache-redis</module>-->
     <module>demo-design-mode</module>
-      <module>demo-java-web/java-web01-servlet</module>
       <module>demo-java-web/demo-java-spring300</module>
       <module>demo-java-web/demo-java-init-ioc</module>
       <module>demo-hadoop</module>
