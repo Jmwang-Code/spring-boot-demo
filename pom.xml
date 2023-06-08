@@ -86,6 +86,7 @@
 <!--    <module>demo-pay</module>-->
     <module>demo-quartz</module>
       <module>demo-mybatis</module>
+      <module>algorithm</module>
   </modules>
   <packaging>pom</packaging>
 
