@@ -139,10 +139,23 @@ MapReduce是Hadoop的分布式计算框架，用于大数据的离线计算。
 
 ## 3.1 基础架构
 
-![Alt text](image.png)
-
 Map：将数据切分成一个个小的数据块，然后由多个MapTask并行处理。
 Shuffle：将MapTask的输出结果按照key进行排序，然后分区，最后将数据发送给ReduceTask。
 Reduce：将Shuffle的结果进行合并，最终得到最终结果。
+
+MrappMaster：负责整个MapReduce的工作流程，包括任务的提交、监控、容错等。
+MapTask：负责数据的切分、处理、输出。
+ReduceTask：负责数据的合并、处理、输出。
+
+
+## 3.2 MapReduce 核心工作流程
+
+![Alt text](image.png)
+
+1. InputFormat、TextInputFormat 重写Mapper的map方法，将数据切分成一个个小的数据块，然后由多个MapTask并行处理。
+2. 自定义排序，将MapTask的输出结果按照key进行排序，然后分区，最后将数据发送给ReduceTask。
+3. OutputFormat、TextOutputFormat 将Shuffle的结果进行合并、排序、归约、分组，最终得到最终结果。
+4. 自定义Reduce重写Reducer的reduce方法,将Shuffle的结果进行合并、处理、输出。
+
 
 

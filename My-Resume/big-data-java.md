@@ -44,15 +44,15 @@ SQL场景开发 算子开发 和 算子性能，支持Java开发
 
 **FIRST 第一轮复盘**
 
-| \                                        | <span style="color:purple">HDFS | <span style="color:purple">YARN |   <span style="color:purple">HBASE   |   <span style="color:purple">HIVE   | <span style="color:purple">MapReduce |   <span style="color:purple">Spark   | <span style="color:purple">Flink |
-|------------------------------------------|---------------------------------|---------------------------------| ---- | ---- |--------------------------------------| ---- |-------|
-| <span style="color:red">**组件理论**  | 基础架构  读写流程                      | 基础架构 工作流程                       |      |      | 基础架构                                 |       |       |
-| <span style="color:red">**问题定位**  |                                 |                                 |      |      |                                      |       |       |
-| <span style="color:red">**调优配置**  |                                 |                                 |      |      |                                      |       |       |
-| <span style="color:red">**基础理论**  |                                 |                                 |      |      |                                      |       |       |
-| <span style="color:red">**项目场景**  |                                 |                                 |      |      |                                      |       |       |
-| <span style="color:red">**特色问题1** |                                 |                                 |      |      |                                      |       |       |
-| <span style="color:red">**特色问题2** |                                 |                                 |      |      |                                      |       |       |
+| \                                        | <span style="color:purple">HDFS | <span style="color:purple">YARN |   <span style="color:purple">HBASE   |    <span style="color:purple">MapReduce |   <span style="color:purple">Spark   | <span style="color:purple">Flink |
+|------------------------------------------|---------------------------------|---------------------------------| ---- | ---- |--------------------------------------| ---- |
+| <span style="color:red">**组件理论**  | 基础架构  读写流程                      | 基础架构 工作流程                       |      |      | 基础架构  核心工作流程                                |       |
+| <span style="color:red">**问题定位**  |                                 |                                 |      |      |                                      |       |
+| <span style="color:red">**调优配置**  |                                 |                                 |      |      |                                      |       |
+| <span style="color:red">**基础理论**  |                                 |                                 |      |      |                                      |       |
+| <span style="color:red">**项目场景**  |                                 |                                 |      |      |                                      |       |
+| <span style="color:red">**特色问题1** |                                 |                                 |      |      |                                      |       |
+| <span style="color:red">**特色问题2** |                                 |                                 |      |      |                                      |       |
 
 
 https://github.com/will-che/BigData-Interview
