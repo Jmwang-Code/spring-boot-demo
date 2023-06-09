@@ -16,7 +16,7 @@ MapReduce Spark Flink
 
 ## 3.开发调优
 
-1. 针对 hive spark flink 计算框架调优 （相对主要）
+1. 针对 spark flink 计算框架调优 （相对主要）
 数据倾斜 计算效率 shuffle 参数调优
 
 2. 代码层面开发
@@ -56,3 +56,5 @@ SQL场景开发 算子开发 和 算子性能，支持Java开发
 
 
 https://github.com/will-che/BigData-Interview
+
+副本机制
