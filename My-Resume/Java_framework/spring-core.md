@@ -199,16 +199,6 @@ Spring在单例模式下的setter方法依赖注入引起的循环依赖问题�
 2. setter方法进行依赖注入且是在多例（原型）模式，给所用的属性套用包装类型ObjectProvider `<XXX>`延迟获取的Bean接口，proAProvider.getIfAvailable();解决
 3. 通过setter方法进行依赖注入且是在单例模式,改用构造方法注入@Lazy解决，或者@Autowired+@Lazy，一起解决。
 
-# 10. 自动装配
-
-- 自动装配:在@Autowired注入点不指定Bean,Spring自动选择。
-- 依赖注入:在@Qualifier或XML中明确指定要注入的Bean,然后由Spring注入。
-  基于注解的自动装配
-- @Autowired:自动装配,默认按照类型注入,如果有多个Bean匹配,则按照属性名注入。（类型->属性）
-- @Qualifier:指定注入的Bean的名称。
-- @Primary:指定首选的Bean。
-- @Resource:自动装配,默认按照名称注入,如果没有匹配的Bean,则按照类型注入。（名->类型）
-- @Inject:自动装配,默认按照类型注入,如果有多个Bean匹配,则按照属性名注入。（类型->属性）
 
 # 11. Spring事务的实现方式
 
