@@ -34,7 +34,23 @@ Hadoop上大量HDFS元数据信息存储在NameNode内存中,因此过多的小�
 
 显而易见的解决这个问题的方法就是合并小文件,可以选择在客户端上传时执行一定的策略先合并,或者是使用Hadoop的CombineFileInputFormat<K,V>实现小文件的合并
 
+## 0.4 常用端口和配置文件（了解）
+1. 常用端口号
+- **hadoop3.x**
+  - HDES NameNode 内部通常端口: 8020/9000/9820
+  - HDES NameNode 对用户的查询端口: 9870
+  - Yarn查看任务运行情况的:8088
+   - 历史服务器: 19888
 
+
+- **hadoop2.x**
+  - HDES NameNode 内部通常端口: 8020/9000
+  - HDES NameNode 对用户的查询端口: 50070
+  - Yarn查看任务运行情况的:8088
+  - 历史服务器:19888
+2. 常用的配置文件
+   - 3.x core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml workers
+   - 2.x core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml slaves
 
 # 1 HDFS架构
 
