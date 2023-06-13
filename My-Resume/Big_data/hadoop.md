@@ -52,7 +52,7 @@ Zookeeper 集群：为主备切换控制器提供主备选举支持；
 
 DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据块和 DataNode 之间的映射关系，为了使故障切换能够快速进行，DataNode 会同时向主 NameNode 和备 NameNode 上报数据块的位置信息。
 
-## 1.2 HDFS 基本架构
+## 1.2 HDFS 基本架构 （重点）
 ![img_4.png](img_4.png)
 - NameNode: 管理许多元数据（内存中），会定期持久化到磁盘（文件名称fsimage（内存命名空间元数据在外存的镜像文件） edits（追加：内存数据变化前首先会将操作记入 editlog）：可以用作回复任务）。
 
@@ -69,7 +69,7 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 - 机架感知：在同一个机架内的DataNode之间进行数据块的复制，减少网络IO，提高效率。
 
 
-## 1.4 HDFS 读写流程
+## 1.4 HDFS 读写流程 （重点）
 <h1>Write</h1>
 
 ![img_3.png](img_3.png)
