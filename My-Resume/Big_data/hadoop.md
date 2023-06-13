@@ -97,7 +97,14 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
    block02: datanode02, datanode01, datanode03
    block03: datanode03, datanode01, datanode02
 Client就近原则，选择datanode01下载block01，选择datanode01下载block02，选择datanode01下载block03
-3. Client向DateNode建立数据流，读取block
+3. Client向DateNode建立数据流，读取block，考虑2个问题: 
+   1. 节点距离
+      <br>**拓扑结构，网络拓扑**
+      ![img_10.png](img_10.png)
+      n-0：服务器
+      机架1：机架（交换机）
+      集群d1：机房（比如上海虹桥集群机房）
+   2. 节点负载
 4. Client合并block，形成文件
 
 
