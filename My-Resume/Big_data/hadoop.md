@@ -54,13 +54,13 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 
 ## 1.2 HDFS 基本架构
 ![img_4.png](img_4.png)
-- NameNode: 管理许多元数据（内存中），会定期持久化到磁盘（文件名称fsimage（内存命名空间元数据在外存的镜像文件） edits（内存数据变化前首先会将操作记入 editlog）：可以用作回复任务）。
+- NameNode: 管理许多元数据（内存中），会定期持久化到磁盘（文件名称fsimage（内存命名空间元数据在外存的镜像文件） edits（追加：内存数据变化前首先会将操作记入 editlog）：可以用作回复任务）。
 
 - SecondaryNameNode: 辅助NameNode元数据（一条150字节）管理，对fsimage edits进行操作，形成新的 fsimage 文件并传回 NameNode，减轻NameNode的压力。
 
 - DataNode: 与NameNode维持心跳发送，负责数据块的存储和读写。Block默认大小为64M，每个Block默认存储 3个副本（HDFS2.0改为128）。
 
-## 1.3 存储副本应该放入那一台DataNode? 机架感知?
+## 1.3 存储副本应该放入那一台DataNode? 机架感知?   
 
 ![img_6.png](img_6.png) 
 
