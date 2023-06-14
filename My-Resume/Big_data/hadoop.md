@@ -218,6 +218,18 @@ ReduceTask：负责数据的合并、处理、输出。
 3. OutputFormat、TextOutputFormat 将Shuffle的结果进行合并、排序、归约、分组，最终得到最终结果。
 4. 自定义Reduce重写Reducer的reduce方法,将Shuffle的结果进行合并、处理、输出。
 
+## 3.3 MapTask并行度决定机制 (了解)
+
+**MapTask的并行度由输入数据的切片数决定，切片数由InputFormat决定。MapTask对应block的数量，一个block对应一个MapTask。**
+
+- 数据块：Block是HDFS物理上把数据分成一块一块。数据块是HDFS存储数据单位。
+- 数据切片：数据切片只是在逻辑上对输入进行分片，并不会在磁盘上将其切分成片进行存储。数据切片是MapReduce程序计算输入数据的单位，一个切片会对应启动一个MapTask。
+![img_12.png](img_12.png)
+
+## 3.4 CombinerTextInputFormat切片机制
+
+
+
 
 
 # 4. 架构设计分析 （可以谈谈自己理解）
