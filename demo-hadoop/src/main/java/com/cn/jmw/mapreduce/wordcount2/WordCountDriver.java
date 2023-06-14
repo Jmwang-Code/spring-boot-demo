@@ -55,7 +55,7 @@ public class WordCountDriver {
      * 把jar 放入/app/hadoop-2.8.5/share/hadoop/mapreduce/目录下
      *
      *
-     * 运行 /app/hadoop-2.8.5/bin/hadoop jar /app/hadoop-2.8.5/share/hadoop/mapreduce/wc.jar com.cn.jmw.mapreduce.wordcount2.WordCountDriver /test/test1/WordCount.txt /test.test1.WordCountOut.txt
+     * 运行 /app/hadoop-2.8.5/bin/hadoop jar /app/hadoop-2.8.5/share/hadoop/mapreduce/wc.jar com.cn.jmw.mapreduce.wordcount2.WordCountDriver /test/test1/ /test/test2/
      */
 
 
