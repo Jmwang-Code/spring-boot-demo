@@ -38,11 +38,12 @@ public class FlowDriver {
         //TODO 8 指定自定义分区器
         job.setPartitionerClass(CustomPartitioner.class);
         //TODO 9 同时指定相应数量的ReduceTask
-        job.setNumReduceTasks(5);
+//        job.setNumReduceTasks(5);
+        job.setNumReduceTasks(2);
 
         // 6 设置数据的输入路径和输出路径
         FileInputFormat.setInputPaths(job, new Path("D:\\coding\\deletedemo\\demo-hadoop\\src\\main\\resources\\phone_data.txt"));
-        FileOutputFormat.setOutputPath(job, new Path("D:\\coding\\deletedemo\\demo-hadoop\\src\\main\\resources\\partition\\"));
+        FileOutputFormat.setOutputPath(job, new Path("D:\\coding\\deletedemo\\demo-hadoop\\src\\main\\resources\\partition2\\"));
 
         // 7 提交job
         boolean result = job.waitForCompletion(true);
