@@ -61,7 +61,7 @@ public class HdfsClient {
     @Test
     public void testPut() throws IOException {
         // 参数解读：参数一：表示删除原数据； 参数二：是否允许覆盖；参数三：原数据路径； 参数四：目的地路径 TODO
-        fs.copyFromLocalFile(false, true, new Path("D:\\coding\\hadoop\\src\\main\\resources\\log4j.properties"), new Path("hdfs://192.168.102.69:8020/test/test1"));
+        fs.copyFromLocalFile(false, true, new Path("D:\\coding\\deletedemo\\demo-hadoop\\src\\main\\resources\\WordCount.txt"), new Path("hdfs://192.168.102.69:8020/test/test1"));
     }
 
     @Test
