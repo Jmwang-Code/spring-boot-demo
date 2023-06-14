@@ -1,4 +1,4 @@
-package com.cn.jmw.combineTextInputformat;
+package com.cn.jmw.mapreduce.combineTextInputformat;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
