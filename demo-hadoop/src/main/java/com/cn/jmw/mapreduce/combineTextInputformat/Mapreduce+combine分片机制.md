@@ -7,3 +7,5 @@ INFO org.apache.hadoop.mapreduce.JobSubmitter - number of splits:4
 ## CombineTextInputFormat切片是在什么MapReduce什么阶段？
 在InputFormat阶段，也就是Map和Shuffle之间。
 
+是为了控制分片文件的数量，从而减少资源消耗，提高效率。
+
