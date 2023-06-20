@@ -185,12 +185,32 @@ RM:NM = 1:n (n>=1)
 
 ![img_7.png](img_7.png)
 
+![img_13.png](img_13.png)
+
 1. Client 和 ResourceManager 交互进行任务提交。
 2. ResourceManager 预备提供开辟容器。
 3. ResourceManager 为 任务分配 容器。
 4. NodeManager 为任务启动容器和计算。
 5. 任务完毕，将开辟的容器资源释放。框架更新计算的进度和状态
 
+# 2.5 Yarn调度器
+Yarn调度器是ResourceManager的一个组件，负责资源的分配和调度。
+FIFO、容量（Capacity Scheduler）和公平（Fair Scheduler）
+
+### 2.5.1 FIFO
+单队列Job先进先出
+
+### 2.5.2 容量调度器 （apache 默认调度器）
+![img_14.png](img_14.png)
+
+分配算法
+![img_15.png](img_15.png)
+ 
+### 2.5.3 公平调度器 （CDH 默认调度器是公平）
+![img_16.png](img_16.png)
+
+缺额
+![img_17.png](img_17.png)
 
 # 3. MapReduce架构
 
