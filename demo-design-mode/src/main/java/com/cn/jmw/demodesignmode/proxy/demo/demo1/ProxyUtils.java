@@ -3,6 +3,7 @@ package com.cn.jmw.demodesignmode.proxy.demo.demo1;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProxyUtils {
 
@@ -29,5 +30,11 @@ public class ProxyUtils {
         Map.put(2,null);
         System.out.println(Map.get(1));
         System.out.println(Map.get(2));
+
+        ConcurrentHashMap<Object, Object> objectObjectConcurrentHashMap = new ConcurrentHashMap<>();
+//        objectObjectConcurrentHashMap.put(null,"123");
+//        System.out.println(objectObjectConcurrentHashMap.get(null));
+        objectObjectConcurrentHashMap.put(123,null);
+        System.out.println(objectObjectConcurrentHashMap.get(123));
     }
 }
