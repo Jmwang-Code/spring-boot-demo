@@ -13,7 +13,6 @@ CGLIB 动态代理:
 # JDK动态代理 VS CGLIB动态代理
 - JDK动态代理只能代理实现了接口的类 <span style="color:yellow;">VS</span> CGLIB可以代理未实现接口的类。
 - JDK动态代理是通过反射来实现的 <span style="color:yellow;">VS</span> CGLIB是通过生成字节码来实现的。
-- JDK动态代理和CGLIB动态代理都是在运行期生成字节码 <span style="color:darkorchid;">Commonality point</span> 
 - JDK调用代理方法，是通过反射机制调用,执行效率低 <span style="color:yellow;">VS</span> CGLIB是通过FastClass机制直接调用方法，执行效率高。
 - JDK（直接写Class字节码）创建效率高，CGLIB（ASM框架写Class字节码）创建效率低 <span style="color:yellow;">VS</span> JDK（反射）运行时效率低，CGLIB（FastClass机制直接调用）运行时的效率高。
 
