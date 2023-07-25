@@ -4,7 +4,7 @@ List、Set、Map、Queue、Deque
 # 2. List Set Map Queue Deque 之间的区别是什么？
 - `List`(对付顺序的好帮手)：元素有序、可重复、可为null
 - `Set`(注重独一无二的性质)：元素无序、不可重复、可为null
-- `Map`(用Key来搜索的专家)：元素无序、不可重复、Key不可为null、Value可为null
+- `Map`(用Key来搜索的专家)：元素无序、不可重复、Key和Value可为null
 - `Queue`(用于模拟队列数据结构使用)：元素有序、可重复、可为null
 - `Deque`(双端队列，可以当作栈和队列来使用)：元素有序、可重复、可为null
 

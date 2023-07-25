@@ -1,6 +1,8 @@
 package com.cn.jmw.demodesignmode.proxy.demo.demo1;
 
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProxyUtils {
 
@@ -19,5 +21,13 @@ public class ProxyUtils {
         proxy.login();
         proxy.delete();
         proxy.query();
+
+        Map Map = new HashMap();
+        Map.put(null,"1235");
+        System.out.println(Map.get(null));
+        Map.put(1,null);
+        Map.put(2,null);
+        System.out.println(Map.get(1));
+        System.out.println(Map.get(2));
     }
 }
