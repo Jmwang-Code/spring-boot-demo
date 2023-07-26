@@ -75,24 +75,7 @@ public class CglibProxyFactory {
 ```
 
 # 动态代理的应用场景
-| \   |   使用JDK动态代理的技术   |   使用CGLIB动态代理的技术   |
-|-----| ---- | ---- |
-| 1   |   `Spring Cloud Feign`   |   `Hibernate 延迟加载`   |
-| 2   |   `Spring Cloud OpenFeign`   |   `MyBatis 缓存`   |
-| 3   |   `Spring Cloud Security`   |   `Spring 事务控制`   |
-| 4   |   `Spring Cloud Contract`   |   `Spring Cloud Zuul`   |
-| 5   |   `Spring Cloud Function`   |   `Spring Cloud Hystrix`   |
-| 6   |      |   `Spring Cloud Ribbon`   |
-| 7   |      |   `Spring Cloud Sleuth`   |
-| 8   |      |   `Spring Cloud Config`   |
-| 9   |      |   `Spring Cloud Stream`   |
-| 10  |      |   `Spring Cloud Consul`   |
-| 11  |      |   `Spring Cloud Zookeeper`   |
-| 12  |      |   `Spring Cloud Vault`   |
-| 13  |      |   `Spring Cloud Gateway`   |
-| 14  |      |   `Spring Cloud Task`   |
-| 15  |      |   `Spring Cloud Cloudfoundry`   |
-| 16  |      |   `Spring Cloud Kubernetes`   |
-| 17  |      |   `Spring Cloud Alibaba`   |
-| 18  |      |   `Spring Cloud Bus`   |
-| 19  |      |   `Spring Cloud CircuitBreaker`   |
+| \   | 使用JDK动态代理的技术     | 使用CGLIB动态代理的技术 |
+|-----|------------------|----------------|
+| 1   | Spring注解@Service | 注解@Aspect      |
+| 2   | 自定义日志收集、慢函数计算时间  | 自定义日志收集、慢函数计算时间            |
