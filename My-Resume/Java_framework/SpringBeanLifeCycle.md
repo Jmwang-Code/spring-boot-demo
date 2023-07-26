@@ -1,12 +1,12 @@
 # <span style="color:red">**Spring Bean的生命周期** (面试)</span>
 
-![img.png](imgBean-1.png)
+![img.png](img.png)
 # 1. 三大阶段：
 1. 生产
 2. 使用
 3. 销毁
 
-![img.png](imgBean-2.png)
+![img_1.png](img_1.png)
 ## 1.1 生产
 1. <span style="color:red">**IOC容器（容器初始化、启动流程） (面试) **</span>
    1. Resource定位
@@ -23,7 +23,7 @@
 ## 1.2 使用
 从单例池中获取bean实例 getSingleton
 
-![img.png](imgBean-3.png)
+![img_2.png](img_2.png)
 ## 1.3 销毁
 1.处理器销毁前的方法 @PreDestroy
 2.销毁实例 destroyBeans
