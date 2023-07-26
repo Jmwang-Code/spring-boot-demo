@@ -1,12 +1,13 @@
 # 1. 锁
 
-常用和锁、线程安全相关的工具：synchronized、ReentrantLock、AtomicInteger、AtomicLong、CopyOnWriteArrayList、CopyOnWriteArraySet、ConcurrentHashMap、ConcurrentSkipListMap、ConcurrentSkipListSet
+常用锁：synchronized、ReentrantLock
 
 # 2. ReentrantLock
 ![Alt text](../images/imagehello.png)
 
 ## 2.1 ReentrantLock 的实现原理
-ReentrantLock 是基于 AQS（AbstractQueuedSynchronizer）实现的，AQS 是一个用于构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器，比如常用的 ReentrantLock、Semaphore、CountDownLatch、ReentrantReadWriteLock、ThreadPoolExecutor 等。
+
+ReentrantLock 是基于 AQS（AbstractQueuedSynchronizer）实现的，AQS 是一个用于构建锁和同步器的框架，使用 AQS 能简单且高效地构造出应用广泛的大量的同步器，比如常用的 ReentrantLock、CountDownLatch、ReentrantReadWriteLock、ThreadPoolExecutor 等。
 
 ## 2.2 AQS 是什么？
 AQS 内部维护了一个 volatile int state 和一个 FIFO 队列，state 用于表示同步状态，FIFO 队列用于存放获取同步状态失败的线程。
