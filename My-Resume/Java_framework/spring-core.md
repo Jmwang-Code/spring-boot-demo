@@ -1,4 +1,4 @@
-# 1 IOC 和 AOP 的联系和区别 
+# 1. IOC 和 AOP 的联系和区别 
 
 IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。
 
@@ -13,6 +13,18 @@ BeanDefinition的载入：这个过程是将Resource定位到的信息，转换�
 BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。BeanDefinitionRegistry注册
 
 ![img_7.png](../images/img_7.png)
+
+# Spring框架中有哪些不同类型的事件（不重要）
+
+Spring 提供了以下5种标准的事件：
+
+1. 上下文更新事件（ContextRefreshedEvent）：在调用ConfigurableApplicationContext 接口中的refresh()方法时被触发。
+2. 上下文开始事件（ContextStartedEvent）：当容器调用ConfigurableApplicationContext的Start()方法开始/重新开始容器时触发该事件。
+3. 上下文停止事件（ContextStoppedEvent）：当容器调用ConfigurableApplicationContext的Stop()方法停止容器时触发该事件。
+4. 上下文关闭事件（ContextClosedEvent）：当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
+5. 请求处理事件（RequestHandledEvent）：在Web应用中，当一个http请求（request）结束触发该事件。
+   如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
+   ![img_10.png](../images/img_10.png)
 
 # 3. Spring的Bean的生命周期
 
@@ -114,6 +126,7 @@ aop是ioc的一个扩展功能，只是在ioc整个流程中的一个扩展点�
 ## 4.4 AOP实现方式 （面试）
 
 AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动态代理。静态代理的代表为AspectJ；动态代理则以Spring AOP为代表。
+一般安卓开发中会使用到AspectJ，而在JavaWeb开发中会使用到Spring AOP。
 
 （1）AspectJ是静态代理，也称为编译时增强，AOP框架会在编译阶段生成AOP代理类。
 
@@ -228,19 +241,10 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
 7. `<span style="color:yellow">`没了解过 适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
 8. `<span style="color:yellow">`没了解过 迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
 
-# Spring框架中有哪些不同类型的事件（不重要）
 
-Spring 提供了以下5种标准的事件：
-
-1. 上下文更新事件（ContextRefreshedEvent）：在调用ConfigurableApplicationContext 接口中的refresh()方法时被触发。
-2. 上下文开始事件（ContextStartedEvent）：当容器调用ConfigurableApplicationContext的Start()方法开始/重新开始容器时触发该事件。
-3. 上下文停止事件（ContextStoppedEvent）：当容器调用ConfigurableApplicationContext的Stop()方法停止容器时触发该事件。
-4. 上下文关闭事件（ContextClosedEvent）：当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
-5. 请求处理事件（RequestHandledEvent）：在Web应用中，当一个http请求（request）结束触发该事件。
-   如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
-   ![img_10.png](../images/img_10.png)
 
 # 11. Spring支持哪些Aware接口?
+Spring 所管理的对象或者信息，都可以通过实现相应的Aware接口来获取。
 
 - ApplicationContextAware:获取ApplicationContext对象
 - BeanFactoryAware:获取BeanFactory对象
