@@ -32,7 +32,11 @@ List、Set、Map、Queue、Deque
 - `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
 - `ConcurrentHashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，不可以有`null`元素，线程安全，效率高
 
-## 2.5 HashMap 和 TreeMap 的区别是什么？
+## 2.5 为什么ConcurrentHashMap效率会高?
+- 分段锁：ConcurrentHashMap 内部采用了分段锁的机制，将整个哈希表分成了多个段（Segment），每个段都有自己的锁。这样，在多线程环境下，不同的线程可以同时访问不同的段，从而减少了锁的竞争，提高了并发性能。
+- CAS 操作：ConcurrentHashMap 内部采用了 CAS（Compare and Swap）操作来实现线程安全，而不是像 Hashtable 和 synchronizedMap 一样使用重量级锁。CAS 操作是一种基于硬件支持的原子操作，可以在不使用锁的情况下实现线程安全，从而提高了并发性能。
+
+## 2.6 HashMap 和 TreeMap 的区别是什么？
 - `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
 - `TreeMap`：内部是通过红黑树实现的，不允许重复元素，不可以有`null`元素，线程不安全，效率高。可以对元素进行排序。通过SortedMap接口实现。
 
