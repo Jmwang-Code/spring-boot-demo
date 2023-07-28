@@ -8,7 +8,7 @@
 ![img.png](img.png)
 
 # LSM-TREE （多用于分布式存储，针对大规模高并发的数据量写入：clickhouse）
-数据按照时间顺序存储在磁盘上，以减少磁盘 I/O 操作和提高写入性能。
+数据按照时间顺序存储在磁盘上，以减少磁盘 I/O 操作和提高写入性能。以APPEND的方式写入数据。
 LSM-Tree 由内存中的 MemTable 和磁盘中的 SSTable 组成。
 
 日志结构合并树(Log-Structured Merge-Tree)其实它并不属于一个具体的数据结构，是一种思想。
