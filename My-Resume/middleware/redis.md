@@ -1,12 +1,13 @@
 # Redis的基本数据结构
 1. String 字符串
-2. Hash 哈希
-3. List 列表
-4. Set 集合
-5. Zset 有序集合
-6. Bitmaps 位图
-7. HyperLogLog 基数
-8. GEO 地理位置
+1. List 列表
+1. Hash 哈希表
+1. Set 无序集合
+1. Sorted Set 有序集合 （ZSet，有权重score）
+1. Bitmap 布隆过滤器
+1. GeoHash 坐标 （底层使用Zset实现）
+1. HyperLogLog 统计不重复数据
+1. Streams 内存版 kafka
 
 # Redis 和 Mysql 如何保证数据一致性
 在高并发的环境下，比如增删改：Redis和数据库的数据可能会存在不一致的问题，极端情况下这种问题更严重。
