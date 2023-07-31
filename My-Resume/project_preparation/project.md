@@ -50,7 +50,6 @@ G1 :java -XX:+UseG1GC -Xmx40g -XX:ConcGCThreads=8 -XX:G1HeapRegionSize=32m -XX:M
    将多个关系的图数据库转换为大宽表导入 ClickHouse，可以采用以下两种方式：
 
    1. 使用 ETL 工具进行转换：可以使用 ETL 工具（例如 Apache Spark、Apache Flink 等）将多个关系的图数据库转换为大宽表，然后再将大宽表导入 ClickHouse 中。具体来说，可以将多个关系的图数据库中的节点和边转换为表格形式，然后将这些表格进行合并和关联，最终得到大宽表。然后，可以使用 ClickHouse 的数据导入工具将大宽表导入到 ClickHouse 中。
-
    2. 使用图数据库的导出工具进行转换：可以使用多个关系的图数据库的导出工具将数据导出为 CSV 格式的文件，然后使用 ETL 工具将这些 CSV 文件转换为大宽表，最终将大宽表导入 ClickHouse 中。具体来说，可以使用多个关系的图数据库的导出工具将节点和边导出为 CSV 格式的文件，然后使用 ETL 工具将这些 CSV 文件进行合并和关联，最终得到大宽表。然后，可以使用 ClickHouse 的数据导入工具将大宽表导入到 ClickHouse 中。
 
 3. Flink-CDC数据迁移
@@ -61,5 +60,34 @@ G1 :java -XX:+UseG1GC -Xmx40g -XX:ConcGCThreads=8 -XX:G1HeapRegionSize=32m -XX:M
    3. 将流数据传输到目标数据库中：Flink-CDC 可以将转换后的流数据传输到目标数据库中，并进行数据的插入、更新、删除等操作，从而实现数据的实时同步和迁移。
 
 
+# 1. 具体实现
+## 1.1 Nebula数据入ck，完成CMDB大宽表的数据处理
+**使用 Flink 将 Nebula Graph 中的数据导入到 ClickHouse 中，可以采用以下步骤实现：**
+
+1. 使用 Nebula Graph 的导出工具将数据导出为 CSV 格式的文件。
+
+2. 使用 Flink 的 CSV 格式读取器将 CSV 文件读取为 Flink 的 DataStream。
+
+3. 使用 Flink 的转换算子对 DataStream 进行转换，将 Nebula Graph 中的数据转换为 ClickHouse 中的数据格式。
+
+4. 使用 Flink 的 ClickHouse 格式写入器将转换后的数据写入到 ClickHouse 中。
+
+**具体的实现步骤如下：**
+
+1. 使用 Nebula Graph 的导出工具将数据导出为 CSV 格式的文件。可以使用 Nebula Graph 的命令行工具 nebula-exporter 来导出数据。例如，可以使用以下命令将 Nebula Graph 中的数据导出为 CSV 格式的文件：
+
+其中，/path/to/nebula-exporter.conf 是 Nebula Graph 的配置文件路径，--type csv 表示导出为 CSV 格式，/path/to/output/dir 是导出文件的输出目录。
+
+2. 使用 Flink 的 CSV 格式读取器将 CSV 文件读取为 Flink 的 DataStream。可以使用 Flink 的 CsvSource 算子来读取 CSV 文件。例如，可以使用以下代码将 CSV 文件读取为 Flink 的 DataStream：
+
+其中，env 是 Flink 的执行环境，/path/to/csv/file 是导出的 CSV 文件路径。
+
+3. 使用 Flink 的转换算子对 DataStream 进行转换，将 Nebula Graph 中的数据转换为 ClickHouse 中的数据格式。具体的转换方式需要根据具体的业务需求和场景进行选择和配置。例如，可以使用 Flink 的 Map 算子将 CSV 格式的数据转换为 ClickHouse 格式的数据。例如，可以使用以下代码将 CSV 格式的数据转换为 ClickHouse 格式的数据：
+
+4. 使用 Flink 的 ClickHouse 格式写入器将转换后的数据写入到 ClickHouse 中。可以使用 Flink 的 ClickHouseOutputFormat 来将数据写入到 ClickHouse 中。例如，可以使用以下代码将转换后的数据写入到 ClickHouse 中：
+
+```clickHouseStream.writeUsingOutputFormat(new ClickHouseOutputFormat(url, username, password));```
+
+其中，url、username 和 password 分别是 ClickHouse 的连接信息。
 
 
