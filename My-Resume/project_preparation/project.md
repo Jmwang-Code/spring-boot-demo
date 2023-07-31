@@ -7,7 +7,7 @@
 | <span style="color:red">**问题定位**  | 1.实体识别树补全实体识别树之外的空缺 2.希望减少在结构化中的耗时，将耗时功能都简化 3.树之间的数据一致性 4.数据恢复问题                     |
 | <span style="color:red">**调优配置**  | 使用G1解决大内存FULL GC的问题                                                                  |
 | <span style="color:red">**基础理论**  | 字典树、前缀树核心算法（以空间换时间）                                                                  |
-| <span style="color:red">**项目场景**  | 补全了在公司人工智能部实体识别树之外的实体识别树，NPL训练的模型识别目的性强，受算力和模型影响识别较慢，在大数据的场景下需要更快的检索速度。              |
+| <span style="color:red">**项目场景**  | 在大数据的场景下需要更快的检索速度。              |
 | <span style="color:red">**特色问题1** | 这个东西会比那ES快么？    并不是他的效率远超ES。内存占用也远超，因为不做磁盘IO。                                        |
 | <span style="color:red">**特色问题2** | 这个节点会不会形成环？    目前没有见过这个问题，如果出现会优化算法。                                                 |
 
@@ -23,15 +23,15 @@ G1 :java -XX:+UseG1GC -Xmx40g -XX:ConcGCThreads=8 -XX:G1HeapRegionSize=32m -XX:M
 
 # 2. 数据报表
 
-| \                                   | <span style="color:purple">数据报表          | 
-|-------------------------------------|------------------------------------------|
-| <span style="color:red">**组件理论**  | SPI机制（方便实现和扩展） 关系型和非关系型抽象多层（加亿层） 包容各种数据源 |
-| <span style="color:red">**问题定位**  |                                          |
-| <span style="color:red">**调优配置**  |                                          |
-| <span style="color:red">**基础理论**  |                                          |
-| <span style="color:red">**项目场景**  |                                          |
-| <span style="color:red">**特色问题1** |                                          |
-| <span style="color:red">**特色问题2** |                                          |
+| \                                   | <span style="color:purple">数据报表                                  | 
+|-------------------------------------|------------------------------------------------------------------|
+| <span style="color:red">**组件理论**  | SPI机制（方便实现和扩展） 关系型和非关系型抽象多层（加亿层） 包容各种数据源                         |
+| <span style="color:red">**问题定位**  | 1.各种数据源的扩展抽象设计 2.新增一种也可以直接通过简单实现SPI接口进行插槽对接 3.非关系型转换成关系型展示，并且持久化 |
+| <span style="color:red">**调优配置**  | 简单的非标参数最大最小堆设置                                                   |
+| <span style="color:red">**基础理论**  | 工厂+单例+策略+SPI                                                     |
+| <span style="color:red">**项目场景**  | 1.为报表提供各种各样的数据源                                                  |
+| <span style="color:red">**特色问题1** |                                                                  |
+| <span style="color:red">**特色问题2** |                                                                  |
 
 # 3. 中台数据调度
 
