@@ -107,9 +107,47 @@ DataStream<Row> clickHouseStream = csvStream.map(new MapFunction<String, Row>() 
 clickHouseStream.writeUsingOutputFormat(new ClickHouseOutputFormat(url, username, password));
 ```
 
-
-
-
-
 其中，url、username 和 password 分别是 ClickHouse 的连接信息。
 
+## 1.2 Flink-CDC数据迁移
+
+**使用 Flink-CDC 将数据从源数据库迁移到目标数据库，可以采用以下步骤实现：**
+
+1. 配置 Flink-CDC，实时捕获源数据库的变更。
+
+2. 将捕获的变更数据转换为流数据，并进行格式化和清洗。
+
+3. 将转换后的流数据传输到目标数据库中，并进行数据的插入、更新、删除等操作。
+
+**具体的实现步骤如下：**
+
+1. 配置 Flink-CDC，实时捕获源数据库的变更。可以使用 Flink-CDC 的官方提供的 connectors，例如 MySQL、PostgreSQL、MongoDB 等。以 MySQL 为例，可以使用以下代码配置 Flink-CDC：
+```java
+Properties properties = new Properties();
+properties.setProperty("connector", "mysql-cdc");
+properties.setProperty("hostname", "localhost");
+properties.setProperty("port", "3306");
+properties.setProperty("username", "root");
+properties.setProperty("password", "password");
+properties.setProperty("database-name", "database_name");
+
+DataStream<Row> stream = env.addSource(new FlinkCDCSource(properties));
+```
+其中，env 是 Flink 的执行环境，properties 是 MySQL 的连接信息。
+
+2. 将捕获的变更数据转换为流数据，并进行格式化和清洗。可以使用 Flink 的转换算子对 DataStream 进行转换，将变更数据转换为目标数据库中的数据格式。例如，可以使用 Flink 的 Map 算子将 MySQL 中的数据转换为 ClickHouse 中的数据格式。例如，可以使用以下代码将 MySQL 中的数据转换为 ClickHouse 中的数据格式：
+```java
+DataStream<Row> clickHouseStream = stream.map(new MapFunction<Row, Row>() {
+    @Override
+    public Row map(Row value) throws Exception {
+        // 将 MySQL 中的数据转换为 ClickHouse 中的数据格式
+        // ...
+        return row;
+    }
+});
+```
+3. 将转换后的流数据传输到目标数据库中，并进行数据的插入、更新、删除等操作。可以使用 Flink 的 ClickHouse 格式写入器将转换后的数据写入到 ClickHouse 中。例如，可以使用以下代码将转换后的数据写入到 ClickHouse 中：
+```java
+clickHouseStream.writeUsingOutputFormat(new ClickHouseOutputFormat(url, username, password));
+```
+其中，url、username 和 password 分别是 ClickHouse 的连接信息。
