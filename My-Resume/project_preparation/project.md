@@ -6,10 +6,10 @@
 | <span style="color:red">**组件理论**  | 缓存机制 日志先行机制 数据源内核（这个可以优化自动加载还是手动都是加锁在查询器上，如果让锁粒度细化到每个节点上，并行效率就大大提高了） 荷官（哨兵机制） 备用主从机制 |
 | <span style="color:red">**问题定位**  | 1.实体识别树补全实体识别树之外的空缺 2.希望减少在结构化中的耗时，将耗时功能都简化 3.树之间的数据一致性 4.数据恢复问题                     |
 | <span style="color:red">**调优配置**  | 使用G1解决大内存FULL GC的问题                                                                  |
-| <span style="color:red">**基础理论**  | 字典树、前缀树核心算法                                                                          |
-| <span style="color:red">**项目场景**  |                                                                                      |
-| <span style="color:red">**特色问题1** |                                                                                      |
-| <span style="color:red">**特色问题2** |                                                                                      |
+| <span style="color:red">**基础理论**  | 字典树、前缀树核心算法（以空间换时间）                                                                  |
+| <span style="color:red">**项目场景**  | 补全了在公司人工智能部实体识别树之外的实体识别树，NPL训练的模型识别目的性强，受算力和模型影响识别较慢，在大数据的场景下需要更快的检索速度。              |
+| <span style="color:red">**特色问题1** | 这个东西会比那ES快么？    并不是他的效率远超ES。内存占用也远超，因为不做磁盘IO。                                        |
+| <span style="color:red">**特色问题2** | 这个节点会不会形成环？    目前没有见过这个问题，如果出现会优化算法。                                                 |
 
 G1 :java -XX:+UseG1GC -Xmx40g -XX:ConcGCThreads=8 -XX:G1HeapRegionSize=32m -XX:MaxGCPauseMillis=200 -XX:G1NewSizePercent=40
 垃圾回收时间控制在200ms左右，内存分配率控制在 40% 左右，
