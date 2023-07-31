@@ -76,18 +76,40 @@ G1 :java -XX:+UseG1GC -Xmx40g -XX:ConcGCThreads=8 -XX:G1HeapRegionSize=32m -XX:M
 
 1. 使用 Nebula Graph 的导出工具将数据导出为 CSV 格式的文件。可以使用 Nebula Graph 的命令行工具 nebula-exporter 来导出数据。例如，可以使用以下命令将 Nebula Graph 中的数据导出为 CSV 格式的文件：
 
+```java
+nebula-exporter --config /path/to/nebula-exporter.conf --type csv --output /path/to/output/dir
+```
 其中，/path/to/nebula-exporter.conf 是 Nebula Graph 的配置文件路径，--type csv 表示导出为 CSV 格式，/path/to/output/dir 是导出文件的输出目录。
 
 2. 使用 Flink 的 CSV 格式读取器将 CSV 文件读取为 Flink 的 DataStream。可以使用 Flink 的 CsvSource 算子来读取 CSV 文件。例如，可以使用以下代码将 CSV 文件读取为 Flink 的 DataStream：
 
+```java
+DataStream<String> csvStream = env.readTextFile("/path/to/csv/file");
+```
 其中，env 是 Flink 的执行环境，/path/to/csv/file 是导出的 CSV 文件路径。
 
 3. 使用 Flink 的转换算子对 DataStream 进行转换，将 Nebula Graph 中的数据转换为 ClickHouse 中的数据格式。具体的转换方式需要根据具体的业务需求和场景进行选择和配置。例如，可以使用 Flink 的 Map 算子将 CSV 格式的数据转换为 ClickHouse 格式的数据。例如，可以使用以下代码将 CSV 格式的数据转换为 ClickHouse 格式的数据：
 
+```java
+DataStream<Row> clickHouseStream = csvStream.map(new MapFunction<String, Row>() {
+    @Override
+    public Row map(String value) throws Exception {
+        // 将 CSV 格式的数据转换为 ClickHouse 格式的数据
+        // ...
+        return row;
+    }
+});
+```
+
 4. 使用 Flink 的 ClickHouse 格式写入器将转换后的数据写入到 ClickHouse 中。可以使用 Flink 的 ClickHouseOutputFormat 来将数据写入到 ClickHouse 中。例如，可以使用以下代码将转换后的数据写入到 ClickHouse 中：
 
-```clickHouseStream.writeUsingOutputFormat(new ClickHouseOutputFormat(url, username, password));```
+```java
+clickHouseStream.writeUsingOutputFormat(new ClickHouseOutputFormat(url, username, password));
+```
+
+
+
+
 
 其中，url、username 和 password 分别是 ClickHouse 的连接信息。
-
 
