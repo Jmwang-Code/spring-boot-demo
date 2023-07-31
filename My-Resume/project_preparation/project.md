@@ -35,3 +35,31 @@ G1 :java -XX:+UseG1GC -Xmx40g -XX:ConcGCThreads=8 -XX:G1HeapRegionSize=32m -XX:M
 
 # 3. 中台数据调度
 
+| \                                   | <span style="color:purple">中台数据调度 | 
+|-------------------------------------|---------------------------------|
+| <span style="color:red">**组件理论**  |                                 |
+| <span style="color:red">**问题定位**  |                                 |
+| <span style="color:red">**调优配置**  |                                 |
+| <span style="color:red">**基础理论**  |                                 |
+| <span style="color:red">**项目场景**  |                                 |
+| <span style="color:red">**特色问题1** |                                 |
+| <span style="color:red">**特色问题2** |                                 |
+
+1. 通过Aviator Flink定时批 和 Flink SQL流任务，通过算子拼接，实现数据的实时和离线的同步。
+2. Nebula数据入ck，完成CMDB大宽表的数据处理
+   将多个关系的图数据库转换为大宽表导入 ClickHouse，可以采用以下两种方式：
+
+   1. 使用 ETL 工具进行转换：可以使用 ETL 工具（例如 Apache Spark、Apache Flink 等）将多个关系的图数据库转换为大宽表，然后再将大宽表导入 ClickHouse 中。具体来说，可以将多个关系的图数据库中的节点和边转换为表格形式，然后将这些表格进行合并和关联，最终得到大宽表。然后，可以使用 ClickHouse 的数据导入工具将大宽表导入到 ClickHouse 中。
+
+   2. 使用图数据库的导出工具进行转换：可以使用多个关系的图数据库的导出工具将数据导出为 CSV 格式的文件，然后使用 ETL 工具将这些 CSV 文件转换为大宽表，最终将大宽表导入 ClickHouse 中。具体来说，可以使用多个关系的图数据库的导出工具将节点和边导出为 CSV 格式的文件，然后使用 ETL 工具将这些 CSV 文件进行合并和关联，最终得到大宽表。然后，可以使用 ClickHouse 的数据导入工具将大宽表导入到 ClickHouse 中。
+
+3. Flink-CDC数据迁移
+   具体来说，Flink-CDC 可以通过以下步骤实现数据迁移：
+
+   1. 监听源数据库的变更：Flink-CDC 可以通过监听源数据库的 binlog（MySQL）或者 oplog（MongoDB）来实时捕获源数据库的变更。
+   2. 将变更数据转换为流数据：Flink-CDC 可以将捕获的变更数据转换为流数据，并进行格式化和清洗，以便于后续的处理和传输。
+   3. 将流数据传输到目标数据库中：Flink-CDC 可以将转换后的流数据传输到目标数据库中，并进行数据的插入、更新、删除等操作，从而实现数据的实时同步和迁移。
+
+
+
+
