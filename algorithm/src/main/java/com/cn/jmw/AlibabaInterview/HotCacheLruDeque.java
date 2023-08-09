@@ -56,6 +56,7 @@ public class HotCacheLruDeque {
                 if (map.getOrDefault(oKey, null)==null){
                     map.put(oKey,oValue);
                     deque.addLast(oValue);
+                    counter.incrementAndGet();
                 }
             }finally {
                 write.unlock();
@@ -68,6 +69,9 @@ public class HotCacheLruDeque {
                 if (map.getOrDefault(oKey, null)==null){
                     map.remove(oKey);
                     deque.remove(oValue);
+
+                    map.put(oKey,oValue);
+                    deque.addLast(oValue);
                 }
             }finally {
                 write.unlock();
