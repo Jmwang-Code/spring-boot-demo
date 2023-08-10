@@ -1,3 +1,7 @@
+# 0. 在InnoDB和Oracle
+InnoDB默认隔离界别：可重复读（Repeatable Read）
+Oracle默认隔离界别：读已提交（Read Committed）
+
 # 1. Mysql中的锁
 基于锁的属性分类：共享锁（读锁）和排他锁（写锁）
 基于锁的粒度分类：表锁、行锁、页锁、记录锁、间隙锁、临键锁
