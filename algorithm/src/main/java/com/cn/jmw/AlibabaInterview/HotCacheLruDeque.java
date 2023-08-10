@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
+//一个热点LRU 的缓存队列
 public class HotCacheLruDeque {
 
     Deque<Object> deque;
