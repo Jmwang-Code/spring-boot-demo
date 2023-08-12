@@ -9,9 +9,7 @@
 1. HyperLogLog 统计不重复数据
 1. Streams 内存版 kafka
 
-# Redis存储数据的方式
-1. RDB 持久化
-2. AOF 持久化
+# Redis存储原理
 
 # Redis 和 Mysql 如何保证数据一致性
 在高并发的环境下，比如增删改：Redis和数据库的数据可能会存在不一致的问题，极端情况下这种问题更严重。
