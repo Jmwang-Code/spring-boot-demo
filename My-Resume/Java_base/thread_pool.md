@@ -1,3 +1,11 @@
+# 0. 线程的生命周期有那些？
+- 新建状态（New）：当线程对象被创建时，它处于新建状态。
+- 就绪状态（Runnable）：当线程调用start()方法后，它进入就绪状态。此时线程已经准备好运行，但尚未获得CPU资源。
+- 运行状态（Running）：当线程获得CPU资源后，它进入运行状态。此时线程正在执行run()方法中的代码。
+- 阻塞状态（Blocked）：当线程等待某个条件时，它进入阻塞状态。比如sleep()。
+- 死亡状态（Dead）：当线程完成run()方法中的代码或调用stop()方法时，它进入死亡状态。不再占用CPU资源。
+
+
 # 1. 你能聊聊线程池么？（简单介绍一下线程池！ 你使用过线程池么？）
 一般我们认为线程池就是所谓的自定义ThreadPoolExecutor。
 
@@ -33,19 +41,14 @@
 
 # 4. 你在实际项目中是如何使用线程池的？
 <font color='red'><h1>model one</h1></font>
-实体识别树中加载模块为了快速加载不同的数据源，此时此刻明显需要多个异步任务完成。
-
-①需要
+实体识别树中加载模块（服务初始化时）为了快速加载不同的数据源，此时此刻明显需要多个异步任务完成。
 
 <img src="img.png" width="50%" height="auto">
 
-# 0.线程base
-# 0.1 线程的生命周期
-- 新建状态（New）：当线程对象被创建时，它处于新建状态。此时线程对象已经被创建，但尚未启动线程。
-- 就绪状态（Runnable）：当线程调用start()方法后，它进入就绪状态。此时线程已经准备好运行，但尚未获得CPU资源。
-- 运行状态（Running）：当线程获得CPU资源后，它进入运行状态。此时线程正在执行run()方法中的代码。
-- 阻塞状态（Blocked）：当线程等待某个条件时，它进入阻塞状态。例如，当线程调用sleep()方法、等待I/O操作完成或等待锁时，它会进入阻塞状态。在阻塞状态下，线程不会占用CPU资源。
-- 死亡状态（Dead）：当线程完成run()方法中的代码或调用stop()方法时，它进入死亡状态。此时线程已经结束，不再占用CPU资源。
+**此时数据源配置和线程池配置都配置在yml文件：**
+1. 比如我配置了10个数据源，那么我会配置核心线程1，最大线程10，队列长度1。以达到最大加载速度。最后剩余一个核心线程用于正常的算法树增删。
+
+
 
 # 1. `Executor`框架三大组成部分
 **1、任务(`Runnable` /`Callable`)**
@@ -65,21 +68,6 @@
 # 2.`ThreadPoolExecutor` 类 线程池执行器 （核心）
 `ThreadPoolExecutor`类是`ExecutorService`接口的实现类，是线程池的核心实现类，用来执行被提交的任务。
 
-## 2.3 线程池自定义创建
-通过`ThreadPoolExecutor`构造函数来创建（推荐）。
-```java
- ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
-                    .setNameFormat("ConfigurationCheck-pool-%d").build();
-            log.info(ColorEnum8.BLUE.getColoredString(Thread.currentThread().getName()+"——可用运行线程为" + runnableThreadNum));
-            configurationCheckThreadPool = new ThreadPoolExecutor(
-                    runnableThreadNum,
-                    10,
-                    0L,
-                    TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<Runnable>(1024),
-                    namedThreadFactory,
-                    new ThreadPoolExecutor.AbortPolicy());
-```
 
 ## 2.4 `Runnable` 和 `Callable` 的区别
 `Runnable`接口和`Callable`接口都是用来定义任务的，但是`Runnable`接口不会返回结果，而`Callable`接口可以返回结果。
