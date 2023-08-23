@@ -54,6 +54,23 @@ public class Singleton {
 
 # 4. 策略模式（考虑业务场景）
 
+```java
+//策略模式 使用map存储策略
+public class StrategyFactory {
+    private static Map<String, Strategy> strategyMap = new HashMap<>();
+    static {
+        strategyMap.put("A", new StrategyA());
+        strategyMap.put("B", new StrategyB());
+    }
+    public static Strategy getStrategy(String type) {
+        if (type == null || type.isEmpty()) {
+            throw new IllegalArgumentException("type should not be empty.");
+        }
+        return strategyMap.get(type);
+    }
+}
+``
+```
 
 # 5. 代理模式（考虑业务场景）
 
