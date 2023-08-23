@@ -22,52 +22,6 @@ public class Singleton {
     }
 }
 
-// 双重检查锁
-public class Singleton {
-    private volatile static Singleton instance;
-    private Singleton() {}
-    public static Singleton getInstance() {
-        if (instance == null) {
-            synchronized (Singleton.class) {
-                if (instance == null) {
-                    instance = new Singleton();
-                }
-            }
-        }
-        return instance;
-    }
-}
-
-
-
-// ThreadLocal
-public class Singleton {
-    private static final ThreadLocal<Singleton> threadLocalInstance = new ThreadLocal<Singleton>() {
-        @Override
-        protected Singleton initialValue() {
-            return new Singleton();
-        }
-    };
-    private Singleton() {}
-    public static Singleton getInstance() {
-        return threadLocalInstance.get();
-    }
-}
-
-// 容器
-public class SingletonManager {
-    private static Map<String, Object> objMap = new HashMap<String, Object>();
-    private SingletonManager() {}
-    public static void registerService(String key, Object instance) {
-        if (!objMap.containsKey(key)) {
-            objMap.put(key, instance);
-        }
-    }
-    public static Object getService(String key) {
-        return objMap.get(key);
-    }
-}
-
 // 支持并发的懒汉式
 public class Singleton {
     private static volatile Singleton instance;
