@@ -1,4 +1,5 @@
 # 1. 你能聊聊线程池么？（简单介绍一下线程池！ 你使用过线程池么？）
+一般我们认为线程池就是所谓的自定义ThreadPoolExecutor。
 
 当需要大量异步任务的时候，如果为每个任务都创建一个新线程，会导致资源浪费。
 
@@ -11,7 +12,32 @@
 1. FixedThreadPool : 固定大小的线程池，只有核心线程。
 2. CachedThreadPool : 缓存线程池，只有非核心线程，线程数量不限制。
 3. ScheduledThreadPool : 定时任务线程池，使用延迟工作队列。
-4. 
+4. SingleThreadExecutor : 单线程的线程池，只有一个核心线程。
+
+# 3.线程池的参数有哪些？它们的含义是什么？
+
+1. corePoolSize : 核心线程数。
+2. maximumPoolSize : 最大线程数。
+3. keepAliveTime : 线程空闲时间。
+4. unit : 时间单位。
+5. workQueue : 工作队列。
+6. threadFactory : 线程工厂。
+7. handler : 拒绝策略。
+
+# 3.1 拒绝策略常用有那些？分别是什么?
+
+- **`ThreadPoolExecutor.AbortPolicy`**：直接抛出异常。
+- **`ThreadPoolExecutor.CallerRunsPolicy`**：用调用者所在的线程来执行任务。
+- **`ThreadPoolExecutor.DiscardPolicy`**：不处理，丢弃掉。
+- **`ThreadPoolExecutor.DiscardOldestPolicy`**：此策略将丢弃最早的未处理的任务请求，并且添加当前任务进入队列。
+
+# 4. 你在实际项目中是如何使用线程池的？
+<font color='red'><h1>model one</h1></font>
+实体识别树中加载模块为了快速加载不同的数据源，此时此刻明显需要多个异步任务完成。
+
+①需要
+
+<img src="img.png" width="50%" height="auto">
 
 # 0.线程base
 # 0.1 线程的生命周期
@@ -38,24 +64,6 @@
 
 # 2.`ThreadPoolExecutor` 类 线程池执行器 （核心）
 `ThreadPoolExecutor`类是`ExecutorService`接口的实现类，是线程池的核心实现类，用来执行被提交的任务。
-
-## 2.1 `ThreadPoolExecutor` 3 个最重要的参数：
-- **`corePoolSize` :** 任务队列未达到队列容量时，最大可以同时运行的线程数量。
-- **`maximumPoolSize` :** 任务队列中存放的任务达到队列容量的时候，当前可以同时运行的线程数量变为最大线程数。
-- **`workQueue`:** 新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，新任务就会被存放在队列中。
-
-`ThreadPoolExecutor`其他常见参数 :
-
-- **`keepAliveTime`**:线程池中的线程数量大于 `corePoolSize` 的时候，如果这时没有新的任务提交，核心线程外的线程不会立即销毁，而是会等待，直到等待的时间超过了 `keepAliveTime`才会被回收销毁。
-- **`unit`** : `keepAliveTime` 参数的时间单位。
-- **`threadFactory`** :executor 创建新线程的时候会用到。
-- **`handler`** :饱和策略。关于饱和策略下面单独介绍一下。
-
-## 2.2 `ThreadPoolExecutor` 饱和策略定义:
-- **`ThreadPoolExecutor.AbortPolicy`**：抛出 `RejectedExecutionException`来拒绝新任务的处理。
-- **`ThreadPoolExecutor.CallerRunsPolicy`**：调用执行自己的线程运行任务，也就是直接在调用`execute`方法的线程中运行(`run`)被拒绝的任务，如果执行程序已关闭，则会丢弃该任务。因此这种策略会降低对于新任务提交速度，影响程序的整体性能。如果您的应用程序可以承受此延迟并且你要求任何一个任务请求都要被执行的话，你可以选择这个策略。
-- **`ThreadPoolExecutor.DiscardPolicy`**：不处理新任务，直接丢弃掉。
-- **`ThreadPoolExecutor.DiscardOldestPolicy`**：此策略将丢弃最早的未处理的任务请求。
 
 ## 2.3 线程池自定义创建
 通过`ThreadPoolExecutor`构造函数来创建（推荐）。
