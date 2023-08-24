@@ -1,3 +1,11 @@
+# 1. 说说你常用的锁？ （你知道的锁都有哪些？ 你工作中使用过什么锁？）
+
+1. synchronized锁：synchronized是Java中的关键字，是JVM中的底层机制，通过monitor对象实现的。
+2. ReentrantLock锁：是互斥锁，优势在于可以手动获取和释放，通过AQS实现的。
+3. ReentrantReadWriteLock锁：既有互斥锁又有共享锁，优势在于可以手动获取和释放，可以通过AQS实现的。
+
+
+
 # 1. 锁
 
 常用锁：synchronized、ReentrantLock
