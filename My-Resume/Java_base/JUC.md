@@ -42,6 +42,16 @@ volatile有内存屏障，可以将内存屏障看成一条指令。可以避免
 
 CAS: Compare And Swap，是Unsafe类的方法。比较并交换，是一种无锁算法。当达到预期值则进行交换，否则不进行交换。
 
+### 0.3.4 ThreadLocal内存泄漏问题
+
+首先要清楚ThreadLocal是如何实现线程绑定的空间。ThreadLocal的核心是ThreadLocalMap的数据结构，而ThreadLocalMap是基于Entry[]实现的。Entry[]数组中存放的就是ThreadLocal的key和value。
+
+**内存泄漏问题：**
+Entry对象的key是弱引用，也就是说当CG回收时会被回收，但是value是强引用，所以当key被回收时，value不会被回收，这样就会造成内存泄漏。
+
+**解决方法：**
+当前线程使用完ThreadLocal后，调用remove方法。
+
 # 1. 你能聊聊线程池么？（简单介绍一下线程池！ 你使用过线程池么？）
 一般我们认为线程池就是所谓的自定义**`ThreadPoolExecutor`**。
 
