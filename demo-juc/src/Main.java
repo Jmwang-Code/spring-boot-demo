@@ -10,7 +10,7 @@ public class Main {
 
 
         ConcurrentHashMap<Object, Object> objectObjectConcurrentHashMap = new ConcurrentHashMap<>();
-        objectObjectConcurrentHashMap.put(null,null);
+        objectObjectConcurrentHashMap.put(1,null);
         System.out.println(1);
     }
 

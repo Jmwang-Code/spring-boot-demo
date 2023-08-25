@@ -20,7 +20,8 @@
 - `ConcurrentHashMap` 数组+链表+红黑树实现的，不允许重复元素，不可以有`null`元素，线程安全，由于使用了分段锁将Map切割开，效率高
 
 
-## 2.5 为什么ConcurrentHashMap效率会高?
+
+## 2.4 为什么ConcurrentHashMap效率会高?
 - 分段锁：ConcurrentHashMap 内部采用了分段锁的机制，将整个哈希表分成了多个段（Segment），每个段都有自己的锁。这样，在多线程环境下，不同的线程可以同时访问不同的段，从而减少了锁的竞争，提高了并发性能。
 - CAS 操作：ConcurrentHashMap 内部采用了 CAS（Compare and Swap）操作来实现线程安全，而不是像 Hashtable 和 synchronizedMap 一样使用重量级锁。CAS 操作是一种基于硬件支持的原子操作，可以在不使用锁的情况下实现线程安全，从而提高了并发性能。
 
