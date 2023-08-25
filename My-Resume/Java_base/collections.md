@@ -1,23 +1,18 @@
-# 1. Java 集合框架有那些接口？
-List、Set、Map、Queue、Deque
+# 1. Java 集合框架有那些接口？ （特点有那些+）
+- `List`顺序
+- `Set`去重
+- `Map`Key-value键值表
+- `Queue`队列
+- `Deque`双端队列
 
-# 2. List Set Map Queue Deque 之间的区别是什么？
-- `List`(对付顺序的好帮手)：元素有序、可重复、可为null
-- `Set`(注重独一无二的性质)：元素无序、不可重复、可为null
-- `Map`(用Key来搜索的专家)：元素无序、不可重复、Key和Value可为null
-- `Queue`(用于模拟队列数据结构使用)：元素有序、可重复、可为null
-- `Deque`(双端队列，可以当作栈和队列来使用)：元素有序、可重复、可为null
-
-## 2.1 ArrayList(数组) 和 LinkedList(双向链表) 的区别是什么？
-- `ArrayList`：内部是通过数组实现的，支持随机访问，实现了`RandomAccess`接口，实现了`Serializable`接口，实现了`Cloneable`接口，线程不安全，效率高
-- `LinkedList`：内部是通过链表实现的，不支持随机访问，没有实现`RandomAccess`接口，实现了`Serializable`接口，实现了`Cloneable`接口，线程不安全，效率高
+# 2. 常见对比
+## 2.1 ArrayList 和 LinkedList 的区别是什么？
+- `ArrayList`：数据结构为数组，支持随机访问，实现了`RandomAccess`接口，线程不安全，效率高
+- `LinkedList`：数据结构为链表，不支持随机访问，没有实现`RandomAccess`接口，线程不安全，效率高
 
 ### 2.1.1 使用ArrayList而不使用LinkedList的原因
-- 插入：ArrayList尾插入效率高，LinkedList头尾插入效率高。但是中加插入效率都很低，因为ArrayList需要移动元素，LinkedList需要移动指针。
-- 删除：ArrayList尾删除效率高，LinkedList头尾删除效率高。但是中间删除效率都很低，因为ArrayList需要移动元素，LinkedList需要移动指针。
-- 修改：ArrayList随机访问效率高，LinkedList随机访问效率低。
-- 查询：ArrayList随机访问效率高，LinkedList随机访问效率低。
-所以我们只使用ArrayList。
+- 插入、删除：ArrayList尾插入效率高，LinkedList头尾插入效率高。但是中加插入效率都很低，因为ArrayList需要移动元素，LinkedList需要移动指针。
+- 修改、查询：ArrayList随机访问效率高，LinkedList随机访问效率低。
 
 ## 2.2 HashMap 和 HashSet 的区别是什么？（散列表 红黑树）
 - `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高。
