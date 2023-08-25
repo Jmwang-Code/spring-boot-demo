@@ -14,14 +14,10 @@
 - 插入、删除：ArrayList尾插入效率高，LinkedList头尾插入效率高。但是中加插入效率都很低，因为ArrayList需要移动元素，LinkedList需要移动指针。
 - 修改、查询：ArrayList随机访问效率高，LinkedList随机访问效率低。
 
-## 2.2 HashMap 和 HashSet 的区别是什么？（散列表 红黑树）
-- `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高。
-- `HashSet`：内部是通过`HashMap`实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高。
 
-
-## 2.3 HashMap 和 Hashtable 的区别是什么？
+## 2.2 HashMap 和 Hashtable 的区别是什么？
 - `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
-- `Hashtable`：内部是通过数组+链表实现的，不允许重复元素，不可以有`null`元素，线程安全，效率低
+- `Hashtable`：内部是通过数组+链表实现的，不允许重复元素，不可以有`null`元素，线程安全，但是由于synchronized关键字加到了每个方法上，效率低
 
 ## 2.4 HashMap 和 ConcurrentHashMap 的区别是什么？
 - `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
