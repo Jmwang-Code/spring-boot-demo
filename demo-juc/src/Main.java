@@ -8,7 +8,6 @@ public class Main {
         ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(5);
 
 
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 10, null, null);
 
         ConcurrentHashMap<Object, Object> objectObjectConcurrentHashMap = new ConcurrentHashMap<>();
         objectObjectConcurrentHashMap.put(null,null);

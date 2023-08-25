@@ -42,6 +42,7 @@
       <module>demo-java-web/demo-java-spring300</module>
       <module>demo-java-web/demo-java-init-ioc</module>
       <module>demo-hadoop</module>
+    <module>demo-juc</module>
       <!--    <module>demo-email</module>-->
 <!--    <module>demo-task</module>-->
 <!--    <module>demo-task-quartz</module>-->
