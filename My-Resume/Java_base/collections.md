@@ -14,14 +14,11 @@
 - 插入、删除：ArrayList尾插入效率高，LinkedList头尾插入效率高。但是中加插入效率都很低，因为ArrayList需要移动元素，LinkedList需要移动指针。
 - 修改、查询：ArrayList随机访问效率高，LinkedList随机访问效率低。
 
+## 2.2 HashMap 和 Hashtable 、ConcurrentHashMap的区别是什么？
+- `HashMap`：数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
+- `Hashtable`：数组+链表实现的，不允许重复元素，不可以有`null`元素，线程安全，但是由于synchronized关键字加到了每个方法上，效率低
+- `ConcurrentHashMap` 数组+链表+红黑树实现的，不允许重复元素，不可以有`null`元素，线程安全，由于使用了分段锁将Map切割开，效率高
 
-## 2.2 HashMap 和 Hashtable 的区别是什么？
-- `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
-- `Hashtable`：内部是通过数组+链表实现的，不允许重复元素，不可以有`null`元素，线程安全，但是由于synchronized关键字加到了每个方法上，效率低
-
-## 2.4 HashMap 和 ConcurrentHashMap 的区别是什么？
-- `HashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，可以有一个`null`元素，线程不安全，效率高
-- `ConcurrentHashMap`：内部是通过数组+链表+红黑树实现的，不允许重复元素，不可以有`null`元素，线程安全，效率高
 
 ## 2.5 为什么ConcurrentHashMap效率会高?
 - 分段锁：ConcurrentHashMap 内部采用了分段锁的机制，将整个哈希表分成了多个段（Segment），每个段都有自己的锁。这样，在多线程环境下，不同的线程可以同时访问不同的段，从而减少了锁的竞争，提高了并发性能。
