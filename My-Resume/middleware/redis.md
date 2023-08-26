@@ -25,19 +25,19 @@
 Redis中的key基本都有过期时间，也就是说需要经常性的获取系统时间戳，Redis的主要操作线程需要经常获取系统时间戳，这个是非常耗时的。
 所以Redis另开线程使用定时任务将时间戳缓存起来，主线程可以直接从缓存中获得。
 
-# Redis存储原理
-## 1. 基本数据结构：
+
+# 2. 基本数据结构：
 1. String 字符串：缓存、计数器、分布式Session
 1. List 列表：消息队列
 1. Hash 哈希表：对象
 1. Set 无序集合
 1. Sorted Set 有序集合 （ZSet，有权重score）：排行榜
-1. Bitmap 布隆过滤器：布隆过滤器
+1. Bitmap ：布隆过滤器
 1. GeoHash 坐标 （底层使用Zset实现）
 1. HyperLogLog 统计不重复数据
 1. Streams 内存版 kafka
 
-## 2. 持久化：AOF（Append Only File）和RDB（Redis DataBase）
+# 3. 数据持久化问题：持久化：AOF（Append Only File）和RDB（Redis DataBase）
 默认开启的是RDB
 如果配置同时开启了RDB和AOF ，数据恢复Redis会优先选择AOF恢复。
 - AOF
@@ -45,6 +45,23 @@ Redis中的key基本都有过期时间，也就是说需要经常性的获取系
 
 - RDB
   指定的时间间隔内将内存中的数据集快照写入磁盘,恢复时将快照文件直接读到内存里。
+
+# 4. Redis关于6.0版本多线程单线程的问题？（Redis会出现线程安全问题么？）
+
+- **Redis 6.0之前** : 指令操作和网络IO操作都是单线程的。（由于CPU不是瓶颈、多线程会出现线程安全问题）
+- **Redis 6.0之后** : 网络IO操作成为了瓶颈，所以改成网络IO多线程的。（比如小数据量的包Redis1秒QPS为8-10万，而改为多线程网络IO操作会大大提高了QPS）
+
+# 5. Redis的高级功能
+
+## 5.1 事务
+
+Redis提供了将多个命令打包成一个事务，只对基本的语法错误进行事务回滚。（multi 和 exec）
+
+
+
+
+
+
 
 # Redis 和 Mysql 如何保证数据一致性
 在高并发的环境下，比如增删改：Redis和数据库的数据可能会存在不一致的问题，极端情况下这种问题更严重。
