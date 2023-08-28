@@ -15,6 +15,28 @@
 - Partition：为了实现扩展性，一个topic一般会分布到多个Partiotion上，每个 partition 是一个有序的队列。partition 中的每条消息都会被分配一个有序的id（offset偏移量）。kafka 只保证按一个 partition 中的消息的顺序，不保证一个 topic 的整体（多个 partition 间）的顺序。
 - Offset：kafka 的存储文件都是按照 offset.kafka 来命名，用 offset 做名字的好处是方便查找。
 
+# 3. Kafka如何保证消费顺序性？
+
+**<h3>person：</h3>**
+kafka只保证在一个partition下按照offset消费的顺序性，而不保证一个topic多个partition下消费的顺序性。
+
+**<h3>Solution：</h3>**
+- 将所有消息都生产到同一个partition。
+
+## 3.1 Kafka为什么消费顺序会乱？
+而生产者生产的消息，按照（轮训、hash key、随机策略）进行分配给多个partition，所以在一个topic下消息会乱。
+
+
+
+
+
+
+
+
+# Kafka 如何保证消息消费的顺序性？
+产生乱序的原因：
+比如一个Topic下，有多个分区。而生产者产生的消息，被（轮训、随机、hash key的策略）分配给不同的分区。导致消费消息的顺序乱了。
+
 # Kafka 如何保证消息不丢失？
 这个就要涉及到Kafka的三者关系：生产者、消费者、Broker，以及Kafka的消息存储机制。
 
@@ -36,9 +58,7 @@ Kafka中记录消费主要是通过offset来记录的。
 4. 异步处理业务提前提交offset，但是要通过中间件缓存，可以重新消费。
 5. 通过幂等性来解决，比如分布式锁、数据库唯一ID等
 
-# Kafka 如何保证消息消费的顺序性？
-产生乱序的原因：
-比如一个Topic下，有多个分区。而生产者产生的消息，被（轮训、随机、hash key的策略）分配给不同的分区。导致消费消息的顺序乱了。
+
 
 解决方案：
 1. 一个Topic下只有一个分区，这样就不会乱序了。但是这样就失去了Kafka的并行处理能力。
