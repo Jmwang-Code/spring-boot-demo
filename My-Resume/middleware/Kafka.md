@@ -1,8 +1,19 @@
-# 说说你在什么场景下使用过Kafka？
+# 1. 说说你在什么场景下使用过Kafka？
 
 - 数据流处理：上上家公司中，数据结构化通过将数据发送到Kafka集群中，主要保证数据不丢失，允许一定性的队列中临时容纳大量数据进行处理。
 - 流式处理：上家公司中，使用flink实时任务中讲kafka算子嵌入处理数据。
 - 消息队列：比如双11下单的场景下：削峰填谷，使得消息能稳定的处理，不亏冲垮服务。
+
+# 2. Kafka架构模型
+![img_12.png](img_12.png)
+
+- Producer ：消息生产者。
+- Consumer ：消息消费者。
+- Topic ：可以理解为一个队列，一个 Topic 又分为一个或多个分区、每个分区又有一个或多个备份，
+- Consumer Group：一个 topic 可以有多个 Consumer Group。
+- Broker ：kafka 服务就是一个 broker。一个集群由多个 broker 组成。一个 broker 可以容纳多个 topic。
+- Partition：为了实现扩展性，一个topic一般会分布到多个Partiotion上，每个 partition 是一个有序的队列。partition 中的每条消息都会被分配一个有序的id（offset偏移量）。kafka 只保证按一个 partition 中的消息的顺序，不保证一个 topic 的整体（多个 partition 间）的顺序。
+- Offset：kafka 的存储文件都是按照 offset.kafka 来命名，用 offset 做名字的好处是方便查找。
 
 # Kafka 如何保证消息不丢失？
 这个就要涉及到Kafka的三者关系：生产者、消费者、Broker，以及Kafka的消息存储机制。
