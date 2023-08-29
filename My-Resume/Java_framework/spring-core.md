@@ -2,32 +2,7 @@
 
 IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。
 
-![](../images/af602a222f414127b7afcb9b8edc0f08.png)
-
-# 2. IOC初始化 IOC启动阶段 (Spring容器的启动流程)
-
-Resource定位过程：这个过程是指定位BeanDefinition的资源，也就是配置文件（如xml）的位置，并将其封装成Resource对象。Resource对象是Spring用来抽象不同形式的BeanDefinition的接口。比如BeanDefinitionReader(加载、Parse解析)
-
-BeanDefinition的载入：这个过程是将Resource定位到的信息，转换成IoC容器内部的数据结构，也就是BeanDefinition对象。BeanDefinition对象是用来描述Bean实例的属性，如类名，构造器参数，依赖的bean等。BeanDefinition生成
-
-BeanDefinition的注册：这个过程是将载入过程中得到的BeanDefinition对象注册到IoC容器中。注册过程是通过BeanDefinitionRegistry接口的实现来完成的。在IoC容器内部，BeanDefinition对象被存储在一个HashMap中。BeanDefinitionRegistry注册
-
-![img_7.png](../images/img_7.png)
-
-# Spring框架中有哪些不同类型的事件（不重要）
-
-Spring 提供了以下5种标准的事件：
-
-1. 上下文更新事件（ContextRefreshedEvent）：在调用ConfigurableApplicationContext 接口中的refresh()方法时被触发。
-2. 上下文开始事件（ContextStartedEvent）：当容器调用ConfigurableApplicationContext的Start()方法开始/重新开始容器时触发该事件。
-3. 上下文停止事件（ContextStoppedEvent）：当容器调用ConfigurableApplicationContext的Stop()方法停止容器时触发该事件。
-4. 上下文关闭事件（ContextClosedEvent）：当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
-5. 请求处理事件（RequestHandledEvent）：在Web应用中，当一个http请求（request）结束触发该事件。
-   如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
-   ![img_10.png](../images/img_10.png)
-
-
-# 4. Spring-IOC是什么   （面试）
+# 2. Spring-IOC是什么   （面试）
 
 Spring-IOC是Spring框架的核心，是一个容器，它负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。
 
@@ -35,40 +10,40 @@ Spring-IOC是Spring框架的核心，是一个容器，它负责实例化、定�
 2. DI依赖注入,依赖注入是IOC的一种实现方式,IOC是一种思想,而DI是这种思想的一种实现方式,populateBean
 3. 容器，使用map结构来存储，在spring中一般存在三级缓存，整个bean的生命周期，从创建到使用到销毁的过程全部都是由容器来管理的(bean的生命周期)
 
-## 4.1 IOC是什么    （面试）
+## 2.1 IOC是什么    （面试）
 
 - 控制反转，指的是将对象的控制权交给Spring容器，由Spring来控制对象的生命周期和对象间的关系，而不是由对象自己控制。
   （原来是自己去new开辟空间等创建，自己通过close等方法进行销毁。）
 - 自己控制对象缺点：使得代码耦合度高，不易于维护，不易于测试。
 - IOC容器控制对象优点：使得代码耦合度低，易于维护，易于测试。
 
-## 4.2 DI是什么
+## 2.2 DI是什么
 
 依赖注入，指的是由Spring容器在运行期间，动态地将某种依赖关系注入到对象之中。
 
-### 4.2.1 依赖注入 DI的三种方式 （面试）
+### 2.2.1 依赖注入 DI的三种方式 （面试）
 
 1. 构造器注入:通过构造器传入依赖对象。
 2. Setter方法注入:通过Setter方法传入依赖对象。
 3. 接口注入:通过接口的Setter方法传入依赖对象。
 
-## 4.3 Spring-AOP是什么 （面试）
+## 2.3 Spring-AOP是什么 （面试）
 
 Spring-AOP是Spring框架的一个重要组成部分，它提供了面向切面的编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的技术。
 （比如HandlerInterceptor实现之后，就是通过动态代理，从调用接口实时的获得handler对象，而这个拦截器的接口就是切面）
 
-### 4.3.1 OOP （面试）
+### 2.3.1 OOP （面试）
 
 面向对象编程，允许开发者定义纵向关系，但并不适用于定义横向的关系，会导致大量代码的重复，而不利于各个模块的重用。
 
-### 4.3.2 AOP （面试）
+### 2.3.2 AOP （面试）
 
 面向切面编程，是对OOP的补充，它允许开发者定义横向关系，将系统中的关注点分离出来形成一个独立的模块，这个模块被称为切面，它的作用是与业务逻辑无关的，但是又为业务逻辑模块所共同调用。
 “切面”（Aspect）可用于权限认证、日志、事务处理。
 
 aop是ioc的一个扩展功能，只是在ioc整个流程中的一个扩展点：BeanPostProcessor
 
-## 4.4 AOP实现方式 （面试）
+## 2.4 AOP实现方式 （面试）
 
 AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动态代理。静态代理的代表为AspectJ；动态代理则以Spring AOP为代表。
 一般安卓开发中会使用到AspectJ，而在JavaWeb开发中会使用到Spring AOP。
@@ -80,7 +55,7 @@ AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动�
 （3）静态代理与动态代理区别在于生成AOP代理对象的时机不同，相对来说AspectJ的静态代理方式具有更好的性能，但是AspectJ需要特定的编译器进行处理，而SpringAOP则无需特定的编译器处理。
 
 
-# 5. BeanFactory和ApplicationContext有什么区别？
+# 3. BeanFactory和ApplicationContext有什么区别？
 
 BeanFactory `<span style="color:darkorange">`(轻量级) 和ApplicationContext `<span style="color:darkorange">`(高级特性和框架)是Spring的两大核心接口，都可以当做Spring的容器。
 （1）BeanFactory是Spring里面最底层的接口，是IoC的核心，定义了IoC的基本功能，包含了各种Bean的定义、加载、实例化，依赖注入和生命周期管理。ApplicationContext接口作为BeanFactory的子类，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：
@@ -113,7 +88,7 @@ class A {
 }
 ```
 
-# 6. Spring框架中的Bean是线程安全的么？如果线程不安全，那么如何处理？
+# 4. Spring框架中的Bean是线程安全的么？如果线程不安全，那么如何处理？
 
 1. 对于prototype作用域的Bean，每次都创建一个新对象，也就是线程之间不存在Bean共享，因此不会有线程安全问题。
 2. 对于singleton作用域的Bean，所有的线程都共享一个单例实例的Bean，因此是存在线程安全问题的。但是如果单例Bean是一个无状态Bean，也就是线程中的操作不会对Bean的成员执行查询以外的操作，那么这个单例Bean是线程安全的。比如Controller类、Service类和Dao等，这些Bean大多是无状态的，只关注于方法本身。
@@ -123,12 +98,12 @@ class A {
     有状态Bean(Stateful Bean) ：就是有实例变量的对象，可以保存数据，是非线程安全的。
 ```
 
-# 7. 单例bean有状态，采用ThreadLocal解决线程安全问题
+# 5. 单例bean有状态，采用ThreadLocal解决线程安全问题
 
 ThreadLocal和线程同步机制都是为了解决多线程中相同变量的访问冲突问题。同步机制采用了“时间换空间”的方式，仅提供一份变量，不同的线程在访问前需要获取锁，没获得锁的线程则需要排队。而ThreadLocal采用了“空间换时间”的方式。ThreadLocal会为每一个线程提供一个独立的变量副本，从而隔离了多个线程对数据的访问冲突。因为每一个线程都拥有自己的变量副本，从而也就没有必要对该变量进行同步了。
 
 
-# 8. Spring的Bean的作用域 （面试）
+# 6. Spring的Bean的作用域 （面试）
 
 Spring的Bean的作用域包括以下几种：
 
@@ -140,7 +115,7 @@ Spring的Bean的作用域包括以下几种：
 - （5）application：所有会话共享一个Bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。
   在编写代码时通常使用ApplicationContext容器，以便能够享受更多的功能和便利性。
 
-# 9. Spring如何解决循环依赖问题
+# 7. Spring如何解决循环依赖问题
 
 Spring设计了三级缓存来解决循环依赖问题，把Bean的实例化和Bean的属性依赖注入进行分离。
 一级缓存用于存放完全初始化好的单例Bean。
@@ -149,14 +124,14 @@ Spring设计了三级缓存来解决循环依赖问题，把Bean的实例化和B
 
 二级缓存作为突破口解决循环依赖问题。三级缓存解决代理对象循环依赖问题。
 
-# 9.1 Spring循环依赖的几种情况
+# 8.1 Spring循环依赖的几种情况
 
 1. 多实例的Setter注入循环依赖，需要改成单例Bean。
 2. 构造器注入的循环依赖，需要加入@Lazy注解。
 3. DependsOn注解的循环依赖，需要手动解决。
 4. 单例Bean的Setter注入导致循环依赖，可以通过@Lazy或者@DependsON解决。
 
-# 10. Spring事务的实现方式
+# 9. Spring事务的实现方式
 
 Spring事务是和数据库事务保持一致
 
@@ -172,7 +147,7 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
    无法做到细粒度的事务控制，无法做到像编程式事务那样可以作用到代码块级别。比如一个事务方法调用了多个DAO方法，希望其中某个DAO方法独立成为一个事务，这时候就办不到了。
 ```
 
-# 11. Spring 框架中都用到了哪些设计模式
+# 10. Spring 框架中都用到了哪些设计模式
 
 1. 工厂模式：Spring使用工厂模式通过BeanFactory、ApplicationContext创建bean对象。
 2. 代理模式：Spring AOP功能的实现。
