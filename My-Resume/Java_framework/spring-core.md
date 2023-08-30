@@ -161,7 +161,7 @@ Spring 所管理的对象或者信息，都可以通过实现相应的Aware接�
 - BeanClassLoaderAware:获取加载当前Bean的ClassLoader对象
   ![img_12.png](../images/img_12.png)
 
-# 12. Aware接口的优点
+# 12. Aware接口
 
 - 可以取得Spring容器中的各种对象和资源,如其他Bean、文件资源、环境变量等。
 - 可以管理项目中的共享资源,如数据库连接池、配置属性等。
