@@ -55,17 +55,12 @@ AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动�
 
 # 3. BeanFactory和ApplicationContext有什么区别？
 
-<span style="color:darkorange">BeanFactory</span> (轻量级) 和<span style="color:darkorange">ApplicationContext </span>(高级特性和框架)是Spring的两大核心接口，都可以当做Spring的容器。
-（1）BeanFactory是Spring里面最底层的接口，是IoC的核心，定义了IoC的基本功能，包含了各种Bean的定义、加载、实例化，依赖注入和生命周期管理。ApplicationContext接口作为BeanFactory的子类，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：
-（2）
-
-1. BeanFactroy采用的是延迟加载形式来注入Bean的，只有在使用到某个Bean时(调用getBean())
-   ，才对该Bean进行加载实例化。这样，我们就不能提前发现一些存在的Spring的配置问题。如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常。
-2. ApplicationContext，它是在容器启动时，一次性创建了所有的Bean。这样，在容器启动时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。
-3. ApplicationContext启动后预载入所有的单实例Bean，所以在运行的时候速度比较快，因为它们已经创建好了。相对于BeanFactory，ApplicationContext
-   唯一的不足是占用内存空间，当应用程序配置Bean较多时，程序启动较慢。
-   （3）BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor的使用，但两者之间的区别是：BeanFactory需要手动注册，而ApplicationContext则是自动注册。
-   （4）BeanFactory通常以编程的方式被创建，ApplicationContext还能以声明的方式创建，如使用ContextLoader。
+| \      | BeanFactory（容器）           | ApplicationContext                |
+|--------|---------------------------|-----------------------------------|
+| 功能     | ![img_10.png](img_10.png) | ![img_11.png](img_11.png)         |
+| 关系     | IOC容器最顶级父类                | 是BeanFactory的子类，继承了BeanFactory的功能 |
+| 加载Bean | 懒加载                       | 预加载，启动时就加载所有的单实例Bean，速度快          |
+| 注册Bean | 手动注册，编程式创建                | 自动注册，声明式创建                        |
 
 ```java
 class A {
