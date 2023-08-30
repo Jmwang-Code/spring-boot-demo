@@ -90,6 +90,7 @@
     <module>demo-quartz</module>
       <module>demo-mybatis</module>
       <module>algorithm</module>
+    <module>demo-Resume</module>
   </modules>
   <packaging>pom</packaging>
 

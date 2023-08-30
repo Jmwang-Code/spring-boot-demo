@@ -152,9 +152,9 @@ Spring事务的实现方式主要有两种：编程式事务管理和声明式�
 3. 单例模式：Spring中的Bean默认都是单例的。
 4. 模板方法模式：Spring中JdbcTemplate、HibernateTemplate等以Template结尾的对数据库操作的类，它们就使用到了模板模式。
 5. 包装器模式：Spring中对Bean的装饰就使用到了装饰器模式，如各个ApplicationContext实现类中对Bean的装饰。
-6. `<span style="color:yellow">`没了解过 观察者模式：Spring事件驱动模型就是观察者模式很经典的一个应用。
-7. `<span style="color:yellow">`没了解过 适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
-8. `<span style="color:yellow">`没了解过 迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
+6. <span style="color:yellow">没了解过 观察者模式：Spring事件驱动模型就是观察者模式很经典的一个应用。
+7. <span style="color:yellow">没了解过 适配器模式：Spring AOP的增强或通知（Advice）使用到了适配器模式、spring MVC中也是用到了适配器模式适配Controller。
+8. <span style="color:yellow">没了解过 迭代器模式：Spring中很多集合对象的遍历（如Spring MVC中model的遍历）都是使用迭代器模式。
 
 
 
