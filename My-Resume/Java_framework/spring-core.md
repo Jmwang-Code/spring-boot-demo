@@ -15,7 +15,6 @@ Spring-IOC是Spring框架的核心，是一个容器，它负责实例化、定�
 ## 2.1 IOC是什么    （面试）
 
 - 控制反转，指的是将对象的控制权交给Spring容器，由Spring来控制对象的生命周期和对象间的关系，而不是由对象自己控制。
-  （原来是自己去new开辟空间等创建，自己通过close等方法进行销毁。）
 
 ## 2.2 DI是什么
 
@@ -57,7 +56,7 @@ AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动�
 
 # 3. BeanFactory和ApplicationContext有什么区别？
 
-BeanFactory `<span style="color:darkorange">`(轻量级) 和ApplicationContext `<span style="color:darkorange">`(高级特性和框架)是Spring的两大核心接口，都可以当做Spring的容器。
+<span style="color:darkorange">BeanFactory</span> (轻量级) 和<span style="color:darkorange">ApplicationContext </span>(高级特性和框架)是Spring的两大核心接口，都可以当做Spring的容器。
 （1）BeanFactory是Spring里面最底层的接口，是IoC的核心，定义了IoC的基本功能，包含了各种Bean的定义、加载、实例化，依赖注入和生命周期管理。ApplicationContext接口作为BeanFactory的子类，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：
 （2）
 
