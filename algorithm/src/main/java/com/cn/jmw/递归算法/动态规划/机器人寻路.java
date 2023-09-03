@@ -9,26 +9,26 @@ package com.cn.jmw.递归算法.动态规划;
 //返回有几种走法
 public class 机器人寻路 {
 
-    public static int way1(int n,int start,int aim,int k){
-        return process1(start,k,aim,n);
+    public static int way1(int n, int start, int aim, int k) {
+        return process1(start, k, aim, n);
     }
 
     /**
      * 常用递归
      */
 
-    public static int process1(int cur,int rest,int aim,int n){
-        if (rest==0){
-            return cur==aim?1:0;
+    public static int process1(int cur, int rest, int aim, int n) {
+        if (rest == 0) {
+            return cur == aim ? 1 : 0;
         }
 
-        if (cur==1){
-            process1(cur+1,rest-1,aim,n);
+        if (cur == 1) {
+            process1(cur + 1, rest - 1, aim, n);
         }
-        if (cur==n){
-            process1(cur-1,rest-1,aim,n);
+        if (cur == n) {
+            process1(cur - 1, rest - 1, aim, n);
         }
-        return process1(cur-1,rest-1,aim,n) + process1(cur+1,rest-1,aim,n);
+        return process1(cur - 1, rest - 1, aim, n) + process1(cur + 1, rest - 1, aim, n);
     }
 
     /**
@@ -36,8 +36,8 @@ public class 机器人寻路 {
      * 本质就是使用缓存，减少重复运算
      */
     //优化重复的叶子节点，使用缓存法
-    public static int way2(int n,int start,int aim,int k){
-        int[][] dp = new int[n+1][k+1];
+    public static int way2(int n, int start, int aim, int k) {
+        int[][] dp = new int[n + 1][k + 1];
         for (int i = 0; i < dp.length; i++) {
             for (int j = 0; j < dp[i].length; j++) {
                 dp[i][j] = -1;
@@ -50,19 +50,19 @@ public class 机器人寻路 {
     //cur 1-n
     //rest 0-k
     //cur rest 是可变的，需要一个二维表存储，存储下来所有对应出现的参数路径
-    public static int process2(int cur,int rest,int aim,int n,int[][] dp) {
-        if (dp[cur][rest]!=-1)return dp[cur][rest];
+    public static int process2(int cur, int rest, int aim, int n, int[][] dp) {
+        if (dp[cur][rest] != -1) return dp[cur][rest];
 
         //之前没算过的
         int ans = 0;
-        if (rest==0){
-            ans = cur==aim?1:0;
-        }else if (cur==1){
-            ans = process2(cur+1,rest-1,aim,n,dp);
-        }else if (cur==n){
-            ans = process2(cur-1,rest-1,aim,n,dp);
-        }else {
-            ans = process2(cur+1,rest-1,aim,n,dp) + process2(cur-1,rest-1,aim,n,dp);
+        if (rest == 0) {
+            ans = cur == aim ? 1 : 0;
+        } else if (cur == 1) {
+            ans = process2(cur + 1, rest - 1, aim, n, dp);
+        } else if (cur == n) {
+            ans = process2(cur - 1, rest - 1, aim, n, dp);
+        } else {
+            ans = process2(cur + 1, rest - 1, aim, n, dp) + process2(cur - 1, rest - 1, aim, n, dp);
         }
 
         dp[cur][rest] = ans;
@@ -71,22 +71,24 @@ public class 机器人寻路 {
 
     /**
      * 构建DP方程
-     *
+     * <p>
      * 通过DP二维数组递推
      */
-    public static int way3(int n,int start,int aim,int k){
-        int[][] dp = new int[n+1][k+1];
+    public static int way3(int n, int start, int aim, int k) {
+        //判断越界
+        if (n < 2 || k < 1 || start < 1 || start > n || k < 1 || k > n) return 0;
+
+        int[][] dp = new int[n + 1][k + 1];
         dp[aim][0] = 1;
         for (int rest = 1; rest <= k; rest++) {//列
-            dp[1][rest] = dp[2][rest-1];
+            dp[1][rest] = dp[2][rest - 1];
             for (int cur = 2; cur < n; cur++) {
-                dp[cur][rest] = dp[cur-1][rest-1] + dp[cur+1][rest-1];
+                dp[cur][rest] = dp[cur - 1][rest - 1] + dp[cur + 1][rest - 1];
             }
-            dp[n][rest] = dp[n-1][rest-1];
+            dp[n][rest] = dp[n - 1][rest - 1];
         }
         return dp[start][k];
     }
-
 
 
     //测试way1方法
