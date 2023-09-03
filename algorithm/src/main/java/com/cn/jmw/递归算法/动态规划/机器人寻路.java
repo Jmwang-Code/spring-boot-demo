@@ -32,7 +32,7 @@ public class 机器人寻路 {
     }
 
     /**
-     * 从顶向下的动态规划
+     * 从顶向下的动态规划（记忆化搜索）
      * 本质就是使用缓存，减少重复运算
      */
     //优化重复的叶子节点，使用缓存法
@@ -43,7 +43,8 @@ public class 机器人寻路 {
                 dp[i][j] = -1;
             }
         }
-        return process2(start,k,aim,n,dp);
+        int i = process2(start, k, aim, n, dp);
+        return i;
     }
 
     //cur 1-n
@@ -68,6 +69,25 @@ public class 机器人寻路 {
         return ans;
     }
 
+    /**
+     * 构建DP方程
+     *
+     * 通过DP二维数组递推
+     */
+    public static int way3(int n,int start,int aim,int k){
+        int[][] dp = new int[n+1][k+1];
+        dp[aim][0] = 1;
+        for (int rest = 1; rest <= k; rest++) {//列
+            dp[1][rest] = dp[2][rest-1];
+            for (int cur = 2; cur < n; cur++) {
+                dp[cur][rest] = dp[cur-1][rest-1] + dp[cur+1][rest-1];
+            }
+            dp[n][rest] = dp[n-1][rest-1];
+        }
+        return dp[start][k];
+    }
+
+
 
     //测试way1方法
     public static void main(String[] args) {
@@ -76,5 +96,8 @@ public class 机器人寻路 {
 
         int way2 = way2(7, 2, 4, 4);
         System.out.println(way2);
+
+        int way3 = way3(7, 2, 4, 4);
+        System.out.println(way3);
     }
 }
