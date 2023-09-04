@@ -15,16 +15,30 @@ public class 预测赢家 {
      * 常式 暴力递归
      */
     public static int win(int[] arr){
-        return process1(arr,0,arr.length-1,0);
+        if (arr==null || arr.length==0)return 0;
+        int first = f(arr,0,arr.length-1);
+        int last = l(arr,0,arr.length-1);
+        return Math.max(first,last);
     }
 
-    //数组
-    public static int process1(int[] arr,int left,int right,int sum){
-        if (left>=right){
-            return sum;
-        }
+    //先手
+    public static int f(int[] arr,int left,int right){
+        if (left==right)return arr[left];
 
-        return Math.max(process1(arr,left+1,right-1,sum+arr[left]),process1(arr,left+1,right-1,sum+arr[right]));
+        int p1 = arr[left] + l(arr,left+1,right);
+        int p2 = arr[right] + l(arr,left,right-1);
+        //先手选取一种 当前牌中的最优
+        return Math.max(p1,p2);
+    }
+
+    //后手
+    public static int l(int[] arr,int left,int right){
+        if (left==right)return 0;
+
+        //后手选 先手剩下的牌中的最优
+        int p1 =  f(arr,left+1,right);
+        int p2 =  f(arr,left,right-1);
+        return Math.min(p1,p2);
     }
 
     //测试
