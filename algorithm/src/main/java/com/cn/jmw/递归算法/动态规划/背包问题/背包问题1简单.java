@@ -53,17 +53,17 @@ public class 背包问题1简单 {
         int[] w = {2, 1, 3, 4};
         int[] v = {5, 6, 3, 19};
         int bag = 8;
-        long l = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
-            maxValue1(w, v, bag);
-        }
-        System.out.println((System.currentTimeMillis()-l)/1000.0);
-
-        long l1 = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
-            maxValue2(w, v, bag);
-        }
-        System.out.println((System.currentTimeMillis()-l1)/1000.0);
+//        long l = System.currentTimeMillis();
+//        for (int i = 0; i < 100000; i++) {
+        System.out.println(maxValue2(w, v, bag));
+//        }
+//        System.out.println((System.currentTimeMillis()-l)/1000.0);
+//
+//        long l1 = System.currentTimeMillis();
+//        for (int i = 0; i < 100000; i++) {
+//            maxValue2(w, v, bag);
+//        }
+//        System.out.println((System.currentTimeMillis()-l1)/1000.0);
 
     }
 }
