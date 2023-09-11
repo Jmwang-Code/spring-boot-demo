@@ -42,9 +42,10 @@ public class 大写英文字符和数组对应转换 {
         dp[N] = 1;
         for (int i = N-1; i >= 0; i--) {
             if (str[i]!='0'){
-                int way = dp[i+1];
-                int way2 = (str.length>i+1) && ((str[i]-'0')*10+(str[i+1]-'0')<27)?dp[i+2]:0;
-                dp[i] = way + way2;
+//                int way = dp[i+1];
+//                int way2 = (str.length>i+1) && ((str[i]-'0')*10+(str[i+1]-'0')<27)?dp[i+2]:0;
+//                dp[i] = way + way2;
+                dp[i] = (str[i] == '0') ? 0 : dp[i+1] + ((i < N - 1 && ((str[i] - '0') * 10 + (str[i+1] - '0') < 27)) ? dp[i+2] : 0);
             }
         }
         return dp[0];
