@@ -91,6 +91,7 @@
       <module>demo-mybatis</module>
       <module>algorithm</module>
     <module>demo-Resume</module>
+      <module>juc</module>
   </modules>
   <packaging>pom</packaging>
 
