@@ -3,7 +3,7 @@ package allAlgorithm.对数器.一维.一维整型;
 
 import allAlgorithm.对数器.一维.OneArray;
 
-public class 一维整型数组对数器 {
+public class OneArrayLogarithmic  {
 
     //获取随机数组 有最大值 有最大长度
     public static int[] getRandomArray(int maxSize, int maxValue) {
