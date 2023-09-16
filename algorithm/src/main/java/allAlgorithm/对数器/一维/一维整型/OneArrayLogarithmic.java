@@ -3,7 +3,11 @@ package allAlgorithm.对数器.一维.一维整型;
 
 import allAlgorithm.对数器.一维.OneArray;
 
-public class OneArrayLogarithmic  {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class OneArrayLogarithmic {
 
     //获取随机数组 有最大值 有最大长度
     public static int[] getRandomArray(int maxSize, int maxValue) {
@@ -106,19 +110,22 @@ public class OneArrayLogarithmic  {
     }
 
     //对数器2个int[] 可以控制参数
-    public static void LogarithmicDevice(OneArray a, OneArray b, int testTimes, int minSize, int maxSize, int minValue, int maxValue) {
+    public static void LogarithmicDevice(int testTimes, int minSize, int maxSize, int minValue, int maxValue, OneArray... a) {
         //testTime绝对正确的方法与被测方法的比较次数，一旦有1次结果不同立刻打印错误用例并跳出
         boolean succeed = true;
         for (int i = 0; i < testTimes; i++) {
             int[] arr1 = getRandomArray(minSize, maxSize, minValue, maxValue);
-            int[] arr2 = copyArray(arr1);
-            a.processNotReturn(arr1);
-            b.processNotReturn(arr2);
-            if (!isEqual(arr1, arr2)) {
-                succeed = false;
-                printArray(arr1);
-                printArray(arr2);
-                break;
+            for (int j = 0; j < a.length - 1; j++) {
+                int[] arr2 = copyArray(arr1);
+                int[] arr3 = copyArray(arr1);
+                a[j].processNotReturn(arr2);
+                a[j + 1].processNotReturn(arr3);
+                if (!isEqual(arr2, arr3)) {
+                    succeed = false;
+                    printArray(arr2);
+                    printArray(arr3);
+                    break;
+                }
             }
         }
         System.out.println(succeed ? "Nice!" : "Fucking fucked!");
