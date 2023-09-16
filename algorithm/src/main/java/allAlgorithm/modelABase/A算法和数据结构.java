@@ -3,6 +3,9 @@ package allAlgorithm.modelABase;
 import allAlgorithm.对数器.一维.一维整型.OneArrayLogarithmic;
 import allAlgorithm.对数器.一维.一维整型.OneArrayNotReturn;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class A算法和数据结构 {
 
     //1. 常数时间的操作 ： + - * / %  >> >>> << | & ^ 数组寻址 o(1)
@@ -24,7 +27,7 @@ public class A算法和数据结构 {
 
     //归并
     public static void mergeSort(int[] arr,int L,int R) {
-        if (L<=R) {
+        if (L>=R) {
             return;
         }
         //获取中间
@@ -45,12 +48,12 @@ public class A算法和数据结构 {
         int p2 = M+1;
         //新数组的指针，控制help
         int i = 0;
-        while (p1 <= M && p2 <= R)help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
+        while (p1 <= M && p2 <= R)help[i++] = arr[p1]<=arr[p2]?arr[p1++]:arr[p2++];
 
-        while (p1 <= M)arr[i++] = arr[p1];
-        while (p2 <= M)arr[i++] = arr[p2];
+        while (p1 <= M)help[i++] = arr[p1++];
+        while (p2 <= R)help[i++] = arr[p2++];
         for (int j = 0; j < help.length; j++) {
-            arr[L+i] = help[j];
+            arr[L+j] = help[j];
         }
     }
 
@@ -63,10 +66,10 @@ public class A算法和数据结构 {
         quickSort(arr, q+1, R);
     }
 
-    private static int partition(int[] a, int p, int r) {
-        int pivot = a[r];
-        int i = p;
-        for(int j = p; j < r; ++j) {
+    private static int partition(int[] a, int L, int R) {
+        int pivot = a[R];
+        int i = L;
+        for(int j = L; j < R; ++j) {
             if (a[j] < pivot) {
                 if (i == j) {
                     ++i;
@@ -79,24 +82,25 @@ public class A算法和数据结构 {
         }
 
         int tmp = a[i];
-        a[i] = a[r];
-        a[r] = tmp;
+        a[i] = a[R];
+        a[R] = tmp;
         return i;
     }
 
     //使用对数器进行验证
     public static void main(String[] args) {
-        OneArrayLogarithmic.LogarithmicDevice(new OneArrayNotReturn() {
-            @Override
-            public void processNotReturn(int[] arr) {
-                mergeSort(arr,0,arr.length-1);
-            }
-        },new OneArrayNotReturn () {
+        OneArrayLogarithmic.LogarithmicDevice(new OneArrayNotReturn () {
             @Override
             public void processNotReturn(int[] arr) {
                 quickSort(arr,0,arr.length-1);
             }
-        },1000,10,20,1,50);
+        },new OneArrayNotReturn() {
+            @Override
+            public void processNotReturn(int[] arr) {
+                mergeSort(arr,0,arr.length-1);
+            }
+        },1000,5,10,1,30);
+
     }
 
 }

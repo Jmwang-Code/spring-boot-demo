@@ -93,12 +93,12 @@ public class OneArrayLogarithmic  {
         for (int i = 0; i < testTimes; i++) {
             int[] arr1 = getRandomArray(1, 100, 1, 100);
             int[] arr2 = copyArray(arr1);
-            int[] arr3 = copyArray(arr1);
             a.processNotReturn(arr1);
             b.processNotReturn(arr2);
             if (!isEqual(arr1, arr2)) {
                 succeed = false;
-                printArray(arr3);
+                printArray(arr1);
+                printArray(arr2);
                 break;
             }
         }
@@ -112,12 +112,12 @@ public class OneArrayLogarithmic  {
         for (int i = 0; i < testTimes; i++) {
             int[] arr1 = getRandomArray(minSize, maxSize, minValue, maxValue);
             int[] arr2 = copyArray(arr1);
-            int[] arr3 = copyArray(arr1);
             a.processNotReturn(arr1);
-            a.processNotReturn(arr2);
+            b.processNotReturn(arr2);
             if (!isEqual(arr1, arr2)) {
                 succeed = false;
-                printArray(arr3);
+                printArray(arr1);
+                printArray(arr2);
                 break;
             }
         }
