@@ -1,4 +1,7 @@
-package allAlgorithm.对数器;
+package allAlgorithm.对数器.一维.一维整型;
+
+
+import allAlgorithm.对数器.一维.OneArray;
 
 public class 一维整型数组对数器 {
 
@@ -19,7 +22,7 @@ public class 一维整型数组对数器 {
     }
 
     //获取随机数组 有最小值和最大值 有最小长度和最大长度
-    public static int[] getRandomArray(int minSize,int maxSize,int minValue ,int maxValue) {
+    public static int[] getRandomArray(int minSize, int maxSize, int minValue, int maxValue) {
         //Math.random() -> double [0,1)
         //Math.random() * N -> double [0,N)
         //(int)(Math.random() * N) -> int [0,N-1]
@@ -84,15 +87,15 @@ public class 一维整型数组对数器 {
     }
 
     // 对数器2个int[] 不能控制参数
-    public static void LogarithmicDevice(OneArrayNotReturn a, OneArrayNotReturn b,int testTimes) {
+    public static void LogarithmicDevice(OneArray a, OneArray b, int testTimes) {
         //testTime绝对正确的方法与被测方法的比较次数，一旦有1次结果不同立刻打印错误用例并跳出
         boolean succeed = true;
         for (int i = 0; i < testTimes; i++) {
-            int[] arr1 = getRandomArray(1, 100, 1,100);
+            int[] arr1 = getRandomArray(1, 100, 1, 100);
             int[] arr2 = copyArray(arr1);
             int[] arr3 = copyArray(arr1);
-            a.process(arr1);
-            a.process(arr2);
+            a.processNotReturn(arr1);
+            b.processNotReturn(arr2);
             if (!isEqual(arr1, arr2)) {
                 succeed = false;
                 printArray(arr3);
@@ -103,15 +106,15 @@ public class 一维整型数组对数器 {
     }
 
     //对数器2个int[] 可以控制参数
-    public static void LogarithmicDevice(OneArrayNotReturn a, OneArrayNotReturn b,int testTimes,int minSize,int maxSize,int minValue ,int maxValue){
+    public static void LogarithmicDevice(OneArray a, OneArray b, int testTimes, int minSize, int maxSize, int minValue, int maxValue) {
         //testTime绝对正确的方法与被测方法的比较次数，一旦有1次结果不同立刻打印错误用例并跳出
         boolean succeed = true;
         for (int i = 0; i < testTimes; i++) {
-            int[] arr1 = getRandomArray(minSize, maxSize, minValue,maxValue);
+            int[] arr1 = getRandomArray(minSize, maxSize, minValue, maxValue);
             int[] arr2 = copyArray(arr1);
             int[] arr3 = copyArray(arr1);
-            a.process(arr1);
-            a.process(arr2);
+            a.processNotReturn(arr1);
+            a.processNotReturn(arr2);
             if (!isEqual(arr1, arr2)) {
                 succeed = false;
                 printArray(arr3);
@@ -121,5 +124,20 @@ public class 一维整型数组对数器 {
         System.out.println(succeed ? "Nice!" : "Fucking fucked!");
     }
 
+
+    public static void main(String[] args) {
+        LogarithmicDevice(new OneArrayNotReturn() {
+            @Override
+            public void processNotReturn(int[] arr) {
+
+            }
+        }, new OneArrayNotReturn() {
+            @Override
+            public void processNotReturn(int[] arr) {
+
+            }
+        }, 10000);
+
+    }
 
 }
