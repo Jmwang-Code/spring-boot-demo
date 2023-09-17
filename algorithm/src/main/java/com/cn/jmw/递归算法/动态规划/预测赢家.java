@@ -12,7 +12,7 @@ package com.cn.jmw.递归算法.动态规划;
 public class 预测赢家 {
 
     /**
-     * 常式 暴力递归
+     * 常式 暴力递归.md
      */
     public static int win(int[] arr){
         if (arr==null || arr.length==0)return 0;
