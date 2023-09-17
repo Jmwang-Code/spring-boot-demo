@@ -9,4 +9,9 @@ public class NodeS {
     public NodeS(int val) {
         this.val = val;
     }
+
+    public NodeS(int val, NodeS next) {
+        this.val = val;
+        this.next = next;
+    }
 }
