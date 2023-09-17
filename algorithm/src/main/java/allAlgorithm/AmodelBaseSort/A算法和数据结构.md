@@ -32,3 +32,64 @@
 4. 所有的改进都是以空间换时间，或者以时间换空间。目前没有时间复杂度O(nlogn)的排序算法，空间复杂度为O(1)，并且是稳定的。
 5. 奇数放在数组左边，偶数放在数组右边，要求相对次序不变，要求空间复杂度O(1),时间复杂度O(n)：快排无法保证稳定性。
 
+# 综合排序
+```java
+public class Sort {
+
+   //快排
+   public static void quickSort(int[] arr, int left, int right) {
+      if (left < right) return;
+      if (left - right <= 60) {
+         insertSort(arr);
+         return;
+      }
+
+      int pivot = partition(arr, left, right);
+      quickSort(arr, left, pivot - 1);
+      quickSort(arr, pivot + 1, right);
+   }
+
+
+   public static int partition(int[] arr, int left, int right) {
+      int pivot = arr[left];
+      while (left < right) {
+         while (left < right && arr[right] >= pivot) {
+            right--;
+         }
+         arr[left] = arr[right];
+         while (left < right && arr[left] <= pivot) {
+            left++;
+         }
+         arr[right] = arr[left];
+      }
+      arr[left] = pivot;
+      return left;
+   }
+
+   //插入排序
+   public static void insertSort(int[] arr) {
+      for (int i = 1; i < arr.length; i++) {
+         int temp = arr[i];
+         int j = i - 1;
+         while (j >= 0 && arr[j] > temp) {
+            arr[j + 1] = arr[j];
+            j--;
+         }
+         arr[j + 1] = temp;
+      }
+   }
+    
+    public static void main(String[] args) {
+        int[] arr = {1, 3, 2, 5, 4, 6, 7, 9, 8, 0};
+        //bubbleSort(arr);
+        //selectSort(arr);
+        //mergeSort(arr, 0, arr.length - 1);
+        //quickSort(arr, 0, arr.length - 1);
+        quickSort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+}
+
+
+
+```
