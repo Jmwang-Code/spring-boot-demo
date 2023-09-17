@@ -1,13 +1,9 @@
-package allAlgorithm.modelABase;
+package allAlgorithm.AmodelBaseSort;
 
 import allAlgorithm.对数器.一维.一维整型.OneArrayLogarithmic;
 import allAlgorithm.对数器.一维.一维整型.OneArrayNotReturn;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class A算法和数据结构 {
 
