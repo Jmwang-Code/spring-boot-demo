@@ -1,6 +1,9 @@
 package allAlgorithm.BmodelLinkedList;
 
+import allAlgorithm.对数器.链表.单向链表.SLinkedList;
 import allAlgorithm.对数器.链表.单向链表.SinglyLinkedList;
+import allAlgorithm.对数器.链表.双向链表.BLinkedList;
+import allAlgorithm.对数器.链表.双向链表.BidirectionalLinkedList;
 
 public class SLinkedListTest {
 
@@ -21,14 +24,14 @@ public class SLinkedListTest {
         return pre;
     }
 
-    public static NodeS unidirectionalLinkedListFlippingdfs(NodeS head) {
+    public static NodeS unidirectionalLinkedListFlippingDfs(NodeS head) {
         //下一个节点等于null 的时候就返回当前节点
         if (head.next == null) {
             return head;
         }
 
         //递归传入下一个节点，目的是为了到达最后一个节点
-        NodeS next = unidirectionalLinkedListFlippingdfs(head.next);
+        NodeS next = unidirectionalLinkedListFlippingDfs(head.next);
         /**
          第一轮出栈，head为5，head.next为空，返回5
          第二轮出栈，head为4，head.next为5，执行head.next.next=head也就是5.next=4，
@@ -58,7 +61,20 @@ public class SLinkedListTest {
     public static void main(String[] args) {
         NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20);
         SinglyLinkedList.printLinkedList(nodeS);
-        NodeS nodeS1 = unidirectionalLinkedListFlippingdfs(nodeS);
+        NodeS nodeS1 = unidirectionalLinkedListFlippingDfs(nodeS);
         SinglyLinkedList.printLinkedList(nodeS1);
+
+        BidirectionalLinkedList.LogarithmicDevice(10000000, 10, 20, 10, 20
+                , new SLinkedList() {
+                    @Override
+                    public NodeS processNodeS(NodeS val) {
+                        return unidirectionalLinkedListFlipping(val);
+                    }
+                }, new SLinkedList() {
+                    @Override
+                    public NodeS processNodeS(NodeS val) {
+                        return unidirectionalLinkedListFlippingDfs(val);
+                    }
+                });
     }
 }
