@@ -3,6 +3,9 @@ package allAlgorithm.BmodelLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BidirectionalLinkedList;
 
+/**
+ * 双向链表
+ */
 public class DLinkedListTest {
 
     //双向链表翻转

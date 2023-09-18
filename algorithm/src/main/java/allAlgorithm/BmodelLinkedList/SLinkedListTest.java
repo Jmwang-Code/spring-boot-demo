@@ -7,6 +7,9 @@ import allAlgorithm.对数器.链表.双向链表.BidirectionalLinkedList;
 
 import java.util.Stack;
 
+/**
+ * 单向链表
+ */
 public class SLinkedListTest {
 
     //单向链表翻转
