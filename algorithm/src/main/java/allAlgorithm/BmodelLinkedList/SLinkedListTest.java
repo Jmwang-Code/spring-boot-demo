@@ -4,11 +4,16 @@ import allAlgorithm.对数器.链表.单向链表.SLinkedList;
 import allAlgorithm.对数器.链表.单向链表.SinglyLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BidirectionalLinkedList;
+import com.cn.jmw.递归算法.动态规划.机器人寻路;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
  * 单向链表
+ * <p>
+ * arrPartition需要理解一下3指针
  */
 public class SLinkedListTest {
 
@@ -40,22 +45,22 @@ public class SLinkedListTest {
         /**
          第一轮出栈，head为5，head.next为空，返回5
          第二轮出栈，head为4，head.next为5，执行head.next.next=head也就是5.next=4，
-                    把当前节点的子节点的子节点指向当前节点
-                    此时链表为1->2->3->4<->5，由于4与5互相指向，所以此处要断开4.next=null
-                    此时链表为1->2->3->4<-5
-                    返回节点5
+         把当前节点的子节点的子节点指向当前节点
+         此时链表为1->2->3->4<->5，由于4与5互相指向，所以此处要断开4.next=null
+         此时链表为1->2->3->4<-5
+         返回节点5
          第三轮出栈，head为3，head.next为4，执行head.next.next=head也就是4.next=3，
-                    此时链表为1->2->3<->4<-5，由于3与4互相指向，所以此处要断开3.next=null
-                    此时链表为1->2->3<-4<-5
-                    返回节点5
+         此时链表为1->2->3<->4<-5，由于3与4互相指向，所以此处要断开3.next=null
+         此时链表为1->2->3<-4<-5
+         返回节点5
          第四轮出栈，head为2，head.next为3，执行head.next.next=head也就是3.next=2，
-                    此时链表为1->2<->3<-4<-5，由于2与3互相指向，所以此处要断开2.next=null
-                    此时链表为1->2<-3<-4<-5
-                    返回节点5
+         此时链表为1->2<->3<-4<-5，由于2与3互相指向，所以此处要断开2.next=null
+         此时链表为1->2<-3<-4<-5
+         返回节点5
          第五轮出栈，head为1，head.next为2，执行head.next.next=head也就是2.next=1，
-                    此时链表为1<->2<-3<-4<-5，由于1与2互相指向，所以此处要断开1.next=null
-                    此时链表为1<-2<-3<-4<-5
-                    返回节点5
+         此时链表为1<->2<-3<-4<-5，由于1与2互相指向，所以此处要断开1.next=null
+         此时链表为1<-2<-3<-4<-5
+         返回节点5
          出栈完成，最终头节点5->4->3->2->1
          */
         head.next.next = head;
@@ -64,7 +69,7 @@ public class SLinkedListTest {
     }
 
     //打印2个有序链表的公共部分
-    public static void printLinkedList(NodeS head1,NodeS head2){
+    public static void printLinkedList(NodeS head1, NodeS head2) {
         while (head1 != null && head2 != null) {
             if (head1.val < head2.val) {
                 head1 = head1.next;
@@ -78,11 +83,11 @@ public class SLinkedListTest {
         }
     }
 
-    public static NodeS heBing(NodeS head1,NodeS head2){
+    public static NodeS heBing(NodeS head1, NodeS head2) {
         NodeS prehead = new NodeS(-1);
         NodeS prev = prehead;
 
-        while (head1!=null && head2!=null){
+        while (head1 != null && head2 != null) {
             if (head1.val <= head2.val) {
                 prev.next = head1;
                 head1 = head1.next;
@@ -93,7 +98,7 @@ public class SLinkedListTest {
             prev = prev.next;
         }
 
-        prev.next = head1==null ? head2:head1;
+        prev.next = head1 == null ? head2 : head1;
         return prehead.next;
     }
 
@@ -190,36 +195,179 @@ public class SLinkedListTest {
         return res;
     }
 
+    /**
+     * 给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
+     * 你应当 保留 两个分区中每个节点的初始相对位置。
+     * <p>
+     * 也就是稳定性
+     */
+    public static NodeS partition(NodeS head, int x) {
+        if (head==null)return head;
+        NodeS cur = head;
+        int i = 0;
+        //将当前顺序取出
+        while (cur != null) {
+            i++;
+            cur = cur.next;
+        }
+
+        //存放临时值
+        NodeS[] nodeS = new NodeS[i];
+        i = 0;
+        cur = head;
+        for (i = 0; i != nodeS.length; i++) {
+            nodeS[i] = cur;
+            cur = cur.next;
+            nodeS[i].next = null;
+        }
+        arrPartition(nodeS, x);
+        //重新组装链表
+        for (i = 1; i != nodeS.length; i++) {
+            nodeS[i - 1].next = nodeS[i];
+        }
+        //关键操作将之前的节点结尾指向null
+        return nodeS[0];
+    }
+
+    /**
+     * 分区数组
+     * <p>
+     * 需要记录几个点位，比如index(0-N-1) ， 记录小数索引 less=-1 ，记录大数索引 more=n
+     * <p>
+     * 移动情况
+     * 1. 当arr[index]<target,说明出现了一个小数 ，交换++less,index++数组位置。（具体表现就是，index位增加，小数位置增加）
+     * 2. 当arr[index]>target,说明出现了一个大数 ，交换--more,index当前值。
+     * 3. 当arr[index]=target,说明此为止暂时不用移动。
+     */
+    public static void arrPartition(NodeS[] nodeS, int x) {
+        int less = -1; // less指针指向小于x的元素的最后一个位置
+        int more = nodeS.length; // more指针指向大于x的元素的第一个位置
+        int index = 0; // index指针用于遍历数组
+        while (index != more) { // 当index指针小于more指针时，继续遍历数组
+            if (nodeS[index].val < x) { // 如果当前元素小于x
+                swap(nodeS, ++less, index++); // 将当前元素与less指针指向的下一个元素交换，并将less指针和index指针都向右移动一位
+            } else if (nodeS[index].val > x) { // 如果当前元素大于x
+                swap(nodeS, --more, index); // 将当前元素与more指针指向的上一个元素交换，并将more指针向左移动一位
+            } else { // 如果当前元素等于x
+                index++; // 将index指针向右移动一位
+            }
+        }
+    }
+
+    public static void swap(NodeS[] nodeS, int i, int j) {
+        NodeS temp = nodeS[i];
+        nodeS[i] = nodeS[j];
+        nodeS[j] = temp;
+    }
+
+    public static NodeS partitionTwo(NodeS head, int x) {
+        NodeS preBegin = null, preEnd = null, midBegin = null, midEnd = null, nextBegin = null, nextEnd = null;
+        NodeS next = head;
+        while (head != null) {
+            //保留下一个值 next
+            next = head.next;
+            //保证每个分解出来的链都是单个的
+            head.next = null;
+            if (head.val < x) {
+                if (preBegin == null) {
+                    preBegin = head;
+                    preEnd = head;
+                } else {
+                    preEnd.next = head;
+                    preEnd = head;
+                }
+            } else if (head.val == x) {
+                if (midBegin == null) {
+                    midBegin = head;
+                    midEnd = head;
+                } else {
+                    midEnd.next = head;
+                    midEnd = head;
+                }
+            } else {
+                if (nextBegin == null) {
+                    nextBegin = head;
+                    nextEnd = head;
+                } else {
+                    nextEnd.next = head;
+                    nextEnd = head;
+                }
+            }
+            head = next;
+        }
+
+        if (preBegin != null) {
+            if (midBegin != null) {
+                preEnd.next = midBegin;
+                if (nextBegin != null) {
+                    midEnd.next = nextBegin;
+                }
+            } else if (nextBegin != null) {
+                preEnd.next = nextBegin;
+            }
+
+        } else if (midBegin != null) {
+            preBegin = midBegin;
+            if (nextBegin!=null){
+                midEnd.next = nextBegin;
+            }
+        } else if (nextBegin!=null){
+            preBegin = nextBegin;
+        }
+
+
+        return preBegin;
+    }
+
+
     public static void main(String[] args) {
-        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20,10,20);
-        SinglyLinkedList.printLinkedList(nodeS);
-        NodeS nodeS1 = unidirectionalLinkedListFlippingDfs(nodeS);
-        SinglyLinkedList.printLinkedList(nodeS1);
+//        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
+//        SinglyLinkedList.printLinkedList(nodeS);
+//        NodeS nodeS1 = unidirectionalLinkedListFlippingDfs(nodeS);
+//        SinglyLinkedList.printLinkedList(nodeS1);
+//
+//        SinglyLinkedList.LogarithmicDevice(100, 10, 20, 10, 20
+//                , new SLinkedList() {
+//                    @Override
+//                    public NodeS processNodeS(NodeS val) {
+//                        return unidirectionalLinkedListFlipping(val);
+//                    }
+//                }, new SLinkedList() {
+//                    @Override
+//                    public NodeS processNodeS(NodeS val) {
+//                        return unidirectionalLinkedListFlippingDfs(val);
+//                    }
+//                });
+//
+//        NodeS nodeS2 = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
+//        NodeS nodeS3 = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
+//        SinglyLinkedList.printLinkedList(nodeS2);
+//        SinglyLinkedList.printLinkedList(nodeS3);
+//        NodeS nodeS4 = heBing(nodeS2, nodeS3);
+//        SinglyLinkedList.printLinkedList(nodeS4);
+//
+//        //回文链表
+//        NodeS s = new NodeS(1, new NodeS(1, new NodeS(2, new NodeS(1))));
+//        System.out.println(isPalindrome(s));
+//        NodeS s1 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(2, new NodeS(1)))));
+//        System.out.println(isPalindrome(s1));
 
-        SinglyLinkedList.LogarithmicDevice(100, 10, 20, 10, 20
-                , new SLinkedList() {
-                    @Override
-                    public NodeS processNodeS(NodeS val) {
-                        return unidirectionalLinkedListFlipping(val);
-                    }
-                }, new SLinkedList() {
-                    @Override
-                    public NodeS processNodeS(NodeS val) {
-                        return unidirectionalLinkedListFlippingDfs(val);
-                    }
-                });
+        System.out.println("=======================分隔链表=========================");
 
-        NodeS nodeS2 = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
-        NodeS nodeS3 = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
-        SinglyLinkedList.printLinkedList(nodeS2);
-        SinglyLinkedList.printLinkedList(nodeS3);
-        NodeS nodeS4 = heBing(nodeS2, nodeS3);
-        SinglyLinkedList.printLinkedList(nodeS4);
+        //分隔链表
+        NodeS s2 = SinglyLinkedList.generateRandomLinkedList(10, 20, 1, 20);
+        SinglyLinkedList.printLinkedList(s2);//12 12 6 3 11
+        NodeS partition = partition(s2,10);
+        NodeS partition2 = partitionTwo(s2, 10);
+        SinglyLinkedList.printLinkedList(partition);
+        SinglyLinkedList.printLinkedList(partition2);
 
-        //回文链表
-        NodeS s = new NodeS(1,new NodeS(1,new NodeS(2,new NodeS(1))));
-        System.out.println(isPalindrome(s));
-        NodeS s1 = new NodeS(1,new NodeS(2,new NodeS(3,new NodeS(2,new NodeS(1)))));
-        System.out.println(isPalindrome(s1));
+        //使用NodeS 15 5 2 18 4 12 8 5 16 7
+        NodeS s = new NodeS(15, new NodeS(5, new NodeS(2, new NodeS(18, new NodeS(4, new NodeS(12, new NodeS(8, new NodeS(5, new NodeS(16, new NodeS(7))))))))));
+        SinglyLinkedList.printLinkedList(s);
+        NodeS partition1 = partitionTwo(s, 10);
+        SinglyLinkedList.printLinkedList(partition1);
+
+
     }
 }

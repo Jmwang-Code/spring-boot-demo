@@ -95,6 +95,7 @@ public class SinglyLinkedList {
                 if (!isEqual(nodeS2, nodeS3)) {
                     succeed = false;
                     System.out.println("当前是第" + i + "个测试用例");
+                    printLinkedList(nodeS1);
                     printLinkedList(nodeS2);
                     printLinkedList(nodeS3);
                     break;
