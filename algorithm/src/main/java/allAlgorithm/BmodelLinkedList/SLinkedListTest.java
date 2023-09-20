@@ -2,13 +2,12 @@ package allAlgorithm.BmodelLinkedList;
 
 import allAlgorithm.对数器.链表.单向链表.SLinkedList;
 import allAlgorithm.对数器.链表.单向链表.SinglyLinkedList;
+import allAlgorithm.对数器.链表.单向随机链表.RandomLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BidirectionalLinkedList;
 import com.cn.jmw.递归算法.动态规划.机器人寻路;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 单向链表
@@ -202,7 +201,7 @@ public class SLinkedListTest {
      * 也就是稳定性
      */
     public static NodeS partition(NodeS head, int x) {
-        if (head==null)return head;
+        if (head == null) return head;
         NodeS cur = head;
         int i = 0;
         //将当前顺序取出
@@ -308,10 +307,10 @@ public class SLinkedListTest {
 
         } else if (midBegin != null) {
             preBegin = midBegin;
-            if (nextBegin!=null){
+            if (nextBegin != null) {
                 midEnd.next = nextBegin;
             }
-        } else if (nextBegin!=null){
+        } else if (nextBegin != null) {
             preBegin = nextBegin;
         }
 
@@ -319,6 +318,118 @@ public class SLinkedListTest {
         return preBegin;
     }
 
+    public static NodeRandom copyRandomList(NodeRandom head) {
+        //用作缓存
+        HashMap<NodeRandom, NodeRandom> nodeRandomNodeRandomHashMap = new HashMap<>();
+        NodeRandom temp = head;
+        while (temp != null) {
+            nodeRandomNodeRandomHashMap.put(temp, new NodeRandom(temp.val));
+            temp = temp.next;
+        }
+
+        //赋值next
+        temp = head;
+        while (temp != null) {
+            NodeRandom nodeRandom = nodeRandomNodeRandomHashMap.get(temp);
+            nodeRandom.next = nodeRandomNodeRandomHashMap.get(temp.next);
+            temp = temp.next;
+        }
+
+        //复制random
+        temp = head;
+        while (temp != null) {
+            NodeRandom nodeRandom = nodeRandomNodeRandomHashMap.get(temp);
+            nodeRandom.random = nodeRandomNodeRandomHashMap.get(temp.random);
+            temp = temp.next;
+        }
+        return nodeRandomNodeRandomHashMap.get(head);
+    }
+
+    /**
+     * 两个链表的第一个公共节点
+     * <p>
+     * 可能存在环
+     */
+    public static NodeS getIntersectionNode(NodeS headA, NodeS headB) {
+        //有环
+        NodeS cycleNode = getCycleNode(headA);
+        if (cycleNode != null) return cycleNode;
+
+        //无环
+        NodeS A = headA, B = headB;
+        int lenA = 0, lenB = 0;
+        while (A.next != null) {
+            A = A.next;
+            lenA++;
+        }
+        while (B.next != null) {
+            B = B.next;
+            lenB++;
+        }
+
+        if (A != B) return null;
+
+        //loop 大-小 大的先走 （大-小）的步数 ,默认A是大的
+        int pre;
+        if (lenA > lenB) {
+            pre = lenA - lenB;
+            A = headA;
+            B = headB;
+        } else {
+            pre = lenB - lenA;
+            A = headB;
+            B = headA;
+        }
+
+        while (pre>0){
+            A = A.next;
+            pre--;
+        }
+
+        while (A!=null){
+            if (A==B)return A;
+            A = A.next;
+            B = B.next;
+        }
+        return null;
+    }
+
+    //判断一个链表有环返回第一个入环节点 快慢指针
+    public static NodeS getCycleNode(NodeS s) {
+        if (s == null || s.next == null || s.next.next == null) return null;
+        NodeS fast = s, low = s;
+        //fast n ,low = m
+        //fast是慢的两倍 n = 2m fast走过的距离为low+环的长度 n = m + k + r
+        //也就是说2m = m + k + r =》 m = k + r
+        //所以当fast和low相遇的时候，low走过的距离为k + r =》 k = r
+        while (fast != null && fast.next != null ) {
+            fast = fast.next.next;
+            low = low.next;
+            if (low == fast) break;
+        }
+
+        fast = s;
+        while (fast != null && low!=null) {
+            if (low == fast) return low;
+            fast = fast.next;
+            low = low.next;
+        }
+
+        return null;
+    }
+
+    //判断有环并且返回第一个成环节点（hash表）
+    public static NodeS getCycleNode2(NodeS s) {
+        NodeS nodeS = s;
+        Set<NodeS> set = new HashSet();
+        while (nodeS != null) {
+            if (!set.contains(nodeS)) set.add(nodeS);
+            else return nodeS;
+            nodeS = nodeS.next;
+
+        }
+        return null;
+    }
 
     public static void main(String[] args) {
 //        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
@@ -352,22 +463,59 @@ public class SLinkedListTest {
 //        NodeS s1 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(2, new NodeS(1)))));
 //        System.out.println(isPalindrome(s1));
 
-        System.out.println("=======================分隔链表=========================");
+//        System.out.println("=======================分隔链表=========================");
+//        //分隔链表
+//        NodeS s2 = SinglyLinkedList.generateRandomLinkedList(10, 20, 1, 20);
+//        SinglyLinkedList.printLinkedList(s2);//12 12 6 3 11
+//        NodeS partition = partition(s2,10);
+//        NodeS partition2 = partitionTwo(s2, 10);
+//        SinglyLinkedList.printLinkedList(partition);
+//        SinglyLinkedList.printLinkedList(partition2);
+//
+//        //使用NodeS 15 5 2 18 4 12 8 5 16 7
+//        NodeS s = new NodeS(15, new NodeS(5, new NodeS(2, new NodeS(18, new NodeS(4, new NodeS(12, new NodeS(8, new NodeS(5, new NodeS(16, new NodeS(7))))))))));
+//        SinglyLinkedList.printLinkedList(s);
+//        NodeS partition1 = partitionTwo(s, 10);
+//        SinglyLinkedList.printLinkedList(partition1);
 
-        //分隔链表
-        NodeS s2 = SinglyLinkedList.generateRandomLinkedList(10, 20, 1, 20);
-        SinglyLinkedList.printLinkedList(s2);//12 12 6 3 11
-        NodeS partition = partition(s2,10);
-        NodeS partition2 = partitionTwo(s2, 10);
-        SinglyLinkedList.printLinkedList(partition);
-        SinglyLinkedList.printLinkedList(partition2);
+//        System.out.println("=======================复制带随机指针的链表=========================");
+//        //复制带随机指针的链表
+//        NodeRandom nodeRandom = new NodeRandom(7);
+//        NodeRandom nodeRandom1 = new NodeRandom(13);
+//        NodeRandom nodeRandom2 = new NodeRandom(11);
+//        NodeRandom nodeRandom3 = new NodeRandom(10);
+//        NodeRandom nodeRandom4 = new NodeRandom(1);
+//        nodeRandom.next = nodeRandom1;
+//        nodeRandom1.next = nodeRandom2;
+//        nodeRandom2.next = nodeRandom3;
+//        nodeRandom3.next = nodeRandom4;
+//        nodeRandom1.random = nodeRandom;
+//        nodeRandom2.random = nodeRandom4;
+//        nodeRandom3.random = nodeRandom2;
+//        RandomLinkedList.printLinkedList(nodeRandom);
+//        NodeRandom nodeRandom5 = copyRandomList(nodeRandom);
+//        RandomLinkedList.printLinkedList(nodeRandom5);
+//        System.out.println(nodeRandom==nodeRandom5);
 
-        //使用NodeS 15 5 2 18 4 12 8 5 16 7
-        NodeS s = new NodeS(15, new NodeS(5, new NodeS(2, new NodeS(18, new NodeS(4, new NodeS(12, new NodeS(8, new NodeS(5, new NodeS(16, new NodeS(7))))))))));
-        SinglyLinkedList.printLinkedList(s);
-        NodeS partition1 = partitionTwo(s, 10);
-        SinglyLinkedList.printLinkedList(partition1);
+        System.out.println("=======================两个链表的第一个公共节点=========================");
+        //两个链表的第一个公共节点
+        NodeS s = new NodeS(1, new NodeS(8, new NodeS(4, new NodeS(5))));
+        NodeS nodeS = new NodeS(4, s);
+        NodeS nodeS1 = new NodeS(5, new NodeS(0, s));
+        SinglyLinkedList.printLinkedList(nodeS);
+        SinglyLinkedList.printLinkedList(nodeS1);
 
+        //成环
+        NodeS nodeS2 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4, new NodeS(5)))));
+        nodeS2.next.next.next.next.next = nodeS2.next.next;
+        NodeS cycleNode = getCycleNode(nodeS2);
+        System.out.println(cycleNode.val);
+        NodeS cycleNode2 = getCycleNode2(nodeS2);
+        System.out.println(cycleNode2.val);
 
+        NodeS intersectionNode = getIntersectionNode(nodeS, nodeS1);
+        System.out.println(intersectionNode.val);
+
+        NodeS intersectionNode2 = getIntersectionNode(null, null);
     }
 }
