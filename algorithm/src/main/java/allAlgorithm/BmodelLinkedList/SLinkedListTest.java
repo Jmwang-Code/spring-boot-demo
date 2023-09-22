@@ -6,6 +6,7 @@ import allAlgorithm.对数器.链表.单向随机链表.RandomLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BLinkedList;
 import allAlgorithm.对数器.链表.双向链表.BidirectionalLinkedList;
 import com.cn.jmw.递归算法.动态规划.机器人寻路;
+import org.w3c.dom.Node;
 
 import java.util.*;
 
@@ -431,6 +432,30 @@ public class SLinkedListTest {
         return null;
     }
 
+    public static NodeS removeElements(NodeS head, int val) {
+        //有换头的可能所以需要虚拟节点
+        NodeS dummyNode = new NodeS(-1);
+        dummyNode.next = head;
+        NodeS pre = dummyNode;
+
+        //pre.next = cur
+        while (pre.next!=null){
+            if (pre.next.val == val){
+                pre.next = pre.next.next;
+            }else {
+                pre = pre.next;
+            }
+        }
+
+        return dummyNode.next;
+    }
+
+    public static NodeS removeElementsDfs(NodeS head, int val) {
+        if (head==null)return head;
+        head.next = removeElementsDfs(head.next, val);
+        return head.val == val ? head.next : head;
+    }
+
     public static void main(String[] args) {
 //        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
 //        SinglyLinkedList.printLinkedList(nodeS);
@@ -497,25 +522,32 @@ public class SLinkedListTest {
 //        RandomLinkedList.printLinkedList(nodeRandom5);
 //        System.out.println(nodeRandom==nodeRandom5);
 
-        System.out.println("=======================两个链表的第一个公共节点=========================");
-        //两个链表的第一个公共节点
-        NodeS s = new NodeS(1, new NodeS(8, new NodeS(4, new NodeS(5))));
-        NodeS nodeS = new NodeS(4, s);
-        NodeS nodeS1 = new NodeS(5, new NodeS(0, s));
+//        System.out.println("=======================两个链表的第一个公共节点=========================");
+//        //两个链表的第一个公共节点
+//        NodeS s = new NodeS(1, new NodeS(8, new NodeS(4, new NodeS(5))));
+//        NodeS nodeS = new NodeS(4, s);
+//        NodeS nodeS1 = new NodeS(5, new NodeS(0, s));
+//        SinglyLinkedList.printLinkedList(nodeS);
+//        SinglyLinkedList.printLinkedList(nodeS1);
+//
+//        //成环
+//        NodeS nodeS2 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4, new NodeS(5)))));
+//        nodeS2.next.next.next.next.next = nodeS2.next.next;
+//        NodeS cycleNode = getCycleNode(nodeS2);
+//        System.out.println(cycleNode.val);
+//        NodeS cycleNode2 = getCycleNode2(nodeS2);
+//        System.out.println(cycleNode2.val);
+//
+//        NodeS intersectionNode = getIntersectionNode(nodeS, nodeS1);
+//        System.out.println(intersectionNode.val);
+//
+//        NodeS intersectionNode2 = getIntersectionNode(null, null);
+
+        System.out.println("=======================移除链表元素=========================");
+        //移除链表元素
+        NodeS sRemoveElements = SinglyLinkedList.generateRandomLinkedList(30, 40, 1, 10);
+        SinglyLinkedList.printLinkedList(sRemoveElements);
+        NodeS nodeS = removeElements(sRemoveElements, 5);
         SinglyLinkedList.printLinkedList(nodeS);
-        SinglyLinkedList.printLinkedList(nodeS1);
-
-        //成环
-        NodeS nodeS2 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4, new NodeS(5)))));
-        nodeS2.next.next.next.next.next = nodeS2.next.next;
-        NodeS cycleNode = getCycleNode(nodeS2);
-        System.out.println(cycleNode.val);
-        NodeS cycleNode2 = getCycleNode2(nodeS2);
-        System.out.println(cycleNode2.val);
-
-        NodeS intersectionNode = getIntersectionNode(nodeS, nodeS1);
-        System.out.println(intersectionNode.val);
-
-        NodeS intersectionNode2 = getIntersectionNode(null, null);
     }
 }
