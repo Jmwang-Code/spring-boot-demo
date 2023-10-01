@@ -456,6 +456,28 @@ public class SLinkedListTest {
         return head.val == val ? head.next : head;
     }
 
+    public static NodeS swapPairs(NodeS head) {
+        if(head == null || head.next == null) return head;
+
+        NodeS node = new NodeS(-1);
+        node.next = head;
+
+        NodeS pre = node;
+        NodeS cur = head;
+        NodeS next = head.next;
+
+        while(cur != null && next != null){
+            cur.next = next.next;
+            next.next = cur;
+            pre.next = next;
+
+            pre = cur;
+            cur = cur.next;
+            if(cur != null) next = cur.next;
+        }
+        return node.next;
+    }
+
     public static void main(String[] args) {
 //        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
 //        SinglyLinkedList.printLinkedList(nodeS);
@@ -543,11 +565,16 @@ public class SLinkedListTest {
 //
 //        NodeS intersectionNode2 = getIntersectionNode(null, null);
 
-        System.out.println("=======================移除链表元素=========================");
-        //移除链表元素
-        NodeS sRemoveElements = SinglyLinkedList.generateRandomLinkedList(30, 40, 1, 10);
-        SinglyLinkedList.printLinkedList(sRemoveElements);
-        NodeS nodeS = removeElements(sRemoveElements, 5);
-        SinglyLinkedList.printLinkedList(nodeS);
+//        System.out.println("=======================移除链表元素=========================");
+//        //移除链表元素
+//        NodeS sRemoveElements = SinglyLinkedList.generateRandomLinkedList(30, 40, 1, 10);
+//        SinglyLinkedList.printLinkedList(sRemoveElements);
+//        NodeS nodeS = removeElements(sRemoveElements, 5);
+//        SinglyLinkedList.printLinkedList(nodeS);
+
+        System.out.println("=======================两两交换链表中的节点=========================");
+        //两两交换链表中的节点
+        NodeS n1 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4))));
+        NodeS s = swapPairs(n1);
     }
 }
