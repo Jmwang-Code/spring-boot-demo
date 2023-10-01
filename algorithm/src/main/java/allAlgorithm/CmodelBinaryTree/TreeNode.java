@@ -10,6 +10,7 @@ public class TreeNode {
         val = x;
     }
 
+    //保留中间状态，两个节点进行连接，其实就是cur.right = pre; pre = cur; cur.left = null;
     static TreeNode minNode;
 
     public static TreeNode convertBiNode(TreeNode root) {
