@@ -382,13 +382,13 @@ public class SLinkedListTest {
             B = headA;
         }
 
-        while (pre>0){
+        while (pre > 0) {
             A = A.next;
             pre--;
         }
 
-        while (A!=null){
-            if (A==B)return A;
+        while (A != null) {
+            if (A == B) return A;
             A = A.next;
             B = B.next;
         }
@@ -403,14 +403,14 @@ public class SLinkedListTest {
         //fast是慢的两倍 n = 2m fast走过的距离为low+环的长度 n = m + k + r
         //也就是说2m = m + k + r =》 m = k + r
         //所以当fast和low相遇的时候，low走过的距离为k + r =》 k = r
-        while (fast != null && fast.next != null ) {
+        while (fast != null && fast.next != null) {
             fast = fast.next.next;
             low = low.next;
             if (low == fast) break;
         }
 
         fast = s;
-        while (fast != null && low!=null) {
+        while (fast != null && low != null) {
             if (low == fast) return low;
             fast = fast.next;
             low = low.next;
@@ -439,10 +439,10 @@ public class SLinkedListTest {
         NodeS pre = dummyNode;
 
         //pre.next = cur
-        while (pre.next!=null){
-            if (pre.next.val == val){
+        while (pre.next != null) {
+            if (pre.next.val == val) {
                 pre.next = pre.next.next;
-            }else {
+            } else {
                 pre = pre.next;
             }
         }
@@ -451,13 +451,13 @@ public class SLinkedListTest {
     }
 
     public static NodeS removeElementsDfs(NodeS head, int val) {
-        if (head==null)return head;
+        if (head == null) return head;
         head.next = removeElementsDfs(head.next, val);
         return head.val == val ? head.next : head;
     }
 
     public static NodeS swapPairs(NodeS head) {
-        if(head == null || head.next == null) return head;
+        if (head == null || head.next == null) return head;
 
         NodeS node = new NodeS(-1);
         node.next = head;
@@ -466,14 +466,14 @@ public class SLinkedListTest {
         NodeS cur = head;
         NodeS next = head.next;
 
-        while(cur != null && next != null){
+        while (cur != null && next != null) {
             cur.next = next.next;
             next.next = cur;
             pre.next = next;
 
             pre = cur;
             cur = cur.next;
-            if(cur != null) next = cur.next;
+            if (cur != null) next = cur.next;
         }
         return node.next;
     }
