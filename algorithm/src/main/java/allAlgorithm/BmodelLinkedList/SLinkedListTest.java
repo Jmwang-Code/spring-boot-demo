@@ -478,6 +478,36 @@ public class SLinkedListTest {
         return node.next;
     }
 
+    public static NodeS rotateRight(NodeS head, int k) {
+        if (k == 0 || head == null || head.next == null) return head;
+        //记录一个锚点
+        NodeS temp = head;
+        int count = 0;
+
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+        if (k % count==0) return head;
+        k =  count - k % count;
+        temp = head;
+
+        //寻找分开节点
+        while (k-- > 1) {
+            temp = temp.next;
+        }
+        NodeS next = temp.next, cpm = temp.next;
+        NodeS end = temp;
+        end.next = null;
+
+        while (cpm.next != null) {
+            cpm = cpm.next;
+        }
+
+        cpm.next = head;
+        return next;
+    }
+
     public static void main(String[] args) {
 //        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
 //        SinglyLinkedList.printLinkedList(nodeS);
@@ -576,5 +606,14 @@ public class SLinkedListTest {
         //两两交换链表中的节点
         NodeS n1 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4))));
         NodeS s = swapPairs(n1);
+
+        System.out.println("=======================旋转链表=========================");
+        //旋转链表
+        NodeS n2 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4, new NodeS(5)))));
+        NodeS nodeS = rotateRight(n2, 2);
+
+        NodeS nodeS2 = rotateRight(null, 0);
+
+        NodeS nodeS3 = rotateRight(new NodeS(1, new NodeS(2)), 2);
     }
 }
