@@ -526,6 +526,42 @@ public class SLinkedListTest {
         return fast;
     }
 
+    public static void reorderList(NodeS head) {
+        if (head == null || head.next == null) {
+            return;
+        }
+        //找到中间节点
+        //双指针法
+        NodeS fast = head,slow = head;
+        while (fast.next!=null && fast.next.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        NodeS cur = slow.next,pre = null;
+
+        slow.next = null;
+
+        //反转后半部分 cur就是最后一个
+        while (cur!=null){
+            NodeS next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+
+        NodeS node = head;
+        //合并两个链表
+        while (pre!=null){
+            NodeS nextNode = node.next;
+            NodeS nextCur = pre.next;
+            node.next = pre;
+
+            node = nextNode;
+            pre.next = node;
+            pre = nextCur;
+        }
+    }
+
     public static void main(String[] args) {
 //        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
 //        SinglyLinkedList.printLinkedList(nodeS);
@@ -633,13 +669,19 @@ public class SLinkedListTest {
 //        NodeS nodeS2 = rotateRight(null, 0);
 //
 //        NodeS nodeS3 = rotateRight(new NodeS(1, new NodeS(2)), 2);
-        System.out.println("=======================环形链表 II=========================");
-        //环形链表 II
-        NodeS n3 = new NodeS(3, new NodeS(2, new NodeS(0, new NodeS(-4))));
-        n3.next.next.next.next = n3.next;
-        NodeS nodeS = detectCycle(n3);
+//        System.out.println("=======================环形链表 II=========================");
+//        //环形链表 II
+//        NodeS n3 = new NodeS(3, new NodeS(2, new NodeS(0, new NodeS(-4))));
+//        n3.next.next.next.next = n3.next;
+//        NodeS nodeS = detectCycle(n3);
+//
+//        NodeS n4 = new NodeS(1);
+//        NodeS nodeS2 = detectCycle(n4);
 
-        NodeS n4 = new NodeS(1);
-        NodeS nodeS2 = detectCycle(n4);
+        System.out.println("=======================重排链表=========================");
+        //重排链表
+        NodeS n5 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4,new NodeS(5)))));
+        reorderList(n5);
+        SinglyLinkedList.printLinkedList(n5);
     }
 }
