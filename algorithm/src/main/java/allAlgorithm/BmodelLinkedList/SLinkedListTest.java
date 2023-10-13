@@ -511,9 +511,11 @@ public class SLinkedListTest {
     public static NodeS detectCycle(NodeS head) {
         NodeS fast = head, slow = head;
         while (true) {
+            //返回null说明没有环
             if (fast == null || fast.next == null) return null;
             fast = fast.next.next;
             slow = slow.next;
+            //相遇说明有环
             if (fast == slow) break;
         }
         fast = head;
