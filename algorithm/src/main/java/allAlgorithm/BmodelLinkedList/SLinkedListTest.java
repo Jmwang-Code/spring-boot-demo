@@ -508,6 +508,22 @@ public class SLinkedListTest {
         return next;
     }
 
+    public static NodeS detectCycle(NodeS head) {
+        NodeS fast = head, slow = head;
+        while (true) {
+            if (fast == null || fast.next == null) return null;
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) break;
+        }
+        fast = head;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+    }
+
     public static void main(String[] args) {
 //        NodeS nodeS = SinglyLinkedList.generateRandomLinkedList(10, 20, 10, 20);
 //        SinglyLinkedList.printLinkedList(nodeS);
@@ -602,18 +618,26 @@ public class SLinkedListTest {
 //        NodeS nodeS = removeElements(sRemoveElements, 5);
 //        SinglyLinkedList.printLinkedList(nodeS);
 
-        System.out.println("=======================两两交换链表中的节点=========================");
-        //两两交换链表中的节点
-        NodeS n1 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4))));
-        NodeS s = swapPairs(n1);
+//        System.out.println("=======================两两交换链表中的节点=========================");
+//        //两两交换链表中的节点
+//        NodeS n1 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4))));
+//        NodeS s = swapPairs(n1);
+//
+//        System.out.println("=======================旋转链表=========================");
+//        //旋转链表
+//        NodeS n2 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4, new NodeS(5)))));
+//        NodeS nodeS = rotateRight(n2, 2);
+//
+//        NodeS nodeS2 = rotateRight(null, 0);
+//
+//        NodeS nodeS3 = rotateRight(new NodeS(1, new NodeS(2)), 2);
+        System.out.println("=======================环形链表 II=========================");
+        //环形链表 II
+        NodeS n3 = new NodeS(3, new NodeS(2, new NodeS(0, new NodeS(-4))));
+        n3.next.next.next.next = n3.next;
+        NodeS nodeS = detectCycle(n3);
 
-        System.out.println("=======================旋转链表=========================");
-        //旋转链表
-        NodeS n2 = new NodeS(1, new NodeS(2, new NodeS(3, new NodeS(4, new NodeS(5)))));
-        NodeS nodeS = rotateRight(n2, 2);
-
-        NodeS nodeS2 = rotateRight(null, 0);
-
-        NodeS nodeS3 = rotateRight(new NodeS(1, new NodeS(2)), 2);
+        NodeS n4 = new NodeS(1);
+        NodeS nodeS2 = detectCycle(n4);
     }
 }
