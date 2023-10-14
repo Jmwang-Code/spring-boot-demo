@@ -526,6 +526,9 @@ public class SLinkedListTest {
         return fast;
     }
 
+    //L0 -> L1 -> ... -> Ln-1 -> Ln
+    //L0 -> Ln -> L1 -> Ln-1 -> L2 -> Ln-2 -> ...
+    //时间复杂度O(n) 空间复杂度O(1)
     public static void reorderList(NodeS head) {
         if (head == null || head.next == null) {
             return;
