@@ -114,7 +114,6 @@ class LRUCache {
     private void removeNode(LinkedNode node) {
         node.pre.next = node.next;
         node.next.pre = node.pre;
-
     }
 
     private void moveToHead(LinkedNode node) {
