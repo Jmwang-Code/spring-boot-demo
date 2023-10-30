@@ -10,7 +10,7 @@
     <groupId>com.cn.jmw</groupId>
     <artifactId>spring-bean-life-cycle</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>spring-aop</name>
+    <name>spring-bean-life-cycle</name>
     <description>spring-bean-life-cycle</description>
     <properties>
         <java.version>19</java.version>
