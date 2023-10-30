@@ -1,6 +1,6 @@
 package com.cn.jmw.mapreduce.etl;
 
-import com.atguigu.mapreduce.outputformat.LogDriver;
+//import com.atguigu.mapreduce.outputformat.LogDriver;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -21,7 +21,7 @@ public class WebLogDriver {
         Job job = Job.getInstance(conf);
 
         // 2 加载jar包
-        job.setJarByClass(LogDriver.class);
+//        job.setJarByClass(LogDriver.class);
 
         // 3 关联map
         job.setMapperClass(WebLogMapper.class);
