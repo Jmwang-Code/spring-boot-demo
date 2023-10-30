@@ -1,4 +1,26 @@
 server:
   port: 8080
-  servlet:
-    context-path: /demo
+#  servlet:
+#    context-path: /demo
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver #mysql 8.XX版本额驱动
+    url: jdbc:mysql://16.2.8.1:3306/activiti?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT&nullCatalogMeansCurrent=true
+    username: root
+    password: 't6n?_'
+  activiti:
+    check-process-definitions: true #自动检查、部署  流程定义文件
+    #1.flase：默认值。activiti在启动时，对比数据库表中保存的版本，如果没有表或者版本不匹配，将抛出异常
+    #2.true： activiti会对数据库中所有表进行更新操作。如果表不存在，则自动创建
+    #3.create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）
+    #4.drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）
+    database-schema-update: true
+    #activiti7默认不生成历史信息表，开启历史表
+    db-history-used: true
+    #记录历史等级 可配置的历史级别有none, activity, audit, full
+    #none：不保存任何的历史数据，因此，在流程执行过程中，这是最高效的。
+    #activity：级别高于none，保存流程实例与流程行为，其他数据不保存。
+    #audit：除activity级别会保存的数据外，还会保存全部的流程任务及其属性。audit为history的默认值。
+    #full：保存历史数据的最高级别，除了会保存audit级别的数据外，还会保存其他全部流程相关的细节数据，包括一些流程参数等。
+    history-level: full
