@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @createTime 2023年02月21日 01:30:00
  */
 @SpringBootApplication
-@RestController
-@EnableScheduling
-public class SpringBootDemoHelloworldApplication {
+public class SpringBootActivitiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootDemoHelloworldApplication.class, args);
+        SpringApplication.run(SpringBootActivitiApplication.class, args);
     }
 
 }
