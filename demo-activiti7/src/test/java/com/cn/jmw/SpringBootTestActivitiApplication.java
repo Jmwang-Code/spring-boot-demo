@@ -17,7 +17,7 @@ class SpringBootTestActivitiApplication {
     @Test
     void testCreateDbTable() {
         //使用默认配置文件
-//        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         //使用自定义配置文件
         //ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource("activiti.cfg.xml").buildProcessEngine();
         //使用自定义配置文件并指定bean的id

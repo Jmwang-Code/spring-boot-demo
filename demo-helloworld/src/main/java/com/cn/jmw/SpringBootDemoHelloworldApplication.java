@@ -1,10 +1,12 @@
 package com.cn.jmw;
 
 import cn.hutool.core.util.StrUtil;
+import com.cn.jmw.aspect.Loggable;
 import com.cn.jmw.utils.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpRequest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 @SpringBootApplication
 @RestController
 @EnableScheduling
+@EnableAspectJAutoProxy
 public class SpringBootDemoHelloworldApplication {
 
     public static void main(String[] args) {
@@ -41,6 +44,7 @@ public class SpringBootDemoHelloworldApplication {
      * @return Hello, ${who}
      */
     @GetMapping("/hello")
+    @Loggable
     public String sayHello(@RequestParam(required = false, name = "who") String who
     , HttpServletRequest request) {
         if (StrUtil.isBlank(who)) {

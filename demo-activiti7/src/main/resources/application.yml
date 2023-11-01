@@ -20,18 +20,18 @@ spring:
     url: jdbc:mysql://152.136.154.249:3306/activiti?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
     username: activiti
     password: pxs8P3Sn2JJm8Pdj
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      #连接池做大连接数
-      maximum-pool-size: 30
-      #连接池空闲连接最小数量
-      #minimum-idle: 10
-      #允许连接在连接池中闲置最长时间
-      #idle-timeout: 30000
-      #池中连接最长生命周期
-      max-lifetime: 120000
-      #等待来自池的连接的最大毫秒数
-      connection-timeout: 30000
+#    type: com.zaxxer.hikari.HikariDataSource
+#    hikari:
+#      #连接池做大连接数
+#      maximum-pool-size: 30
+#      #连接池空闲连接最小数量
+#      #minimum-idle: 10
+#      #允许连接在连接池中闲置最长时间
+#      #idle-timeout: 30000
+#      #池中连接最长生命周期
+#      max-lifetime: 120000
+#      #等待来自池的连接的最大毫秒数
+#      connection-timeout: 30000
 
 #  jpa:
 #    hibernate:
