@@ -42,6 +42,7 @@ public class SpringBootDemoHelloworldApplication {
      *
      * @param who 参数，非必须
      * @return Hello, ${who}
+     * http://localhost:8080/demo/hello?who=jmw
      */
     @GetMapping("/hello")
     @Loggable

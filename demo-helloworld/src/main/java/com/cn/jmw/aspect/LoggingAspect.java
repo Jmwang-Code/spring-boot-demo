@@ -28,6 +28,9 @@ public class LoggingAspect {
     public void logMethodCall(JoinPoint joinPoint) {
         jakarta.servlet.http.HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
+        //获取参数
+        Object[] args = joinPoint.getArgs();
+
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Loggable loggable = signature.getMethod().getAnnotation(Loggable.class);
         DBXSLogEnum value = loggable.value();
