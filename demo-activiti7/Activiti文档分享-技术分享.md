@@ -82,3 +82,15 @@
 # 八、网管
 
 # 九、Activiti 与 Springboot 简单整合实例（傻瓜式）
+
+# 十、Activiti 与 springboot 版本对照表 （JDK8友好）
+| Activiti版本 | SpringBoot要求最低版本 | SpringCloud要求最低版本 |
+|:----------:|:----------------:|:-----------------:|
+|  7.1.0.M4  |  2.1.6.RELEASE   |   Greenwich.SR2   |
+|  7.1.0.M5  |  2.1.10.RELEASE  |   Greenwich.SR3   |
+|  7.1.0.M6  |  2.1.12.RELEASE  |   Greenwich.SR5   |
+
+现在中央仓库中更新到了7.1.0.M6版本。但是最新版本是8.0.0，但是这个版本还没有发布到中央仓库中，所以我们只能使用7.1.0.M6版本。
+
+
+

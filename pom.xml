@@ -92,7 +92,7 @@
       <module>algorithm</module>
     <module>demo-Resume</module>
       <module>juc</module>
-    <module>demo-activiti7</module>
+<!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
 
