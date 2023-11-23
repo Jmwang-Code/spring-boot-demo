@@ -13,6 +13,14 @@ spring:
     #audit：除activity级别会保存的数据外，还会保存全部的流程任务及其属性。audit为history的默认值。
     #full：保存历史数据的最高级别，除了会保存audit级别的数据外，还会保存其他全部流程相关的细节数据，包括一些流程参数等。
     history-level: full
+    #这个属性控制Activiti是否将流程变量复制到任务的本地变量。如果设置为false，Activiti将不会复制流程变量。
+    copy-variables-to-local-for-tasks: false
+    #这个属性控制Activiti是否将流程变量中的POJO对象序列化为JSON。如果设置为false，Activiti将不会序列化POJO对象。
+    serialize-p-o-j-os-in-variables-to-json: false
+  security:
+    user:
+      name: admin
+      password: admin
 
   datasource:
     # 8.+的驱动 com.mysql.cj.jdbc.Driver
@@ -32,6 +40,8 @@ spring:
 #      max-lifetime: 120000
 #      #等待来自池的连接的最大毫秒数
 #      connection-timeout: 30000
+
+
 
 #  jpa:
 #    hibernate:
