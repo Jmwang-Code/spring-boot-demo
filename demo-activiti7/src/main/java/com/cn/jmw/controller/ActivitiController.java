@@ -1,4 +1,5 @@
 package com.cn.jmw.controller;
+import com.cn.jmw.activiti.factory.ProcessEngineFactory;
 import org.activiti.engine.*;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -25,6 +26,9 @@ public class ActivitiController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private ProcessEngineFactory processEngineFactory;
+
     @GetMapping("/start-process")
     public String startProcess() {
         repositoryService.createDeployment()
@@ -36,6 +40,8 @@ public class ActivitiController {
 
         ProcessInstance processInstance =
                 runtimeService.startProcessInstanceByKey("my-process", variables);
+
+        ProcessEngine instance = processEngineFactory.getInstance();
 
         return "Process started. Process id: " + processInstance.getId();
     }
