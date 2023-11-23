@@ -63,7 +63,7 @@ public class WorkflowService {
     /**
      * 查询任务:查询一个流程的唯一性ID
      *
-     * @param assignee 任务负责人
+     * @param assignee   任务负责人
      * @param processKey 流程key
      * @return 任务列表
      */
@@ -74,12 +74,61 @@ public class WorkflowService {
     /**
      * 查询任务:查询一个流程的唯一性ID
      *
-     * @param assignee 任务负责人
+     * @param assignee   任务负责人
      * @param processKey 流程key
      * @return 一个任务
      */
     public Task queryTaskForOne(String assignee, String processKey) {
         return taskService.createTaskQuery().taskAssignee(assignee).processDefinitionKey(processKey).singleResult();
+    }
+
+    /**
+     * 查询任务:查询一个流程的唯一性ID
+     *
+     * @param assignee    任务负责人
+     * @param processKey  流程key
+     * @param businessKey 业务key
+     * @return 任务列表
+     */
+    public List<Task> queryTaskForList(String assignee, String processKey, String businessKey) {
+        return taskService.createTaskQuery().taskAssignee(assignee).processDefinitionKey(processKey).processInstanceBusinessKey(businessKey).list();
+    }
+
+    /**
+     * 查询任务:查询一个流程的唯一性ID
+     *
+     * @param assignee    任务负责人
+     * @param processKey  流程key
+     * @param businessKey 业务key
+     * @return 一个任务
+     */
+    public Task queryTaskForOne(String assignee, String processKey, String businessKey) {
+        return taskService.createTaskQuery().taskAssignee(assignee).processDefinitionKey(processKey).processInstanceBusinessKey(businessKey).singleResult();
+    }
+
+    /**
+     * 挂起流程
+     *
+     * @param processInstanceId 流程实例id
+     */
+    public void suspendProcess(String processInstanceId) {
+        runtimeService.suspendProcessInstanceById(processInstanceId);
+    }
+
+    /**
+     * 激活流程
+     *
+     * @param processInstanceId 流程实例id
+     */
+    public void activateProcess(String processInstanceId) {
+        runtimeService.activateProcessInstanceById(processInstanceId);
+    }
+
+    /**
+     * 设置流程变量
+     */
+    public void setVariable(String taskId, String variableName, Object value) {
+        taskService.setVariable(taskId, variableName, value);
     }
 
     /**
@@ -89,5 +138,24 @@ public class WorkflowService {
      */
     public void completeTask(String taskId) {
         taskService.complete(taskId);
+    }
+
+    /**
+     * 删除流程
+     *
+     * @param processInstanceId 流程实例id
+     */
+    public void deleteProcess(String processInstanceId) {
+        runtimeService.deleteProcessInstance(processInstanceId, "删除流程");
+    }
+
+    /**
+     * 删除流程
+     *
+     * @param processInstanceId 流程实例id
+     * @param deleteReason 删除原因
+     */
+    public void deleteProcess(String processInstanceId, String deleteReason) {
+        runtimeService.deleteProcessInstance(processInstanceId, deleteReason);
     }
 }
