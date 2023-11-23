@@ -25,9 +25,7 @@ spring:
   datasource:
     # 8.+的驱动 com.mysql.cj.jdbc.Driver
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://152.136.154.249:3306/activiti?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-    username: activiti
-    password: pxs8P3Sn2JJm8Pdj
+
 #    type: com.zaxxer.hikari.HikariDataSource
 #    hikari:
 #      #连接池做大连接数
