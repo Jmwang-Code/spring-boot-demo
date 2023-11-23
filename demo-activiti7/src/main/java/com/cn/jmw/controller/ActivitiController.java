@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @RestController
 public class ActivitiController {
@@ -48,8 +49,8 @@ public class ActivitiController {
 
     @GetMapping("/complete-task")
     public String completeTask() {
-        Task task = taskService.createTaskQuery().singleResult();
-        taskService.complete(task.getId());
+        List<Task> list = taskService.createTaskQuery().list();
+        list.stream().forEach(task -> taskService.complete(task.getId()));
         return "Task completed";
     }
 }
