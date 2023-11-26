@@ -2,8 +2,13 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
   <process id="LeaveApplicationProcess" name="LeaveApplicationProcess" isExecutable="true">
     <documentation>休假申请流程</documentation>
+
+    <!-- 流程开始 -->
     <startEvent id="T1_LeaveStart" name="LeaveStart">
       <documentation>请假开始</documentation>
+      <extensionElements>
+        <activiti:executionListener class="com.cn.jmw.activiti.listeners.StartListeners"/>
+      </extensionElements>
     </startEvent>
     <!-- activiti:assignee 分配到任务的人 -->
     <userTask id="T2_LeaveApplication" name="LeaveApplication">
@@ -34,8 +39,13 @@
       <documentation>一级审批</documentation>
     </userTask>
     <sequenceFlow id="Path2" sourceRef="T1_LeaveStart" targetRef="T2_LeaveApplication"/>
+
+    <!-- 流程结束 -->
     <endEvent id="T_End" name="LeaveEnded">
       <documentation>请假任务结束</documentation>
+      <extensionElements>
+        <activiti:executionListener class="com.cn.jmw.activiti.listeners.EndListeners"/>
+      </extensionElements>
     </endEvent>
     <sequenceFlow id="Path3" sourceRef="T4_FirstLevelApproval" targetRef="T_End"/>
     <exclusiveGateway id="T3_1NodeSwitching" name="1NodeSwitching" default="Path4">
@@ -67,24 +77,24 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="edge-4b2b2afd-4780-4007-a9de-aac59cc860e1" bpmnElement="Path1">
         <omgdi:waypoint x="-465.75" y="-394.3082"/>
-        <omgdi:waypoint x="-465.75" y="-365.0"/>
+        <omgdi:waypoint x="-465.75" y="-350.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="sid-f739bed6-a3f1-470d-9d04-3ce2737c2e62" bpmnElement="T4_FirstLevelApproval">
-        <omgdc:Bounds x="-370.75" y="-302.2422" width="100.0" height="80.0"/>
+        <omgdc:Bounds x="-370.75" y="-297.2422" width="100.0" height="80.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="edge-a15fced2-3c65-4c39-9739-acf8a7a1dcad" bpmnElement="Path3">
-        <omgdi:waypoint x="-320.75" y="-222.24219"/>
+        <omgdi:waypoint x="-320.75" y="-217.24219"/>
         <omgdi:waypoint x="-450.75" y="-171.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="shape-b8adb32e-fe8e-49cf-99d5-957b27b607da" bpmnElement="T3_1NodeSwitching">
-        <omgdc:Bounds x="-485.75" y="-365.0" width="40.0" height="40.0"/>
+        <omgdc:Bounds x="-485.75" y="-350.0" width="40.0" height="40.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="edge-6279c23a-61b0-4e33-886a-99a4fd3d3dc9" bpmnElement="Path4">
-        <omgdi:waypoint x="-445.75" y="-345.0"/>
-        <omgdi:waypoint x="-320.75" y="-302.2422"/>
+        <omgdi:waypoint x="-445.75" y="-330.0"/>
+        <omgdi:waypoint x="-320.75" y="-297.2422"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="edge-43a9676f-5d99-4ac1-8d83-d4895fe026cd" bpmnElement="Path5">
-        <omgdi:waypoint x="-465.75" y="-330.0"/>
+        <omgdi:waypoint x="-465.75" y="-315.0"/>
         <omgdi:waypoint x="-465.75" y="-186.0"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
