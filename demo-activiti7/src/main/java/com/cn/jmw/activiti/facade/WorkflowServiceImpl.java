@@ -3,6 +3,7 @@ package com.cn.jmw.activiti.facade;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +28,8 @@ public class WorkflowServiceImpl implements WorkflowService {
      * @param processKey 流程key
      * @param variables  流程变量
      */
-    public void startProcessVariable(String processKey, Map<String, Object> variables) {
-        runtimeService.startProcessInstanceByKey(processKey, variables);
+    public ProcessInstance startProcessVariable(String processKey, Map<String, Object> variables) {
+        return runtimeService.startProcessInstanceByKey(processKey, variables);
     }
 
     /**

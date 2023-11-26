@@ -2,59 +2,44 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
   <process id="LeaveApplicationProcess" name="LeaveApplicationProcess" isExecutable="true">
     <documentation>休假申请流程</documentation>
-    <!-- 流程开始 -->
     <startEvent id="T1_LeaveStart" name="LeaveStart">
       <documentation>请假开始</documentation>
       <extensionElements>
         <activiti:executionListener class="com.cn.jmw.activiti.listeners.StartListeners"/>
       </extensionElements>
     </startEvent>
-    <!-- activiti:assignee 分配到任务的人 -->
+    <sequenceFlow id="Path2" sourceRef="T2_LeaveApplication" targetRef="T3_1NodeSwitching"/>
     <userTask id="T2_LeaveApplication" name="LeaveApplication">
       <documentation>任务申请</documentation>
-      <!-- <activiti:taskListener>：在 userTask 节点上使用 taskListener 元素，可以在任务创建和完成时触发自定义逻辑。
-      在这里，我们使用 event="create" 来在任务创建时触发逻辑，使用 event="complete" 来在任务完成时触发逻辑。 -->
       <extensionElements>
-        <activiti:taskListener event="create" class="org.activiti.engine.delegate.TaskListener">
-          <!-- <activiti:field>：在 taskListener 中使用 field 元素，可以设置任务的属性。
-          在这里，我们使用 name="assignment" 来设置任务的分配人，name="approvalDecision" 来设置任务的审批决策。 -->
+        <activiti:taskListener event="create" class="com.cn.jmw.config.ActivitiTaskListener">
           <activiti:field name="assignment" stringValue="${applicant}"/>
         </activiti:taskListener>
-      </extensionElements>
-      <!-- <multiInstanceLoopCharacteristics>：使用 multiInstanceLoopCharacteristics 元素可以实现多实例任务，即多个审批人依次处理任务。
-      在这里，我们使用 isSequential="false" 来指定并行处理，loopCardinality 来指定审批人数量，completionCondition 来指定完成条件。 -->
-      <multiInstanceLoopCharacteristics isSequential="false">
-        <loopCardinality>${numberOfApprovers}</loopCardinality>
-        <completionCondition>${approvedCount &gt;= numberOfApprovers or rejectedCount &gt; 0}</completionCondition>
-      </multiInstanceLoopCharacteristics>
-      <extensionElements>
-        <activiti:taskListener event="complete" class="org.activiti.engine.delegate.TaskListener">
+        <activiti:taskListener event="complete" class="com.cn.jmw.config.ActivitiTaskListener">
           <activiti:field name="approvalDecision" expression="${approved ? 'approve' : 'reject'}"/>
         </activiti:taskListener>
       </extensionElements>
     </userTask>
-    <sequenceFlow id="Path1" sourceRef="T2_LeaveApplication" targetRef="T3_1NodeSwitching"/>
-    <userTask id="T4_FirstLevelApproval" name="FirstLevelApproval">
-      <documentation>一级审批</documentation>
-    </userTask>
-    <!-- 流程结束 -->
-    <endEvent id="T_End" name="LeaveEnded">
-      <documentation>请假任务结束</documentation>
-      <extensionElements>
-        <activiti:executionListener class="com.cn.jmw.activiti.listeners.EndListeners"/>
-      </extensionElements>
-    </endEvent>
-    <sequenceFlow id="Path3" sourceRef="T4_FirstLevelApproval" targetRef="T_End"/>
     <exclusiveGateway id="T3_1NodeSwitching" name="1NodeSwitching" default="Path4">
       <documentation>第一个切换节点</documentation>
     </exclusiveGateway>
+    <sequenceFlow id="Path3" sourceRef="T4_FirstLevelApproval" targetRef="T_End"/>
     <sequenceFlow id="Path4" sourceRef="T3_1NodeSwitching" targetRef="T4_FirstLevelApproval">
       <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="Path5" sourceRef="T3_1NodeSwitching" targetRef="T_End">
       <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="sid-7ee8060c-560d-469e-bb6e-4a3870f5c0d8" sourceRef="T1_LeaveStart" targetRef="T2_LeaveApplication"/>
+    <sequenceFlow id="T1Path" sourceRef="T1_LeaveStart" targetRef="T2_LeaveApplication"/>
+    <userTask id="T4_FirstLevelApproval" name="FirstLevelApproval">
+      <documentation>一级审批</documentation>
+    </userTask>
+    <endEvent id="T_End" name="LeaveEnded">
+      <documentation>请假任务结束</documentation>
+      <extensionElements>
+        <activiti:executionListener class="com.cn.jmw.activiti.listeners.EndListeners"/>
+      </extensionElements>
+    </endEvent>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_LeaveApplicationProcess">
     <bpmndi:BPMNPlane bpmnElement="LeaveApplicationProcess" id="BPMNPlane_LeaveApplicationProcess">
@@ -67,7 +52,7 @@
       <bpmndi:BPMNShape id="shape-7c0631d0-aca3-4c32-92a2-45e9cf66a8c9" bpmnElement="T_End">
         <omgdc:Bounds x="-480.75" y="-186.0" width="30.0" height="30.0"/>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="edge-4b2b2afd-4780-4007-a9de-aac59cc860e1" bpmnElement="Path1">
+      <bpmndi:BPMNEdge id="edge-4b2b2afd-4780-4007-a9de-aac59cc860e1" bpmnElement="Path2">
         <omgdi:waypoint x="-465.75" y="-419.3082"/>
         <omgdi:waypoint x="-465.75" y="-372.1541"/>
         <omgdi:waypoint x="-465.75" y="-353.57706"/>
@@ -91,8 +76,10 @@
         <omgdi:waypoint x="-465.74997" y="-300.0"/>
         <omgdi:waypoint x="-465.75" y="-186.0"/>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="edge-ac04c80c-2f11-4c62-a0ed-67048e3adda4" bpmnElement="sid-7ee8060c-560d-469e-bb6e-4a3870f5c0d8">
+      <bpmndi:BPMNEdge id="edge-ac04c80c-2f11-4c62-a0ed-67048e3adda4" bpmnElement="T1Path">
         <omgdi:waypoint x="-465.74997" y="-538.0"/>
+        <omgdi:waypoint x="-465.75" y="-528.327"/>
+        <omgdi:waypoint x="-465.75" y="-518.6541"/>
         <omgdi:waypoint x="-465.75" y="-499.3082"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

@@ -1,5 +1,6 @@
 package com.cn.jmw.activiti.facade;
 
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface WorkflowService {
      * @param processKey 流程key
      * @param variables  流程变量
      */
-    public void startProcessVariable(String processKey, Map<String, Object> variables);
+    public ProcessInstance startProcessVariable(String processKey, Map<String, Object> variables);
 
     /**
      * 启动流程

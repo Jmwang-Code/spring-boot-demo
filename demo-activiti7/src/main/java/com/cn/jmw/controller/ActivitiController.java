@@ -1,4 +1,5 @@
 package com.cn.jmw.controller;
+import com.cn.jmw.activiti.facade.WorkflowService;
 import com.cn.jmw.activiti.factory.ProcessEngineFactory;
 import org.activiti.engine.*;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -29,6 +30,9 @@ public class ActivitiController {
 
     @Autowired
     private ProcessEngineFactory processEngineFactory;
+
+    @Autowired
+    private WorkflowService workflowService;
 
     @GetMapping("/start-process")
     public String startProcess() {
@@ -63,11 +67,11 @@ public class ActivitiController {
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("assignee", "user1");
+        variables.put("numberOfApprovers", 1);
 
-        ProcessInstance processInstance =
-                runtimeService.startProcessInstanceByKey("leave", variables);
+        ProcessInstance processInstance = workflowService.startProcessVariable("LeaveApplicationProcess", variables);
 
-        ProcessEngine instance = processEngineFactory.getInstance();
+//        ProcessEngine instance = processEngineFactory.getInstance();
 
         return "Process started. Process id: " + processInstance.getId();
     }
