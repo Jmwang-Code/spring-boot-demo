@@ -53,4 +53,22 @@ public class ActivitiController {
         list.stream().forEach(task -> taskService.complete(task.getId()));
         return "Task completed";
     }
+
+    //请假流程
+    @GetMapping("/start-process2")
+    public String startProcess2() {
+        repositoryService.createDeployment()
+                .addClasspathResource("processes/LeaveApplicationProcess.bpmn20.xml")
+                .deploy();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("assignee", "user1");
+
+        ProcessInstance processInstance =
+                runtimeService.startProcessInstanceByKey("leave", variables);
+
+        ProcessEngine instance = processEngineFactory.getInstance();
+
+        return "Process started. Process id: " + processInstance.getId();
+    }
 }
