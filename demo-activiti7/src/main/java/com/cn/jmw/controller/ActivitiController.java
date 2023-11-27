@@ -69,6 +69,11 @@ public class ActivitiController {
         variables.put("assignee", "user1");
         variables.put("numberOfApprovers", 1);
 
+        // 校验流程定义是否存在
+        if (this.repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey("LeaveApplicationProcess")
+                .count() <= 0) throw new RuntimeException("指定流程定义不存在");
+
         ProcessInstance processInstance = workflowService.startProcessVariable("LeaveApplicationProcess", variables);
 
 //        ProcessEngine instance = processEngineFactory.getInstance();

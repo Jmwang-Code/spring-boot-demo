@@ -4,21 +4,21 @@
     <documentation>休假申请流程</documentation>
     <startEvent id="T1_LeaveStart" name="LeaveStart">
       <documentation>请假开始</documentation>
-      <extensionElements>
-        <activiti:executionListener class="com.cn.jmw.activiti.listeners.StartListeners"/>
-      </extensionElements>
+<!--      <extensionElements>-->
+<!--        <activiti:executionListener class="com.cn.jmw.activiti.listeners.StartListeners"/>-->
+<!--      </extensionElements>-->
     </startEvent>
     <sequenceFlow id="Path2" sourceRef="T2_LeaveApplication" targetRef="T3_1NodeSwitching"/>
     <userTask id="T2_LeaveApplication" name="LeaveApplication">
       <documentation>任务申请</documentation>
-      <extensionElements>
-        <activiti:taskListener event="create" class="com.cn.jmw.config.ActivitiTaskListener">
-          <activiti:field name="assignment" stringValue="${applicant}"/>
-        </activiti:taskListener>
-        <activiti:taskListener event="complete" class="com.cn.jmw.config.ActivitiTaskListener">
-          <activiti:field name="approvalDecision" expression="${approved ? 'approve' : 'reject'}"/>
-        </activiti:taskListener>
-      </extensionElements>
+<!--      <extensionElements>-->
+<!--        <activiti:taskListener event="create" class="com.cn.jmw.config.ActivitiTaskListener">-->
+<!--          <activiti:field name="assignment" stringValue="${applicant}"/>-->
+<!--        </activiti:taskListener>-->
+<!--        <activiti:taskListener event="complete" class="com.cn.jmw.config.ActivitiTaskListener">-->
+<!--          <activiti:field name="approvalDecision" expression="${approved ? 'approve' : 'reject'}"/>-->
+<!--        </activiti:taskListener>-->
+<!--      </extensionElements>-->
     </userTask>
     <exclusiveGateway id="T3_1NodeSwitching" name="1NodeSwitching" default="Path4">
       <documentation>第一个切换节点</documentation>
@@ -36,9 +36,9 @@
     </userTask>
     <endEvent id="T_End" name="LeaveEnded">
       <documentation>请假任务结束</documentation>
-      <extensionElements>
-        <activiti:executionListener class="com.cn.jmw.activiti.listeners.EndListeners"/>
-      </extensionElements>
+<!--      <extensionElements>-->
+<!--        <activiti:executionListener class="com.cn.jmw.activiti.listeners.EndListeners"/>-->
+<!--      </extensionElements>-->
     </endEvent>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_LeaveApplicationProcess">
