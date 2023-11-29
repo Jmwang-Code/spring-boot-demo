@@ -1,4 +1,5 @@
 package com.cn.jmw.controller;
+import com.cn.jmw.activiti.common.CommonEnum;
 import com.cn.jmw.activiti.facade.WorkflowService;
 import com.cn.jmw.activiti.factory.ProcessEngineFactory;
 import org.activiti.engine.*;
@@ -66,8 +67,7 @@ public class ActivitiController {
                 .deploy();
 
         Map<String, Object> variables = new HashMap<>();
-        variables.put("assignee", "user1");
-        variables.put("numberOfApprovers", 1);
+        variables.put(CommonEnum.T1_ASSIGNEE.getCode(), "hello");
 
         // 校验流程定义是否存在
         if (this.repositoryService.createProcessDefinitionQuery()
