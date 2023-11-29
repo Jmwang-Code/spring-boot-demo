@@ -2,14 +2,14 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
   <process id="LeaveApplicationProcess" name="LeaveApplicationProcess" isExecutable="true">
     <documentation>休假申请流程</documentation>
-    <startEvent id="T1_LeaveStart" name="LeaveStart">
+    <startEvent activiti:assignee="${T1_Assignee}" id="T1_LeaveStart" name="LeaveStart">
       <documentation>请假开始</documentation>
 <!--      <extensionElements>-->
 <!--        <activiti:executionListener class="com.cn.jmw.activiti.listeners.StartListeners"/>-->
 <!--      </extensionElements>-->
     </startEvent>
     <sequenceFlow id="Path2" sourceRef="T2_LeaveApplication" targetRef="T3_1NodeSwitching"/>
-    <userTask id="T2_LeaveApplication" name="LeaveApplication">
+    <userTask activiti:assignee="${T2_Assignee}" id="T2_LeaveApplication" name="LeaveApplication">
       <documentation>任务申请</documentation>
 <!--      <extensionElements>-->
 <!--        <activiti:taskListener event="create" class="com.cn.jmw.config.ActivitiTaskListener">-->
@@ -20,7 +20,7 @@
 <!--        </activiti:taskListener>-->
 <!--      </extensionElements>-->
     </userTask>
-    <exclusiveGateway id="T3_1NodeSwitching" name="1NodeSwitching" default="Path4">
+    <exclusiveGateway activiti:assignee="${T3_Assignee}" id="T3_1NodeSwitching" name="1NodeSwitching" default="Path4">
       <documentation>第一个切换节点</documentation>
     </exclusiveGateway>
     <sequenceFlow id="Path3" sourceRef="T4_FirstLevelApproval" targetRef="T_End"/>
@@ -31,10 +31,10 @@
       <conditionExpression xsi:type="tFormalExpression">false</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="T1Path" sourceRef="T1_LeaveStart" targetRef="T2_LeaveApplication"/>
-    <userTask id="T4_FirstLevelApproval" name="FirstLevelApproval">
+    <userTask activiti:assignee="${T4_Assignee}" id="T4_FirstLevelApproval" name="FirstLevelApproval">
       <documentation>一级审批</documentation>
     </userTask>
-    <endEvent id="T_End" name="LeaveEnded">
+    <endEvent activiti:assignee="${T_Assignee}" id="T_End" name="LeaveEnded">
       <documentation>请假任务结束</documentation>
 <!--      <extensionElements>-->
 <!--        <activiti:executionListener class="com.cn.jmw.activiti.listeners.EndListeners"/>-->
