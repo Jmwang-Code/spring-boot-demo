@@ -80,4 +80,12 @@ public class ActivitiController {
 
         return "Process started. Process id: " + processInstance.getId();
     }
+
+    //请假流程
+    @GetMapping("/complete-task2")
+    public String completeTask2() {
+        List<Task> list = taskService.createTaskQuery().list();
+        list.stream().forEach(task -> taskService.complete(task.getId()));
+        return "Task completed";
+    }
 }
