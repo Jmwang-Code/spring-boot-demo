@@ -3,6 +3,7 @@ package com.cn.jmw.controller;
 import com.cn.jmw.activiti.facade.WorkflowService;
 import com.cn.jmw.aop.Workflow;
 import com.cn.jmw.aop.WorkflowEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -22,6 +23,7 @@ import java.util.Map;
  * 2. 审批人审批
  * 结束
  */
+@Slf4j
 @RestController("/approval-process")
 public class ApprovalProcessController {
 
@@ -108,14 +110,15 @@ public class ApprovalProcessController {
         List<HistoricTaskInstance> historicTaskInstances = workflowService.queryHistoryTask(processInstanceId);
         historicTaskInstances.stream()
                 .forEach(historicTaskInstance -> {
-                    System.out.println("任务ID：" + historicTaskInstance.getId());
-                    System.out.println("任务名称：" + historicTaskInstance.getName());
-                    System.out.println("任务的创建时间：" + historicTaskInstance.getCreateTime());
-                    System.out.println("任务的结束时间：" + historicTaskInstance.getEndTime());
-                    System.out.println("任务持续的时间：" + historicTaskInstance.getDurationInMillis());
-                    System.out.println("任务的办理人：" + historicTaskInstance.getAssignee());
-                    System.out.println("流程实例ID：" + historicTaskInstance.getProcessInstanceId());
-                    System.out.println("############################################");
+                    //使用log
+                    log.info("流程实例ID:{}", historicTaskInstance.getProcessInstanceId());
+                    log.info("任务ID:{}", historicTaskInstance.getId());
+                    log.info("任务负责人:{}", historicTaskInstance.getAssignee());
+                    log.info("任务名称:{}", historicTaskInstance.getName());
+                    log.info("任务开始时间:{}", historicTaskInstance.getStartTime());
+                    log.info("任务结束时间:{}", historicTaskInstance.getEndTime());
+                    log.info("任务持续时间:{}", historicTaskInstance.getDurationInMillis());
+                    log.info("############################################");
                 });
     }
 }
