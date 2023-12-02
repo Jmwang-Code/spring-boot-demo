@@ -26,7 +26,7 @@ public interface WorkflowService {
      *
      * @param processKey 流程key
      */
-    public void startProcess(String processKey);
+    public ProcessInstance startProcess(String processKey);
 
     /**
      * 查询任务
@@ -122,4 +122,23 @@ public interface WorkflowService {
      * @param deleteReason 删除原因
      */
     public void deleteProcess(String processInstanceId, String deleteReason);
+
+    /**
+     * 根据流程实例id查询流程实例
+     *
+     * @param processInstanceId 流程实例id
+     */
+    public List<Task> byProcessInstanceIdQueryTodoTaskList(String processInstanceId);
+
+    /**
+     * 根据流程实例id查询流程实例
+     *
+     * @param processInstanceId 流程实例id
+     */
+    public Task byProcessInstanceIdQueryTodoTaskOne(String processInstanceId);
+
+    /**
+     * 替换任务负责人
+     */
+    public void replaceAssignee(String taskId, String userId);
 }

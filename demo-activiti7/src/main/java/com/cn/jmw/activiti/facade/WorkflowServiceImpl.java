@@ -52,8 +52,9 @@ public class WorkflowServiceImpl implements WorkflowService {
      *
      * @param processKey 流程key
      */
-    public void startProcess(String processKey) {
-        runtimeService.startProcessInstanceByKey(processKey);
+    public ProcessInstance startProcess(String processKey) {
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processKey);
+        return processInstance;
     }
 
     /**
@@ -173,5 +174,24 @@ public class WorkflowServiceImpl implements WorkflowService {
      */
     public void deleteProcess(String processInstanceId, String deleteReason) {
         runtimeService.deleteProcessInstance(processInstanceId, deleteReason);
+    }
+
+    /**
+     * 查询待办任务
+     */
+    public List<Task> byProcessInstanceIdQueryTodoTaskList(String processInstanceId) {
+        return taskService.createTaskQuery().processInstanceId(processInstanceId).list();
+    }
+
+    /**
+     * 查询待办任务 ONE
+     */
+    public Task byProcessInstanceIdQueryTodoTaskOne(String processInstanceId) {
+        return taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+    }
+
+    @Override
+    public void replaceAssignee(String taskId, String userId) {
+        taskService.setAssignee(taskId, userId);
     }
 }

@@ -38,6 +38,7 @@ public class WorkflowAspect {
 
         //初始化
         value.init();
+        value.handle(joinPoint,request,null);
 
         log.info("------------------日志信息校验: {}", value.name());
     }
@@ -50,7 +51,6 @@ public class WorkflowAspect {
         Workflow loggable = signature.getMethod().getAnnotation(Workflow.class);
         WorkflowEnum value = loggable.value();
         //获取模块
-        value.handle(joinPoint,request,result);
 
         log.info("------------------日志记录: {}", value.name());
         startTime.remove();
