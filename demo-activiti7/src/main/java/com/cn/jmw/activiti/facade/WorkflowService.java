@@ -9,6 +9,11 @@ import java.util.Map;
 public interface WorkflowService {
 
     /**
+     * 校验流程定义是否存在
+     */
+    public boolean checkProcessDefinition(String processKey);
+
+    /**
      * 启动流程
      *
      * @param processKey 流程key

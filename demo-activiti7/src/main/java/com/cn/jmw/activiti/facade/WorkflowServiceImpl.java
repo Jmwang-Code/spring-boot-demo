@@ -1,6 +1,7 @@
 package com.cn.jmw.activiti.facade;
 
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -12,14 +13,28 @@ import java.util.Map;
 
 @Component
 public class WorkflowServiceImpl implements WorkflowService {
-    private ProcessEngine processEngine;
+    /**
+     * RepositoryService：管理流程定义
+     * RuntimeService：执行管理，包括启动、推进、删除流程实例等操作
+     * TaskService：任务管理
+     * ProcessEngine：流程引擎对象
+     */
+    private RepositoryService repositoryService;
     private RuntimeService runtimeService;
     private TaskService taskService;
+    private ProcessEngine processEngine;
 
     public WorkflowServiceImpl(ProcessEngine processEngine) {
+        this.repositoryService = processEngine.getRepositoryService();
         this.processEngine = processEngine;
         this.runtimeService = processEngine.getRuntimeService();
         this.taskService = processEngine.getTaskService();
+    }
+
+    @Override
+    public boolean checkProcessDefinition(String processKey) {
+        long count = repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).count();
+        return count > 0;
     }
 
     /**
