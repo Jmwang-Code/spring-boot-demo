@@ -26,7 +26,7 @@ public interface WorkflowService {
      *
      * @param processKey 流程key
      */
-    public ProcessInstance startProcess(String processKey);
+    public ProcessInstance startProcess(String processKey,Map<String, Object> processVariables);
 
     /**
      * 查询任务
@@ -106,7 +106,7 @@ public interface WorkflowService {
      *
      * @param taskId 任务id
      */
-    public void completeTask(String taskId);
+    public void completeTask(String taskId, Map<String, Object> variables);
 
     /**
      * 删除流程

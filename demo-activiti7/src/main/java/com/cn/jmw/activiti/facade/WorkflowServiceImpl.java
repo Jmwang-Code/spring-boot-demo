@@ -7,11 +7,12 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Service
 public class WorkflowServiceImpl implements WorkflowService {
     /**
      * RepositoryService：管理流程定义
@@ -52,8 +53,8 @@ public class WorkflowServiceImpl implements WorkflowService {
      *
      * @param processKey 流程key
      */
-    public ProcessInstance startProcess(String processKey) {
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processKey);
+    public ProcessInstance startProcess(String processKey,Map<String, Object> processVariables) {
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processKey,processVariables);
         return processInstance;
     }
 
@@ -153,8 +154,8 @@ public class WorkflowServiceImpl implements WorkflowService {
      *
      * @param taskId 任务id
      */
-    public void completeTask(String taskId) {
-        taskService.complete(taskId);
+    public void completeTask(String taskId, Map<String, Object> variables) {
+        taskService.complete(taskId, variables);
     }
 
     /**

@@ -9,6 +9,9 @@ import org.activiti.engine.task.Task;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 审批流
  *
@@ -27,16 +30,18 @@ public class ApprovalProcessController {
 
     private WorkflowService workflowService;
 
-    public ApprovalProcessController(RepositoryService repositoryService) {
+    public ApprovalProcessController(RepositoryService repositoryService, WorkflowService workflowService) {
         this.repositoryService = repositoryService;
         this.workflowService = workflowService;
     }
 
     /**
      * 创建流程
+     *
+     * http://localhost:8080/create-process3
      */
     @Workflow(value = WorkflowEnum.APPROVAL_PROCESS)
-    @GetMapping("/create-process")
+    @GetMapping("/create-process3")
     public void createProcess() {
         // 创建部署
         repositoryService.createDeployment()
@@ -46,12 +51,18 @@ public class ApprovalProcessController {
 
     /**
      * 申请人发起申请
+     *
+     * http://localhost:8080/start-process3?processKey=ApprovalProcess
      */
     @Workflow(value = WorkflowEnum.APPROVAL_PROCESS)
-    @GetMapping("/start-process")
+    @GetMapping("/start-process3")
     public String startProcess(String processKey) {
+        //变量
+        Map<String, Object> variablesA = new HashMap<>();
+        variablesA.put("create_approval_assignee", "开始人");
+
         //启动流程
-        ProcessInstance processInstance = workflowService.startProcess(processKey);
+        ProcessInstance processInstance = workflowService.startProcess(processKey, variablesA);
 
         //实例ID,用于查询流程实例
         String processInstanceId = processInstance.getProcessInstanceId();
@@ -59,28 +70,27 @@ public class ApprovalProcessController {
         //查询任务
         Task task = workflowService.byProcessInstanceIdQueryTodoTaskOne(processInstanceId);
 
-        //任务负责人
-        workflowService.replaceAssignee(task.getId(), "申请人");
+        Map<String, Object> variablesB = new HashMap<>();
+        variablesB.put("approves_assignee", "审批人");
 
         //完成任务
-        workflowService.completeTask(task.getId());
+        workflowService.completeTask(task.getId(), variablesB);
 
         return processInstanceId;
     }
 
     /**
      * 审批人审批
+     *
+     * http://localhost:8080/end-process3?processInstanceId=628ade70-90f1-11ee-a0b8-ce47401b8f36
      */
     @Workflow(value = WorkflowEnum.APPROVAL_PROCESS)
-    @GetMapping("/approval-process")
+    @GetMapping("/end-process3")
     public void approvalProcess(String processInstanceId) {
         //查询任务
         Task task = workflowService.byProcessInstanceIdQueryTodoTaskOne(processInstanceId);
 
-        //任务负责人
-        workflowService.replaceAssignee(task.getId(), "审批人");
-
         //完成任务
-        workflowService.completeTask(task.getId());
+        workflowService.completeTask(task.getId(), null);
     }
 }

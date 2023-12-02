@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-@RestController
+@RestController("/activiti")
 public class ActivitiController {
 
     /**
