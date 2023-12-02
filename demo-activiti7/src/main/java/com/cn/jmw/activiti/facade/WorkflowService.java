@@ -1,5 +1,6 @@
 package com.cn.jmw.activiti.facade;
 
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
@@ -141,4 +142,14 @@ public interface WorkflowService {
      * 替换任务负责人
      */
     public void replaceAssignee(String taskId, String userId);
+
+    /**
+     * 查询流程实例
+     */
+    public ProcessInstance queryProcessInstance(String processInstanceId);
+
+    /**
+     * 查询历史任务
+     */
+    public List<HistoricTaskInstance> queryHistoryTask(String processInstanceId);
 }

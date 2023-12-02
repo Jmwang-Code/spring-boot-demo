@@ -4,12 +4,14 @@ import com.cn.jmw.activiti.facade.WorkflowService;
 import com.cn.jmw.aop.Workflow;
 import com.cn.jmw.aop.WorkflowEnum;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,7 +84,7 @@ public class ApprovalProcessController {
     /**
      * 审批人审批
      *
-     * http://localhost:8080/end-process3?processInstanceId=628ade70-90f1-11ee-a0b8-ce47401b8f36
+     * http://localhost:8080/end-process3?processInstanceId=c7504ea7-913f-11ee-a357-ce47401b8f36
      */
     @Workflow(value = WorkflowEnum.APPROVAL_PROCESS)
     @GetMapping("/end-process3")
@@ -92,5 +94,28 @@ public class ApprovalProcessController {
 
         //完成任务
         workflowService.completeTask(task.getId(), null);
+    }
+
+    /**
+     * 查询流程实例
+     *
+     * http://localhost:8080/query-process3?processInstanceId=c7504ea7-913f-11ee-a357-ce47401b8f36
+     */
+    @Workflow(value = WorkflowEnum.APPROVAL_PROCESS)
+    @GetMapping("/query-process3")
+    public void queryProcess(String processInstanceId) {
+        //查询流程实例
+        List<HistoricTaskInstance> historicTaskInstances = workflowService.queryHistoryTask(processInstanceId);
+        historicTaskInstances.stream()
+                .forEach(historicTaskInstance -> {
+                    System.out.println("任务ID：" + historicTaskInstance.getId());
+                    System.out.println("任务名称：" + historicTaskInstance.getName());
+                    System.out.println("任务的创建时间：" + historicTaskInstance.getCreateTime());
+                    System.out.println("任务的结束时间：" + historicTaskInstance.getEndTime());
+                    System.out.println("任务持续的时间：" + historicTaskInstance.getDurationInMillis());
+                    System.out.println("任务的办理人：" + historicTaskInstance.getAssignee());
+                    System.out.println("流程实例ID：" + historicTaskInstance.getProcessInstanceId());
+                    System.out.println("############################################");
+                });
     }
 }

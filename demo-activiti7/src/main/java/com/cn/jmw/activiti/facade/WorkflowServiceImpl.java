@@ -1,12 +1,9 @@
 package com.cn.jmw.activiti.facade;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +21,14 @@ public class WorkflowServiceImpl implements WorkflowService {
     private RuntimeService runtimeService;
     private TaskService taskService;
     private ProcessEngine processEngine;
+    private HistoryService historyService;
 
     public WorkflowServiceImpl(ProcessEngine processEngine) {
         this.repositoryService = processEngine.getRepositoryService();
         this.processEngine = processEngine;
         this.runtimeService = processEngine.getRuntimeService();
         this.taskService = processEngine.getTaskService();
+        this.historyService = processEngine.getHistoryService();
     }
 
     @Override
@@ -195,4 +194,19 @@ public class WorkflowServiceImpl implements WorkflowService {
     public void replaceAssignee(String taskId, String userId) {
         taskService.setAssignee(taskId, userId);
     }
+
+    /**
+     * 查询流程实例
+     */
+    public ProcessInstance queryProcessInstance(String processInstanceId) {
+        return runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    }
+
+    /**
+     * 查询历史任务
+     */
+    public List<HistoricTaskInstance> queryHistoryTask(String processInstanceId) {
+        return historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstanceId).list();
+    }
+
 }
