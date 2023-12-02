@@ -19,7 +19,7 @@
 
 ## 	2.2 Activiti架构
 ​		Activiti采用了一个分层架构完成自底向上的包装
-![img.png](img.png)
+![img.png](src/assets/img.png)
 
 # 三、Activiti使用
 
@@ -28,9 +28,36 @@
 ## 	3.2 Springboot自动建表
 
 ## 	3.3 表结构介绍
+| **表分类**   | **表名**              | **解释**                                           |
+| ------------ | --------------------- | -------------------------------------------------- |
+| 一般数据     |                       |                                                    |
+|              | [ACT_GE_BYTEARRAY]    | 通用的流程定义和流程资源                           |
+|              | [ACT_GE_PROPERTY]     | 系统相关属性                                       |
+| 流程历史记录 |                       |                                                    |
+|              | [ACT_HI_ACTINST]      | 历史的流程实例                                     |
+|              | [ACT_HI_ATTACHMENT]   | 历史的流程附件                                     |
+|              | [ACT_HI_COMMENT]      | 历史的说明性信息                                   |
+|              | [ACT_HI_DETAIL]       | 历史的流程运行中的细节信息                         |
+|              | [ACT_HI_IDENTITYLINK] | 历史的流程运行过程中用户关系                       |
+|              | [ACT_HI_PROCINST]     | 历史的流程实例                                     |
+|              | [ACT_HI_TASKINST]     | 历史的任务实例                                     |
+|              | [ACT_HI_VARINST]      | 历史的流程运行中的变量信息                         |
+| 流程定义表   |                       |                                                    |
+|              | [ACT_RE_DEPLOYMENT]   | 部署单元信息                                       |
+|              | [ACT_RE_MODEL]        | 模型信息                                           |
+|              | [ACT_RE_PROCDEF]      | 已部署的流程定义                                   |
+| 运行实例表   |                       |                                                    |
+|              | [ACT_RU_EVENT_SUBSCR] | 运行时事件                                         |
+|              | [ACT_RU_EXECUTION]    | 运行时流程执行实例                                 |
+|              | [ACT_RU_IDENTITYLINK] | 运行时用户关系信息，存储任务节点与参与者的相关信息 |
+|              | [ACT_RU_JOB]          | 运行时作业                                         |
+|              | [ACT_RU_TASK]         | 运行时任务                                         |
+|              | [ACT_RU_VARIABLE]     | 运行时变量表                                       |
+
 
 ## 	3.4 关系类图
-
+![img.png](src/assets/clip_image002.jpg)
+IdentityService，FormService两个Serivce都已经删除
 ## 	3.5 工作流引擎使用
 
 # 四、Activiti BPMN建模
