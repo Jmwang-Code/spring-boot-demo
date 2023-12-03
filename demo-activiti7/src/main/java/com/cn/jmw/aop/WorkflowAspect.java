@@ -32,9 +32,18 @@ public class WorkflowAspect {
     public void logMethodCall(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
+        //获取方法上的注解
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Workflow loggable = signature.getMethod().getAnnotation(Workflow.class);
-        WorkflowEnum value = loggable.value();
+
+        //获取类上的注解
+        WorkflowEnum value = null;
+        if (loggable!=null){
+            value = loggable.value();
+        }else {
+            Workflow annotation = joinPoint.getTarget().getClass().getAnnotation(Workflow.class);
+            value = annotation.value();
+        }
 
         //初始化
         value.init();
@@ -49,10 +58,8 @@ public class WorkflowAspect {
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Workflow loggable = signature.getMethod().getAnnotation(Workflow.class);
-        WorkflowEnum value = loggable.value();
-        //获取模块
+        Workflow annotation = joinPoint.getTarget().getClass().getAnnotation(Workflow.class);
 
-        log.info("------------------日志记录: {}", value.name());
         startTime.remove();
     }
 }
