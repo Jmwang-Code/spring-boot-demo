@@ -110,8 +110,6 @@ IdentityService，FormService两个Serivce都已经删除
 
 # 五、Activiti API
 
-- 流程定义：
-
 ## 	5.1 启动流程实例
 
 ## 	5.2 查询流程实例
