@@ -1,5 +1,6 @@
 package com.cn.jmw.aop;
 
+import com.cn.jmw.activiti.facade.ManagerRepositoryService;
 import com.cn.jmw.activiti.facade.WorkflowService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -13,7 +14,7 @@ public enum WorkflowEnum implements WorkflowEnumInterface{
 
     private String processId;
 
-    private WorkflowService workflowService;
+    private ManagerRepositoryService workflowService;
 
     WorkflowEnum(String processId) {
         this.processId = processId;
@@ -23,7 +24,7 @@ public enum WorkflowEnum implements WorkflowEnumInterface{
      * 初始化
      */
     public void init() {
-        workflowService = SpringBeanUtil.getBean(WorkflowService.class);
+        workflowService = SpringBeanUtil.getBean(ManagerRepositoryService.class);
     }
 
     public String getProcessId() {

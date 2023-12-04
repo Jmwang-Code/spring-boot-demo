@@ -10,10 +10,15 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class WorkflowServiceImpl implements WorkflowService {
+public class WorkflowServiceImpl implements ManagerRepositoryService
+                                            ,ManagerRuntimeService
+                                            ,ManagerTaskService
+                                            ,ManagerHistoryService
+                                            ,ManagerProcessEngine
+                                            ,WorkflowService{
     /**
      * RepositoryService：管理流程定义
-     * RuntimeService：执行管理，包括启动、推进、删除流程实例等操作
+     * RuntimeService：流程管理，执行管理，包括启动、推进、删除流程实例等操作
      * TaskService：任务管理
      * ProcessEngine：流程引擎对象
      */
@@ -31,13 +36,21 @@ public class WorkflowServiceImpl implements WorkflowService {
         this.historyService = processEngine.getHistoryService();
     }
 
-    @Override
+
+    /**
+     * ************************           ManagerRepositoryService           ************************
+     * 校验流程定义是否存在
+     *
+     * @param processKey
+     * @return true 当前流程定义存在，false 当前流程定义不存在
+     */
     public boolean checkProcessDefinition(String processKey) {
         long count = repositoryService.createProcessDefinitionQuery().processDefinitionKey(processKey).count();
         return count > 0;
     }
 
     /**
+     * ************************           ManagerRepositoryService           ************************
      * 启动流程
      *
      * @param processKey 流程key
