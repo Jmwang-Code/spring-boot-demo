@@ -1,5 +1,8 @@
 package com.cn.jmw.activiti.common;
 
+/**
+ * 公共枚举类
+ */
 public enum CommonEnum {
 
     /**

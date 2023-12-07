@@ -1,5 +1,8 @@
 package com.cn.jmw.activiti.common;
 
+/**
+ * 审批流程枚举
+ */
 public enum ApprovalProcessEnum {
 
     /**
