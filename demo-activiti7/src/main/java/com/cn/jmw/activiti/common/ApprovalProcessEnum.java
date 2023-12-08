@@ -15,7 +15,7 @@ public enum ApprovalProcessEnum {
      */
     APPROVES("approves_assignee");
 
-    private String code;
+    private final String code;
 
     ApprovalProcessEnum(String code) {
         this.code = code;
@@ -25,7 +25,8 @@ public enum ApprovalProcessEnum {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    @Override
+    public String toString() {
+        return code;
     }
 }
