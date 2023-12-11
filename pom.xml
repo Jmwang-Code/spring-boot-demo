@@ -93,7 +93,8 @@
     <module>demo-Resume</module>
       <module>juc</module>
     <module>demo-okhttp</module>
-<!--    <module>demo-activiti7</module>-->
+      <module>demo-Authentication-Policy</module>
+      <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
 
