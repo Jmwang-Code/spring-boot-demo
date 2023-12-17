@@ -1,5 +1,6 @@
 package com.cn.engine.process;
 
+import com.cn.engine.utils.ResourcePathUtils;
 import org.springframework.core.io.ResourceLoader;
 import com.cn.engine.pojo.ProcessCreatorParam;
 import com.cn.engine.utils.SnowFlakeUtil;
@@ -15,28 +16,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-@Service
-public class ProcessDynamicsFactory implements ProcessFactoryInterface{
-
-    @Resource
-    private RepositoryService repositoryService;
-
-    @Resource
-    private ResourceLoader resourceLoader;
+public class ProcessDynamicsFactory implements ProcessFactoryInterface {
 
     /**
      * 创建一个BPMN模型
+     *
      * @param processCreatorParam
      * @return
      */
-    public boolean deployProcessDefinition(ProcessCreatorParam processCreatorParam) {
+    @Override
+    public boolean createBPMN(ProcessCreatorParam processCreatorParam) {
         // 创建BpmnModel对象
         BpmnModel bpmnModel = new BpmnModel();
 
         // 创建流程定义对象
         Process process = new Process();
         process.setId("customProcess");
-        process.setName(SnowFlakeUtil.getSecondId()+processCreatorParam.getProcessName());
+        String snow = SnowFlakeUtil.getSecondId().toString();
+        process.setName(snow);
         bpmnModel.addProcess(process);
 
         // 创建创建人任务
@@ -62,21 +59,14 @@ public class ProcessDynamicsFactory implements ProcessFactoryInterface{
         process.addFlowElement(endTask);
 
         // 输出BPMN XML到文件
-        try {
-            org.springframework.core.io.Resource resource = resourceLoader.getResource("classpath:processes/");
-            String processesPath = resource.getFile().getAbsolutePath();
-
-            // 输出 BPMN XML 到文件
-            try (FileOutputStream fos = new FileOutputStream(new File(processesPath, process+".bpmn20.xml"))) {
-                String bpmnXml = new String(new BpmnXMLConverter().convertToXML(bpmnModel));
-                fos.write(bpmnXml.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        String classPath = ResourcePathUtils.getClassPath("/processes");
+        // 输出 BPMN XML 到文件
+        try (FileOutputStream fos = new FileOutputStream(new File(classPath, snow + ".bpmn20.xml"))) {
+            String bpmnXml = new String(new BpmnXMLConverter().convertToXML(bpmnModel));
+            fos.write(bpmnXml.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return true;
     }
-
 }

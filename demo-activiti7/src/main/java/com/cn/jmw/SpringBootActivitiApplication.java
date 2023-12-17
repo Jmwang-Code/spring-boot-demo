@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description
  * @createTime 2023年02月21日 01:30:00
  */
-@SpringBootApplication
+//扫描package
+@SpringBootApplication(scanBasePackages = "com.cn")
 public class SpringBootActivitiApplication {
 
     public static void main(String[] args) {

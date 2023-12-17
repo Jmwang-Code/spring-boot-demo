@@ -63,7 +63,7 @@ public class ActivitiController {
     @GetMapping("/start-process2")
     public String startProcess2() {
         repositoryService.createDeployment()
-                .addClasspathResource("processes/LeaveApplicationProcess.bpmn20.xml")
+                .addClasspathResource("LeaveApplicationProcess.bpmn20.xml")
                 .deploy();
 
         Map<String, Object> variables = new HashMap<>();
