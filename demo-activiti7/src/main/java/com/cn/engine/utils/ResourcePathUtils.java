@@ -1,84 +1,43 @@
 package com.cn.engine.utils;
 
-import cn.hutool.core.io.resource.ResourceUtil;
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.CodeSource;
 
 public class ResourcePathUtils {
 
-    /**
-     * 通过ClassLoader获取Path
-     * @param resourcePath 资源路径resources下比如"processes/"
-     * @return
-     */
-    public static String getClassLoaderPath(String resourcePath) {
-        String path = null;
-
-        // 获取类加载器
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        // 使用类加载器获取资源路径
-        URL resource = classLoader.getResource(resourcePath);
-
-        if (resource != null) {
-            path = new File(resource.getFile()).getAbsolutePath();
-            System.out.println("ClassLoader: " + path);
-        } else {
-            System.out.println("Resource not found.");
-        }
-        return path;
-    }
 
     /**
-     * 通过SystemResource获取Path
-     * @param resourcePath 资源路径resources下比如"processes/"
-     * @return
+     * 获取对应资源的绝对路径，比如jar同级目录下的processes文件夹，或者idea的resources目录下的processes文件夹
      */
-    public static String getSystemResourcePath(String resourcePath) {
-        String path = null;
-
-        // 使用ClassLoader获取资源路径
-        URL resource = ClassLoader.getSystemResource(resourcePath);
-
-        if (resource != null) {
-            path = new File(resource.getFile()).getAbsolutePath();
-            System.out.println("SystemResource: " + path);
-        } else {
-            System.out.println("Resource not found.");
+    public static String getPath(String path) {
+        //没有processes目录，就创建
+        if (!new File(path).exists()) {
+            new File(path).mkdirs();
         }
-        return path;
-    }
 
-    /**
-     * 通过ResourceUtil获取Path
-     * @param resourcePath 资源路径resources下比如"/processes"
-     * @return
-     */
-    public static String getClassPath(String resourcePath) {
-        String path = null;
-
-        // 使用类获取资源路径
-        URL resource = ResourceUtil.class.getResource(resourcePath);
-
-        if (resource != null) {
-            path = new File(resource.getFile()).getAbsolutePath();
-            System.out.println("Class: " + path);
-        } else {
-            System.out.println("Resource not found.");
+        String result = null;
+        try {
+            CodeSource codeSource = ResourcePathUtils.class.getProtectionDomain().getCodeSource();
+            File jarFile = new File(codeSource.getLocation().toURI().getPath());
+            result = jarFile.getParentFile().getPath() + File.separator + path;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
-        return path;
+        return result;
     }
 
     public static void main(String[] args) {
-        String resourcePath = "processes/";
-        String classLoaderPath = getClassLoaderPath(resourcePath);
-        String systemResourcePath = getSystemResourcePath(resourcePath);
-        String classPath = getClassPath("/processes");
-        System.out.println(classLoaderPath);
-        System.out.println(systemResourcePath);
-        System.out.println(classPath);
+        System.out.println(getPath("processes"));
     }
 
 }

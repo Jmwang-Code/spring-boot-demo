@@ -17,5 +17,4 @@ public class ProcessCreatorParam {
     private String creator;
     private List<String> approvers;
 
-    // Getters and setters
 }

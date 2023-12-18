@@ -1,0 +1,50 @@
+<assembly>
+    <id>assembly</id>
+
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <directory>src/main/bin</directory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>target/classes/</directory>
+            <includes>
+                <include>*.yml</include>
+                <include>sql/*</include>
+                <include>conf/*</include>
+                <include>processes/*</include>
+            </includes>
+            <outputDirectory>config</outputDirectory>
+        </fileSet>
+        <!-- 主程序jar打包 -->
+        <fileSet>
+            <directory>target</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>${project.artifactId}.jar</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>${project.groupId}:*:*</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</assembly>
+

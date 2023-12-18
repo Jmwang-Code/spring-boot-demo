@@ -1,20 +1,18 @@
 package com.cn.engine.process;
 
-import com.cn.engine.utils.ResourcePathUtils;
-import org.springframework.core.io.ResourceLoader;
 import com.cn.engine.pojo.ProcessCreatorParam;
+import com.cn.engine.utils.ResourcePathUtils;
 import com.cn.engine.utils.SnowFlakeUtil;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.RepositoryService;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class ProcessDynamicsFactory implements ProcessFactoryInterface {
 
@@ -59,7 +57,8 @@ public class ProcessDynamicsFactory implements ProcessFactoryInterface {
         process.addFlowElement(endTask);
 
         // 输出BPMN XML到文件
-        String classPath = ResourcePathUtils.getClassPath("/processes");
+        String classPath = ResourcePathUtils.getPath("config/processes");
+
         // 输出 BPMN XML 到文件
         try (FileOutputStream fos = new FileOutputStream(new File(classPath, snow + ".bpmn20.xml"))) {
             String bpmnXml = new String(new BpmnXMLConverter().convertToXML(bpmnModel));
