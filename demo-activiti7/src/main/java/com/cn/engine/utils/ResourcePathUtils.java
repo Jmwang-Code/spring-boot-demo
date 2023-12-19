@@ -1,16 +1,7 @@
 package com.cn.engine.utils;
 
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ResourceUtils;
-
-import java.io.*;
+import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.CodeSource;
 
 public class ResourcePathUtils {

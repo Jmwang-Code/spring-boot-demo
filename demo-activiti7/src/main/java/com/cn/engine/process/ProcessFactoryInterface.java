@@ -11,4 +11,9 @@ public interface ProcessFactoryInterface {
      * 创建BPMN
      */
     public boolean createBPMN(ProcessCreatorParam processCreatorParam);
+
+    /**
+     * 流程定义
+     */
+    public boolean deployProcess(ProcessCreatorParam processCreatorParam);
 }

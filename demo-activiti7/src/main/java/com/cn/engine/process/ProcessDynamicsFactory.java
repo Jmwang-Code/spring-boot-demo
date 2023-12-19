@@ -11,8 +11,6 @@ import org.activiti.bpmn.model.UserTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 public class ProcessDynamicsFactory implements ProcessFactoryInterface {
 
@@ -67,5 +65,10 @@ public class ProcessDynamicsFactory implements ProcessFactoryInterface {
             e.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public boolean deployProcess(ProcessCreatorParam processCreatorParam) {
+        return false;
     }
 }
