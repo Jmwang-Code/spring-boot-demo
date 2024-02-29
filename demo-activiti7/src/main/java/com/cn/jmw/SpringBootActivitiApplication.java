@@ -2,8 +2,6 @@ package com.cn.jmw;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author 一只小小狗
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description
  * @createTime 2023年02月21日 01:30:00
  */
+//扫描package
 @SpringBootApplication
 public class SpringBootActivitiApplication {
 

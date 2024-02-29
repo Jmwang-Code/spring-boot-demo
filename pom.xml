@@ -16,13 +16,13 @@
   <modules>
     <module>demo-helloworld</module>
     <module>demo-properties</module>
-    <module>demo-spring-security/spring-security-00SourceCode</module>
-    <module>demo-spring-security/spring-security-01</module>
-    <module>demo-spring-security/spring-security-02</module>
-    <module>demo-spring-security/spring-security-03web</module>
+<!--    <module>demo-spring-security/spring-security-00SourceCode</module>-->
+<!--    <module>demo-spring-security/spring-security-01</module>-->
+<!--    <module>demo-spring-security/spring-security-02</module>-->
+<!--    <module>demo-spring-security/spring-security-03web</module>-->
 <!--    <module>demo-spring-security/spring-security-04split</module>-->
-    <module>demo-spring/spring-aop</module>
-    <module>demo-spring/spring-bean-life-cycle</module>
+    <module>spring-aop</module>
+    <module>spring-bean-life-cycle</module>
 <!--    <module>demo-logback</module>-->
 <!--    <module>demo-log-aop</module>-->
 <!--    <module>demo-exception-handler</module>-->
@@ -92,7 +92,9 @@
       <module>algorithm</module>
     <module>demo-Resume</module>
       <module>juc</module>
-<!--    <module>demo-activiti7</module>-->
+    <module>demo-okhttp</module>
+      <module>demo-Authentication-Policy</module>
+      <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
 
@@ -113,19 +115,19 @@
     <user.agent.version>1.20</user.agent.version>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>aliyun</id>
-      <name>aliyun</name>
-      <url>https://maven.aliyun.com/repository/public</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+<!--  <repositories>-->
+<!--    <repository>-->
+<!--      <id>aliyun</id>-->
+<!--      <name>aliyun</name>-->
+<!--      <url>https://maven.aliyun.com/repository/public</url>-->
+<!--      <releases>-->
+<!--        <enabled>true</enabled>-->
+<!--      </releases>-->
+<!--      <snapshots>-->
+<!--        <enabled>false</enabled>-->
+<!--      </snapshots>-->
+<!--    </repository>-->
+<!--  </repositories>-->
 
   <dependencyManagement>
     <dependencies>
