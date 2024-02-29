@@ -151,3 +151,16 @@ DataStream<Row> clickHouseStream = stream.map(new MapFunction<Row, Row>() {
 clickHouseStream.writeUsingOutputFormat(new ClickHouseOutputFormat(url, username, password));
 ```
 其中，url、username 和 password 分别是 ClickHouse 的连接信息。
+
+
+
+# 5. 大数据法律监督平台-线索模块
+| \                                   | <span style="color:purple">大数据法律监督平台-线索模块                                | 
+|-------------------------------------|------------------------------------------------------------------|
+| <span style="color:red">**组件理论**  | SPI机制（方便实现和扩展） 关系型和非关系型抽象多层（加亿层） 包容各种数据源                         |
+| <span style="color:red">**问题定位**  | 1.各种数据源的扩展抽象设计 2.新增一种也可以直接通过简单实现SPI接口进行插槽对接 3.非关系型转换成关系型展示，并且持久化 |
+| <span style="color:red">**调优配置**  | 简单的非标参数最大最小堆设置                                                   |
+| <span style="color:red">**基础理论**  | 工厂+单例+策略+SPI                                                     |
+| <span style="color:red">**项目场景**  | 1.为报表提供各种各样的数据源                                                  |
+| <span style="color:red">**特色问题1** |                                                                  |
+| <span style="color:red">**特色问题2** |                                                                  |
