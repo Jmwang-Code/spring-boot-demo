@@ -94,6 +94,7 @@
       <module>juc</module>
     <module>demo-okhttp</module>
       <module>demo-Authentication-Policy</module>
+      <module>unix</module>
       <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
