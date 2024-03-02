@@ -33,7 +33,7 @@ public class LoggingAspect {
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Loggable loggable = signature.getMethod().getAnnotation(Loggable.class);
-        DBXSLogEnum value = loggable.value();
+        ClueLogEnum value = loggable.value();
 
         // TODO test
         log.info("------------------Start.DBXSLogEnum: {}", value.name());
@@ -45,7 +45,7 @@ public class LoggingAspect {
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Loggable loggable = signature.getMethod().getAnnotation(Loggable.class);
-        DBXSLogEnum value = loggable.value();
+        ClueLogEnum value = loggable.value();
 
         // TODO test
         log.info("------------------End.DBXSLogEnum: {}", value.name());

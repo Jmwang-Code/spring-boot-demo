@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface Loggable {
 
-    DBXSLogEnum value() default DBXSLogEnum.OTHER;
+    ClueLogEnum value();
 
 }
