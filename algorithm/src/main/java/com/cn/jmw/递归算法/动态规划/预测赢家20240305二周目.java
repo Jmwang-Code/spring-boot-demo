@@ -109,31 +109,33 @@ public class 预测赢家20240305二周目 {
      * Last缓存表位置确定： l(x,y) = 最大值（f(x-1,y) , f(x,y+1))
      */
     public static int win3(int[] arr) {
-        if (arr == null || arr.length == 0) return 0;
-        int ans = 0;
-
         int N = arr.length;
-        int[][] dpF = new int[N][N];
-        int[][] dpL = new int[N][N];
-        //初始化dpF
-        for (int i = 0; i < N; i++) {
-            dpF[i][i] = arr[i];
+        if (arr == null || N == 0) {
+            return 0;
         }
 
-        //开始递推
-        for (int startCol = 1; startCol < N; startCol++) {
-            int l = 0;  //列
-            int r = startCol;
-            while (r < N) {
-                dpF[l][r] = Math.max(arr[l] + dpL[l + 1][r], arr[r] + dpL[l][r - 1]);
-                dpL[l][r] = Math.min(dpF[l + 1][r], dpF[l][r - 1]);
-                l++;
-                r++;
+        //先手缓存表
+        int[][] dpF = new int[N][N];
+        //后手缓存表
+        int[][] dpL = new int[N][N];
+
+        for (int i = 1; i < N; i++) {
+            int L = 0;
+            int R = i;
+            while (R<N){
+                //先推算先手表此对角线
+                dpF[L][R] = Math.max((arr[L]+dpL[L+1][R]),(arr[R]+dpL[L][R-1]));
+
+                //推算后手表此对角线
+                dpL[L][R] = Math.min(dpF[L+1][R],dpF[L][R-1]);
+                L++;
+                R++;
             }
         }
 
-
-        return Math.max(dpF[0][N - 1], dpL[0][N - 1]);
+        //  return Math.max(f1(arr, 0, arr.length - 1), l1(arr, 0, arr.length - 1));
+        //最大值出现在原式中的位置都是，2个DP方程中的 0,N-1的位置。第0行，第N-1列
+        return Math.max(dpF[0][N-1],dpL[0][N-1]);
     }
 
 
