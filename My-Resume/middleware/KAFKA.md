@@ -5,7 +5,7 @@
 - 消息队列：比如双11下单的场景下：削峰填谷，使得消息能稳定的处理，不亏冲垮服务。
 
 # 2. Kafka架构模型
-![img_10.png](img_10.png)
+![img_10.png](../images/MID-Kafka架构模型.png)
 
 - Producer ：消息生产者。
 - Consumer ：消息消费者。
@@ -27,36 +27,36 @@ kafka只保证在一个partition下按照offset消费的顺序性，而不保证
 ## 3.1 Kafka为什么消费顺序会乱？
 而生产者生产的消息，按照（轮训、hash key、随机策略）进行分配给多个partition，所以在一个topic下消息会乱。
 
-![img_13.png](img_13.png)
+![img_13.png](../images/MID-Kafka为什么消费顺序会乱.png)
 
 # 4. Kafka数据一致性怎么保证？ （服务宕机时的数据一致性如何保证？）
 
 **<h3>Kafka数据一致性问题：</h3>** 当leader宕机时，重新选举出的副本数据可能缺失。
 
-![Kafka数据一致性问题](img_11.png)
+![Kafka数据一致性问题](../images/MID-Kafka数据一致性问题.png)
 
 使用ISR（In-Sync Replicas 副本同步队列）机制来保证副本之间的数据一致性。
 (生产消息到Topic中时，需要将消息加入到所有副本后再进行返回客户端，生产完成)
 
-![img_12.png](img_12.png)
+![img_12.png](../images/MID-Kafka解决数据一致性问题.png)
 
 # 5. Kafka什么时候消息会丢失？
 
-![img_14.png](img_14.png)
+![img_14.png](../images/MID-Kafka什么时候消息会丢失.png)
 
 # 5.1 Kafka 如何保证消息不丢失？
 
-![img_15.png](img_15.png)
+![img_15.png](../images/MID-Kafka如何保证消息不丢失.png)
 
 
 # 6. Kafka 怎么避免重复消费？
 Kafka中记录消费主要是通过offset来记录的。
 
 1. 由于消费者组中增加或者减少消费者，发生Rebalance，导致offset提交失败
-![img_16.png](img_16.png)
+![img_16.png](../images/MID-Kafka重复消费.png)
 
 2. 由于消费者消费异常导致提交异常。
-![img_17.png](img_17.png)
+![img_17.png](../images/MID-Kafka消费重复2.png)
 
 # 7. Kafka 是如何实现高吞吐率的？
 
@@ -68,4 +68,4 @@ Kafka中记录消费主要是通过offset来记录的。
 
 # 7.1 零拷贝
 避免了数据的多次拷贝，提高了数据传输的效率。
-![img_18.png](img_18.png)
+![img_18.png](../images/MID-零拷贝.png)

@@ -9,7 +9,7 @@
 
 - 全局哈希表：类似JDK1.6的hashMap，它维护的一个哈希桶数组，每个桶里面存储的是一个链表，链表里面存储的是一个个的键值对节点元素。
 - 节点元素：是以Key-Value的形式存储，key是一个字符串，value是一个Redis数据结构。 
-![img_8.png](img_8.png)
+![img_8.png](../images/MID-全局哈希表(REDIS).png)
 
 而当全局哈希表达到某一个临界值会发生扩容，当扩容时需要重新分配哈希表的哈希桶数组位。这个过程就是Rehash。
 
@@ -18,7 +18,7 @@
 当Redis已经有大量数据的时候，此时进行扩容，Rehash的数量会达到一个恐怖的时间，Redis此时会进行卡顿，甚至会造成雪崩。
 假如此时Rehash 10W个Key，我们创建一个另一个全局哈希表B，将原来的全局哈希表A的数据通过查询对应桶位进行Rehash一个或者多个key进行拷贝到全局哈希表B上，以达到渐进式Rehash。
 
-<img src="img_9.png" width="70%" height="auto">
+<img src="../images/MID-渐进式Rehash.png" width="70%" height="auto">
 
 ## 1.3 缓存时间戳
 
@@ -93,9 +93,9 @@ Redis过期策略:
 哨兵模式基于主从复制，是主从复制的升级，从手动变成了自动。
 
 哨兵模式
-![img_3.png](img_3.png)
+![img_3.png](../images/MID-哨兵模式.png)
 高可用模式
-![img_4.png](img_4.png)
+![img_4.png](../images/MID-高可用模式.png)
 
 
 # 10. 基础知识
@@ -111,12 +111,12 @@ Redis中的key是一个字符串，value是一个Redis数据结构，当value的
 # 10. 场景问题
 
 ## 10.1 缓存穿透
-![img_5.png](img_5.png)
+![img_5.png](../images/MID-缓存穿透.png)
 用户想要查询一个数据，发现redis内存数据库没有，也就是缓存没有命中，于是向持久层数据库查询。在高并发的场景下可能会导致数据库被压垮。
 
 解决方案：
 布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。
-![img_6.png](img_6.png)
+![img_6.png](../images/MID-布隆过滤器.png)
 
 ### 10.1.1 布隆过滤器
 
@@ -135,7 +135,7 @@ hash碰撞带来的问题：多个不同的key都可能算出的hash值相同，
 
 ## 10.3 缓存雪崩
 在某一时间段内，缓存集中过期失效（比如Redis宕机），全部打到数据库上，导致数据库被压垮。
-![img_7.png](img_7.png)
+![img_7.png](../images/MID-缓存雪崩.png)
 
 解决方案：
 1. 增加集群部署。
