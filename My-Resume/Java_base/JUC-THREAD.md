@@ -98,7 +98,7 @@ Entry对象的key是弱引用，也就是说当CG回收时会被回收，但是v
 <font color='red'><h1>model one</h1></font>
 实体识别树中加载模块（服务初始化时）为了快速加载不同的数据源，此时此刻明显需要多个异步任务完成，此时使用。
 
-<img src="img.png" width="50%" height="auto">
+<img src="../images/JAVA-前缀树加载不同数据源.png" width="50%" height="auto">
 
 **此时数据源配置和线程池配置都配置在yml文件：**
 1. 比如我配置了10个数据源（流处理），那么我会配置核心线程1，最大线程10，队列长度1。以达到最大加载速度。最后剩余一个核心线程用于正常的算法树增删。
@@ -128,7 +128,7 @@ Entry对象的key是弱引用，也就是说当CG回收时会被回收，但是v
 
 `Future`接口，`FutureTask`类都可以代表异步计算的结果。
 
-![Executor 框架的使用示意图](../images/image1008611.png)
+![Executor 框架的使用示意图](../images/JAVA-线程池（Executor框架）三大组成部分关系图.png)
 
 
 ## 6.1 `Runnable` 和 `Callable` 的区别

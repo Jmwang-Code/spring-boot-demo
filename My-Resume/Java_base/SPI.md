@@ -6,7 +6,7 @@ SPI 将服务接口和服务实现分离开来，将服务调用方和服务实�
 
 # 2. SPI 和 API 的区别？
 
-![](../images/image-15.png)
+![](../images/JAVA-SPI和API区别.png)
 
 `API` 是应用程序编程接口，是一提供程序调用的。
 
