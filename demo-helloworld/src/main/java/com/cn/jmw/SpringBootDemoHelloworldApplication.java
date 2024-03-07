@@ -1,6 +1,7 @@
 package com.cn.jmw;
 
 import cn.hutool.core.util.StrUtil;
+import com.cn.jmw.aspect.ClueLogEnum;
 import com.cn.jmw.aspect.Loggable;
 import com.cn.jmw.utils.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,7 +46,7 @@ public class SpringBootDemoHelloworldApplication {
      * http://localhost:8080/demo/hello?who=jmw
      */
     @GetMapping("/hello")
-    @Loggable
+    @Loggable(ClueLogEnum.INIT)
     public String sayHello(@RequestParam(required = false, name = "who") String who
     , HttpServletRequest request) {
         if (StrUtil.isBlank(who)) {
