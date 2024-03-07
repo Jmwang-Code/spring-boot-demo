@@ -1,7 +1,7 @@
 # 0 Hadoop
 
 ## 0.1 Hadoop 1.x 和 2.x 的区别
-![](../../demo-hadoop/img.png)
+![](../images/HADOOP-Hadoop%201.x%20和%202.x%20的区别.png)
 
 资源调度方式的改变
 
@@ -16,11 +16,13 @@ HDFS Federation
 Hadoop 2.0中对HDFS进行了改进，使NameNode可以横向扩展成多个，每个NameNode分管一部分目录，进而产生了HDFS Federation，该机制的引入不仅增强了HDFS的扩展性，也使HDFS具备了隔离性
 
 ## 0.2 大数据技术生态圈
-![](../../demo-hadoop/img_5.png)
+
+![HADOOP-大数据技术生态圈.png](../images/HADOOP-大数据技术生态圈.png)
+
 负责的就是数据计算层、数据库可视化、业务应用
 
 ## 0.3 hadoop HA介绍
-![img_8.png](img_8.png)
+![img_8.png](../images/HADOOP-hadoopHA介绍.png)
 Active NameNode 和 Standby NameNode：两台 NameNode 形成互备，一台处于 Active 状态，为主 NameNode，另外一台处于 Standby 状态，为备 NameNode，只有主 NameNode 才能对外提供读写服务；
 ZKFailoverController（主备切换控制器，FC）：ZKFailoverController 作为独立的进程运行，对 NameNode 的主备切换进行总体控制。ZKFailoverController 能及时检测到 NameNode 的健康状况，在主 NameNode 故障时借助 Zookeeper 实现自动的主备选举和切换（当然 NameNode 目前也支持不依赖于 Zookeeper 的手动主备切换）；
 Zookeeper 集群：为主备切换控制器提供主备选举支持；
@@ -57,7 +59,7 @@ Hadoop上大量HDFS元数据信息存储在NameNode内存中,因此过多的小�
 HDFS是Hadoop分布式文件系统。
 
 ## 1.1 HDFS 2.0 架构
-![img_1.png](img_1.png)
+![img_1.png](../images/HADOOP-HDFS%202.0%20架构.png)
 Active NameNode 和 Standby NameNode：两台 NameNode 形成互备，一台处于 Active 状态，为主 NameNode，另外一台处于 Standby 状态，为备 NameNode，只有主 NameNode 才能对外提供读写服务；
 
 ZKFailoverController（主备切换控制器，FC）：ZKFailoverController 作为独立的进程运行，对 NameNode 的主备切换进行总体控制。ZKFailoverController 能及时检测到 NameNode 的健康状况，在主 NameNode 故障时借助 Zookeeper 实现自动的主备选举和切换（当然 NameNode 目前也支持不依赖于 Zookeeper 的手动主备切换）；
@@ -69,7 +71,7 @@ Zookeeper 集群：为主备切换控制器提供主备选举支持；
 DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据块和 DataNode 之间的映射关系，为了使故障切换能够快速进行，DataNode 会同时向主 NameNode 和备 NameNode 上报数据块的位置信息。
 
 ## 1.2 HDFS 基本架构 （重点）
-![img_4.png](img_4.png)
+![img_4.png](../images/HADOOP-HDFS基本架构（重点）.png)
 - NameNode: 管理许多元数据（内存中），会定期持久化到磁盘（文件名称fsimage（内存命名空间元数据在外存的镜像文件） edits（追加：内存数据变化前首先会将操作记入 editlog）：可以用作回复任务）。
 
 - SecondaryNameNode: 辅助NameNode元数据（一条150字节）管理，对fsimage edits进行操作，形成新的 fsimage 文件并传回 NameNode，减轻NameNode的压力。
@@ -78,7 +80,7 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 
 ## 1.3 存储副本应该放入那一台DataNode? 机架感知?   
 
-![img_6.png](img_6.png) 
+![img_6.png](../images/HADOOP-机架感知.png) 
 
 - 机架：机架是一种物理结构，机架中有多个节点，节点之间通过交换机连接。
 
@@ -88,7 +90,7 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 ## 1.4 HDFS 读写流程 （重点）
 <h1>Write</h1>
 
-![img_3.png](img_3.png)
+![img_3.png](../images/HADOOP-HDFS读写流程（重点）.png)
 
 1. Client向NameNode发送请求，请求上传文件
 2. NameNode检查元数据文件目录树
@@ -105,7 +107,7 @@ DataNode 节点：因为主 NameNode 和备 NameNode 需要共享 HDFS 的数据
 
 <h1>Read</h1>
 
-![img_5.png](img_5.png)
+![HADOOP-Read.png](../images/HADOOP-Read.png)
 
 1. Client向NameNode发送RPC请求，请求下载文件
 2. 告诉Client，block地址列表
@@ -116,7 +118,7 @@ Client就近原则，选择datanode01下载block01，选择datanode01下载block
 3. Client向DateNode建立数据流，读取block，考虑2个问题: 
    1. 节点距离
       <br>**拓扑结构，网络拓扑**
-      ![img_10.png](img_10.png)
+      ![img_10.png](../images/HADOOP-拓扑结构，网络拓扑.png)
       n-0：服务器
       机架1：机架（交换机）
       集群d1：机房（比如上海虹桥集群机房）
@@ -130,7 +132,7 @@ Yarn是Hadoop的资源调度平台，负责集群资源的管理和调度。
 
 ## 2.1 基础架构
 
-![img_11.png](img_11.png)
+![img_11.png](../images/YARN-基础架构.png)
 1. ResourceManager（RM）
    RM 是一个全局的资源管理器，负责整个系统的资源管理和分配，它主要有两个组件构成：
 
@@ -180,12 +182,12 @@ RM:NM = 1:n (n>=1)
     ```
 
 # 2.4 Yarn的工作流程
-？
-![Alt text](image-1.png)
 
-![img_7.png](img_7.png)
+![Alt text](../images/YARN-Yarn的工作流程.png)
 
-![img_13.png](img_13.png)
+![img_7.png](../images/YARN-工作完成阶段.png)
+
+![img_13.png](../images/YARN-工作机制.png)
 
 1. Client 和 ResourceManager 交互进行任务提交。
 2. ResourceManager 预备提供开辟容器。
@@ -201,16 +203,16 @@ FIFO、容量（Capacity Scheduler）和公平（Fair Scheduler）
 单队列Job先进先出
 
 ### 2.5.2 容量调度器 （apache 默认调度器）
-![img_14.png](img_14.png)
+![img_14.png](../images/YARN-容量调度器.png)
 
 分配算法
-![img_15.png](img_15.png)
+![img_15.png](../images/YARN-分配算法.png)
  
 ### 2.5.3 公平调度器 （CDH 默认调度器是公平）
-![img_16.png](img_16.png)
+![img_16.png](../images/YARN-公平调度器.png)
 
 缺额
-![img_17.png](img_17.png)
+![img_17.png](../images/YARN-缺额.png)
 
 # 3. MapReduce架构
 
@@ -231,7 +233,7 @@ ReduceTask：负责数据的合并、处理、输出。
 
 ## 3.2 MapReduce 核心工作流程
 
-![Alt text](image.png)
+![Alt text](../images/MAPREDUCE-MapReduce核心工作流程.png)
 
 1. InputFormat、TextInputFormat 重写Mapper的map方法，将数据切分成一个个小的数据块，然后由多个MapTask并行处理。
 2. 自定义排序，将MapTask的输出结果按照key进行排序，然后分区，最后将数据发送给ReduceTask。
@@ -244,7 +246,7 @@ ReduceTask：负责数据的合并、处理、输出。
 
 - 数据块：Block是HDFS物理上把数据分成一块一块。数据块是HDFS存储数据单位。
 - 数据切片：数据切片只是在逻辑上对输入进行分片，并不会在磁盘上将其切分成片进行存储。数据切片是MapReduce程序计算输入数据的单位，一个切片会对应启动一个MapTask。
-![img_12.png](img_12.png)
+![img_12.png](../images/MAPREDUCE-并行度决定机制.png)
 
 ## 3.4 CombinerTextInputFormat切片机制
 
