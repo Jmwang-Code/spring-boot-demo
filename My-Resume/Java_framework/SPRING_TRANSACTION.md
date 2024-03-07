@@ -16,6 +16,6 @@
 4. 在父函数设置了@Transactional，子函数没有设置@Transactional
 
 # 4. 两个事务主要解决的三种模式
-![img_6.png](img_6.png)
-![img_7.png](img_7.png)
-![img_8.png](img_8.png)
+![img_6.png](SPRING-事务融入.png)
+![img_7.png](SPRING-事务挂起.png)
+![img_8.png](SPRING-事务嵌套.png)
