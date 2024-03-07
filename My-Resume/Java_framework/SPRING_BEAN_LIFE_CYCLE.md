@@ -1,13 +1,13 @@
 # <span style="color:red">**Spring Bean的生命周期** (面试)</span>
 
-<img alt="img.png" src="img.png" width="200"/>
+<img alt="SPRING-Spring Bean的生命周期.png" src="SPRING-SpringBean的生命周期.png" width="200"/>
 
 # 1. 三大阶段：
 1. 生产
 2. 使用
 3. 销毁
 
-![img_1.png](img_1.png)
+![img_1.png](SPRING-生产.png)
 ## 1.1 生产
 1. **<span style="color:red">IOC容器（容器初始化、启动流程） (面试) </span>**
    1. Resource定位
@@ -24,7 +24,7 @@
 ## 1.2 使用
 从单例池中获取bean实例 getSingleton
 
-![img_2.png](img_2.png)
+![img_2.png](SPRING-销毁.png)
 ## 1.3 销毁
 1.处理器销毁前的方法 @PreDestroy
 2.销毁实例 destroyBeans
@@ -85,7 +85,7 @@ Spring会检测该对象是否实现了xxxAware接口，通过Aware类型的接�
 9. [ ] destroy-method属性指定的初始化方法：
    最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。
 
-![img_7.png](../images/img_7.png)
+![img_7.png](../images/SPRING-img_7.png)
 
 # 3. Spring框架中有哪些不同类型的事件（非面试）
 
@@ -97,4 +97,4 @@ Spring 提供了以下5种标准的事件：
 4. 上下文关闭事件（ContextClosedEvent）：当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
 5. 请求处理事件（RequestHandledEvent）：在Web应用中，当一个http请求（request）结束触发该事件。
    如果一个bean实现了ApplicationListener接口，当一个ApplicationEvent 被发布以后，bean会自动被通知。
-   ![img_10.png](../images/img_10.png)
+   ![img_10.png](../images/SPRING-img_10.png)

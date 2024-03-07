@@ -1,6 +1,6 @@
 # 1. Spring的事务是如何回滚的？
 
-![img_3.png](img_3.png)
+![img_3.png](../images/SPRING-%20Spring的事务是如何回滚的.png)
 
 # 2. Spring常用事务传播行为？
 

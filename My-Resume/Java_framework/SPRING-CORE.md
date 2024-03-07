@@ -2,7 +2,7 @@
 
 IoC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。
 
-![img_9.png](img_9.png)
+![SPRING-IOC和AOP的联系和区别.png](../images/SPRING-IOC和AOP的联系和区别.png)
 
 # 2. Spring-IOC是什么 
 
@@ -57,7 +57,7 @@ AOP实现的关键在于 代理模式，AOP代理主要分为静态代理和动�
 
 | \      | BeanFactory（容器）           | ApplicationContext                |
 |--------|---------------------------|-----------------------------------|
-| 功能     | ![img_10.png](img_10.png) | ![img_11.png](img_11.png)         |
+| 功能     | ![img_10.png](../images/SPRING-BeanFactory（容器）.png) | ![img_11.png](../images/SPRING-ApplicationContext.png)         |
 | 关系     | IOC容器最顶级父类                | 是BeanFactory的子类，继承了BeanFactory的功能 |
 | 加载Bean | 懒加载                       | 预加载，启动时就加载所有的单实例Bean，速度快          |
 | 注册Bean | 手动注册，编程式创建                | 自动注册，声明式创建                        |
@@ -159,7 +159,7 @@ Spring 所管理的对象或者信息，都可以通过实现相应的Aware接�
 - ResourceLoaderAware:获取ResourceLoader对象
 - ServletContextAware:在Web应用中获取ServletContext对象
 - BeanClassLoaderAware:获取加载当前Bean的ClassLoader对象
-  ![img_12.png](../images/img_12.png)
+  ![img_12.png](../images/SRPING-Spring支持哪些Aware接口.png)
 
 # 12. Aware接口
 
