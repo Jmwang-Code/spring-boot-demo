@@ -55,7 +55,7 @@ public class 背包问题1简单 {
         int bag = 8;
 //        long l = System.currentTimeMillis();
 //        for (int i = 0; i < 100000; i++) {
-        System.out.println(maxValue2(w, v, bag));
+        System.out.println(maxValue1(w, v, bag));
 //        }
 //        System.out.println((System.currentTimeMillis()-l)/1000.0);
 //
