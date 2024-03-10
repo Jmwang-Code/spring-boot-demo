@@ -54,7 +54,7 @@ public class 大写英文字符和数组对应转换 {
 
     //测试案例字符串长一点
     public static void main(String[] args) {
-        String str = "11016152023";
+        String str = "27";
         System.out.println(process(str));
 
         System.out.println(process2(str));
