@@ -1,5 +1,8 @@
 package com.cn.jmw.华为;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 给你一个字符串 s 和一个字符 c ，且 c 是 s 中出现过的字符。
  *
@@ -24,9 +27,37 @@ public class 字符的最短距离821 {
      * 输入：s = "aaab", c = "b"
      * 输出：[3,2,1,0]
      */
-    public int[] shortestToChar(String s, char c) {
 
+    /**
+     * 遍历两遍
+     */
+    public int[] shortestToChar(String s, char c) {
+        char[] charArray = s.toCharArray();
+        int n = s.length();
+        int[] ans = new int[n];
+        Arrays.fill(ans,n+1);
+        //第一遍遍历完成左到右，增序赋值
+        for (int i = 0,j = -1; i < n; i++) {
+            if (charArray[i]==c){
+                j = i;
+            }
+            if (j != -1){
+                ans[i] = i - j;
+            }
+        }
+
+        for (int i = n - 1,j = -1; i >= 0; i--) {
+            if (charArray[i]==c){
+                j = i;
+            }
+            if (j != -1){
+                ans[i] = Math.min(j-i,ans[i]);
+            }
+        }
+
+        return ans;
     }
+
 
     public static void main(String[] args) {
         //测试
@@ -36,5 +67,6 @@ public class 字符的最短距离821 {
         for (int i : result) {
             System.out.println(i);
         }
+
     }
 }
