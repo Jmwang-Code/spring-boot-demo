@@ -42,31 +42,7 @@ public class 贴纸拼词 {
     }
 
 
-//    public static int minStickers2(String[] stickers, String target){
-//        int[][] stickerss = new int[stickers.length][26];
-//        for (int i = 0; i < stickers.length; i++) {
-//            char[] charArray = stickers[i].toCharArray();
-//            for (int j = 0; j < charArray.length; j++) {
-//                stickerss[i][j] = charArray[j] - 'a';
-//            }
-//        }
-//        int ans = process2(stickerss, target);
-//        return ans == Integer.MAX_VALUE ? -1 : ans;
-//    }
 
-//    public static int process2(int[][] stickers, String target){
-//        if (target.length()==0)return 0;
-//
-//        int min = Integer.MAX_VALUE;
-//        for (String sticker:stickers) {
-//            String rest = getStr(target,sticker);
-//            if (target.length()!=rest.length()){
-//                min = Math.min(min,process(stickers,rest));
-//            }
-//        }
-//        return min + (min == Integer.MAX_VALUE?0:1);
-//    }
-//
 
 
     //来个测试案例
