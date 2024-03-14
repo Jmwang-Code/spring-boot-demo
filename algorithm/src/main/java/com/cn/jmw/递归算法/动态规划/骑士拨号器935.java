@@ -113,6 +113,7 @@ public class 骑士拨号器935 {
             dp[0][i] = 1;
         }
 
+        //TODO i是步,10个号码
         // 计算以每个数字键盘开始的号码数量
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < 10; j++) {
