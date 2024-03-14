@@ -6,9 +6,9 @@
 - 防止重复处理: 比如订单支付，用户点击支付按钮后，可能会出现重复支付的情况。
 - 顺序执行: 比如秒杀活动，用户抢购商品，必须保证用户的抢购请求是按照顺序执行的。
 
-![img.png](img.png)
+![img.png](../images/分布式业务架构.png)
 
-![img_1.png](img_1.png)
+![img_1.png](../images/分布式JService.png)
 
 # 2. 集群环境下的分布式锁
 
@@ -134,11 +134,11 @@ public class RedisLock {
 
 - 问题：如果主节点宕机，会导致锁丢失。
 
-  ![img_2.png](img_2.png)
+  ![img_2.png](../images/分布式Redis主从模式节点宕机.png)
 
 - 解决方案：使用Redlock算法，多个Redis实例之间进行协调。（通常5个独立的Redis实例）当我们需要获取锁的时候，只有在大部分Redis实例上获取到锁的时候，才算获取成功。反之，获取失败。需要释放所有节点上的锁。）
 
-  ![img_3.png](img_3.png)
+  ![img_3.png](../images/分布式红锁解决同步问题.png)
 
 ```java
 import org.redisson.Redisson;
@@ -184,7 +184,7 @@ public class RedLockExample {
 
 ### 2.3.1 RedLock算法的问题
 
-![img_4.png](img_4.png)
+![img_4.png](../images/分布式红锁算法的问题.png)
 
 
 # 3. 分布式ID
@@ -205,7 +205,7 @@ UUID是128位的全局唯一标识符，通常由32字节的字符串表示。
 
 在数据库中创建一个专门的表来存储当前的ID值。每次需要生成新的ID时，我们就从这个表中获取一个号段，然后在应用程序中递增这个号段，直到号段用完为止。这样，我们就可以在不访问数据库的情况下生成大量的ID，从而提高性能。
 
-![img_5.png](img_5.png)
+![img_5.png](../images/分布式基于数据库的号段分配ID.png)
 
 ## 3.4 Twitter的Snowflake算法
 
