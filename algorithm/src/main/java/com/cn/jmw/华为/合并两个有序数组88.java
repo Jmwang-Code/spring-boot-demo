@@ -31,6 +31,7 @@ public class 合并两个有序数组88 {
         int tail = m + n - 1;
         int cur;
         while (i1 >= 0 || i2 >= 0){
+            //处理越界是关键
             if (i1 == -1){
                 cur = nums2[i2--];
             }else if (i2 == -1){
