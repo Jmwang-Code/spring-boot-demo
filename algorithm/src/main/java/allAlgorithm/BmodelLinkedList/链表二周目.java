@@ -37,6 +37,7 @@ public class 链表二周目 {
 
     // 206. 反转链表
     public ListNode reverseListI(ListNode head) {
+        return null;
     }
 
     // 206. 反转链表
@@ -75,6 +76,7 @@ public class 链表二周目 {
 
     // 92. 反转链表 II
     public ListNode reverseBetween(ListNode head, int m, int n) {
+        return null;
     }
 
     // 92. 反转链表 II
@@ -112,6 +114,7 @@ public class 链表二周目 {
 
     // 21. 合并两个有序链表
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        return null;
     }
 
     // 21. 合并两个有序链表
@@ -163,6 +166,7 @@ public class 链表二周目 {
 
     // 83. 删除排序链表中的重复元素
     public ListNode deleteDuplicates(ListNode head) {
+        return null;
     }
 
     // 83. 删除排序链表中的重复元素
@@ -200,6 +204,7 @@ public class 链表二周目 {
 
     // 141. 环形链表
     public boolean hasCycle(ListNode head) {
+        return false;
     }
 
     // 141. 环形链表
@@ -239,6 +244,7 @@ public class 链表二周目 {
 
     // 160. 相交链表
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        return null;
     }
 
     // 160. 相交链表
@@ -289,6 +295,7 @@ public class 链表二周目 {
 
     // 203. 移除链表元素
     public ListNode removeElements(ListNode head, int val) {
+        return null;
     }
 
     // 203. 移除链表元素
@@ -323,6 +330,119 @@ public class 链表二周目 {
         ListNode node5 = removeElements(head3, 1);
         printList(node5);
     }
+
+    // 234. 回文链表
+    public boolean isPalindrome(ListNode head) {
+        return false;
+    }
+
+    // 234. 回文链表
+    @Test
+    public void testIsPalindrome() {
+        ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i <= 5; i++) {
+            node.next = new ListNode(i);
+            node = node.next;
+        }
+        boolean b = isPalindrome(head);
+        System.out.println(b);
+
+        //再来一个案例
+        ListNode head2 = new ListNode(1);
+        ListNode node2 = head2;
+        for (int i = 2; i <= 6; i++) {
+            node2.next = new ListNode(i);
+            node2 = node2.next;
+        }
+        boolean b2 = isPalindrome(head2);
+        System.out.println(b2);
+
+        //再来测试边界的案例
+        ListNode head3 = new ListNode(1);
+        ListNode node3 = head3;
+        for (int i = 2; i <= 1; i++) {
+            node3.next = new ListNode(i);
+            node3 = node3.next;
+        }
+        boolean b3 = isPalindrome(head3);
+        System.out.println(b3);
+    }
+
+    // LCR 141. 训练计划 III
+    public int minStartValue(int[] nums) {
+        return 0;
+    }
+
+    // LCR 141. 训练计划 III
+    @Test
+    public void testMinStartValue() {
+        int[] nums = {1, 2};
+        int i = minStartValue(nums);
+        System.out.println(i);
+
+        //再来一个案例
+        int[] nums2 = {1, -2, 3};
+        int i2 = minStartValue(nums2);
+        System.out.println(i2);
+
+        //再来测试边界的案例
+        int[] nums3 = {1, -2, 3, 4};
+        int i3 = minStartValue(nums3);
+        System.out.println(i3);
+    }
+
+    // LCR 136. 删除链表的节点
+    public ListNode deleteNode(ListNode head, int val) {
+        return null;
+    }
+
+    // LCR 136. 删除链表的节点
+    @Test
+    public void testDeleteNode() {
+        ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i <= 5; i++) {
+            node.next = new ListNode(i);
+            node = node.next;
+        }
+        ListNode node1 = deleteNode(head, 3);
+        printList(node1);
+
+        //再来一个案例
+        ListNode head2 = new ListNode(1);
+        ListNode node2 = head2;
+        for (int i = 2; i <= 6; i++) {
+            node2.next = new ListNode(i);
+            node2 = node2.next;
+        }
+        ListNode node3 = deleteNode(head2, 6);
+        printList(node3);
+
+        //再来测试边界的案例
+        ListNode head3 = new ListNode(1);
+        ListNode node4 = head3;
+        for (int i = 2; i <= 1; i++) {
+            node4.next = new ListNode(i);
+            node4 = node4.next;
+        }
+        ListNode node5 = deleteNode(head3, 1);
+        printList(node5);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
