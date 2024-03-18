@@ -41,7 +41,7 @@ public class 链表二周目 {
     public ListNode reverseListI(ListNode head) {
         ListNode pre = null;
         ListNode cur = head;
-        while (cur!=null){
+        while (cur != null) {
             ListNode next = cur.next;
             cur.next = pre;
 
@@ -87,7 +87,7 @@ public class 链表二周目 {
     }
 
     // 92. 反转链表 II
-    public ListNode reverseBetween(ListNode head,  int left, int right) {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
         // 设置 dummyNode 是这一类问题的一般做法
         ListNode dummyNode = new ListNode(-1);
         dummyNode.next = head;
@@ -143,7 +143,32 @@ public class 链表二周目 {
 
     // 21. 合并两个有序链表
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        return null;
+        ListNode listNode = new ListNode(-1);
+
+        ListNode cur = listNode;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                cur.next = l1;
+                ListNode next = l1.next;
+                l1.next = null;
+                l1 = next;
+            } else {
+                cur.next = l2;
+                ListNode next = l2.next;
+                l2.next = null;
+                l2 = next;
+            }
+            cur = cur.next;
+        }
+
+        if (l1 != null) {
+            cur.next = l1;
+        }
+        if (l2 != null) {
+            cur.next = l2;
+        }
+
+        return listNode.next;
     }
 
     // 21. 合并两个有序链表
@@ -195,7 +220,24 @@ public class 链表二周目 {
 
     // 83. 删除排序链表中的重复元素
     public ListNode deleteDuplicates(ListNode head) {
-        return null;
+        if (head == null) return head;
+        ListNode listNode = new ListNode(-1);
+        listNode.next = head;
+
+        ListNode pre = head;
+        ListNode cur = head.next;
+
+        while (cur != null) {
+            ListNode next = cur.next;
+            if (pre.val == cur.val) {
+                pre.next = next;
+                cur = next;
+            } else {
+                pre = cur;
+                cur = next;
+            }
+        }
+        return listNode.next;
     }
 
     // 83. 删除排序链表中的重复元素
@@ -233,6 +275,19 @@ public class 链表二周目 {
 
     // 141. 环形链表
     public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if (fast == slow) return true;
+        }
+
         return false;
     }
 
@@ -273,7 +328,15 @@ public class 链表二周目 {
 
     // 160. 相交链表
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        return null;
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode pA = headA, pB = headB;
+        while (pA != pB) {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
+        }
+        return pA;
     }
 
     // 160. 相交链表
@@ -324,7 +387,17 @@ public class 链表二周目 {
 
     // 203. 移除链表元素
     public ListNode removeElements(ListNode head, int val) {
-        return null;
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode temp = dummyHead;
+        while (temp.next != null) {
+            if (temp.next.val == val) {
+                temp.next = temp.next.next;
+            } else {
+                temp = temp.next;
+            }
+        }
+        return dummyHead.next;
     }
 
     // 203. 移除链表元素
@@ -362,7 +435,51 @@ public class 链表二周目 {
 
     // 234. 回文链表
     public boolean isPalindrome(ListNode head) {
-        return false;
+        if (head == null) {
+            return true;
+        }
+
+        // 找到前半部分链表的尾节点并反转后半部分链表
+        ListNode firstHalfEnd = endOfFirstHalf(head);
+        ListNode secondHalfStart = reverseList(firstHalfEnd.next);
+
+        // 判断是否回文
+        ListNode p1 = head;
+        ListNode p2 = secondHalfStart;
+        boolean result = true;
+        while (result && p2 != null) {
+            if (p1.val != p2.val) {
+                result = false;
+            }
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+
+        // 还原链表并返回结果
+        firstHalfEnd.next = reverseList(secondHalfStart);
+        return result;
+    }
+
+    private ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+
+    private ListNode endOfFirstHalf(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
     }
 
     // 234. 回文链表
