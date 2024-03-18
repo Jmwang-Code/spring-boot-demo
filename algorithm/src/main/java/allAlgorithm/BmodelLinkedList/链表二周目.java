@@ -2,6 +2,8 @@ package allAlgorithm.BmodelLinkedList;
 
 import org.junit.Test;
 
+import java.util.List;
+
 public class 链表二周目 {
 
     // 单链表节点
@@ -37,7 +39,17 @@ public class 链表二周目 {
 
     // 206. 反转链表
     public ListNode reverseListI(ListNode head) {
-        return null;
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur!=null){
+            ListNode next = cur.next;
+            cur.next = pre;
+
+            pre = cur;
+            cur = next;
+        }
+
+        return pre;
     }
 
     // 206. 反转链表
@@ -75,8 +87,25 @@ public class 链表二周目 {
     }
 
     // 92. 反转链表 II
-    public ListNode reverseBetween(ListNode head, int m, int n) {
-        return null;
+    public ListNode reverseBetween(ListNode head,  int left, int right) {
+        // 设置 dummyNode 是这一类问题的一般做法
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+        ListNode pre = dummyNode;
+        for (int i = 0; i < left - 1; i++) {
+            pre = pre.next;
+        }
+        ListNode cur = pre.next;
+
+        ListNode next;
+        for (int i = 0; i < right - left; i++) {
+            next = cur.next;
+            cur.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+
+        return dummyNode.next;
     }
 
     // 92. 反转链表 II
@@ -429,22 +458,6 @@ public class 链表二周目 {
         ListNode node5 = deleteNode(head3, 1);
         printList(node5);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
