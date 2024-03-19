@@ -41,6 +41,11 @@ volatile有内存屏障，可以将内存屏障看成一条指令。可以避免
 ### 0.3.3 什么是CAS? 
 
 CAS: Compare And Swap，是Unsafe类的方法。比较并交换，是一种无锁算法。当达到预期值则进行交换，否则不进行交换。
+是乐观锁的一种实现。
+
+实用场景有：
+1. 轻量级锁升级为重量级锁。
+2. ConcurrentHashMap的put操作。
 
 ### 0.3.4 ThreadLocal内存泄漏问题
 
