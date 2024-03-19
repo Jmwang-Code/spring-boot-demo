@@ -80,6 +80,11 @@ public class Prototype implements Serializable {
 
 # 4. 策略模式（考虑业务场景）
 
+1. 基本实现
+2. 枚举实现
+3. 使用map存储策略
+4. Lambda 表达式实现
+
 ```java
 //策略模式 使用map存储策略
 public class StrategyFactory {
