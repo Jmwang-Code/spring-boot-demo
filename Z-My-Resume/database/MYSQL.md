@@ -135,7 +135,7 @@ Innodb每行数据都有向上指向的一个版本数据存放在undo log中，
 MVCC好处：读不加锁、读写不冲突，增加了并发，保证了事务。
 
 # 10. Mysql 主从复制原理以及流程
-保证主服务器（Master）和从（备Slave）的数据一致性，想Master进行数据修改后，（在一定规则下）Slave会将Master中数据同步过来。
+保证主服务器（Master）和从（备Slave）的数据一致性，Master进行数据修改后，Slave会将Master中数据同步过来。
 
 ## 10.1 MySQL 主从复制解决了什么问题？
 1.高可用和稳定性
