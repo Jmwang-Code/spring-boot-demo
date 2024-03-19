@@ -10,25 +10,18 @@ public class Singleton {
     }
 }
 
-// 懒汉式
-public class Singleton {
-    private static Singleton instance;
-    private Singleton() {}
-    public static synchronized Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
-
 // 支持并发的懒汉式
 public class Singleton {
+    // 使用volatile关键字保证多线程环境下的可见性
     private static volatile Singleton instance;
+    // 私有构造函数，防止外部实例化
     private Singleton() {}
     public static Singleton getInstance() {
+        // 第一次检查，如果实例已经创建，直接返回，避免不必要的同步
         if (instance == null) {
+            // 使用同步块，确保只有一个线程进入创建实例的代码块
             synchronized (Singleton.class) {
+                // 第二次检查，防止多个线程同时通过了第一次检查，造成重复创建实例
                 if (instance == null) {
                     instance = new Singleton();
                 }
@@ -41,12 +34,13 @@ public class Singleton {
 
 # 2. 工厂模式（考虑扩展性）
 从产品 、产品族 、产品等级结构 三个维度来考虑
-产品: 比如汽车发动机
-产品等级结构: 比如汽车发动机的不同型号
-产品族: 比如不同厂家生产的汽车发动机
-1. 创建单个产品等级结构，使用简单工厂模式（比如：某一款发动机）
-2. 创建单个产品族，使用工厂方法模式（比如：某一厂家的发动机，多个型号）
-3. 创建多个产品族，使用抽象工厂模式（比如：多个厂家的发动机，多个型号）
+产品: 比如汽车发动机、汽车轮胎
+产品等级结构: 比如汽车发动机的型号A B C、汽车轮胎的型号A B C
+产品族: 比如某一厂家的发动机、轮胎
+1. 简单工厂模式，创建单个产品（比如：汽车发动机、轮胎）
+2. 工厂方法模式，创建单个产品族（比如：某一厂家的发动机、某一厂家的轮胎）
+3. 抽象工厂模式，创建多个产品族、多个产品等级（比如：多个厂家的发动机、轮胎）
+
 
 # 3. 原型模式（考虑对象创建成本）
 1. 浅克隆:创建一个新对象，但是属性和原对象都指向相同的内存地址。（实现 Cloneable 接口和重写 Object 类的 clone() 方法）
