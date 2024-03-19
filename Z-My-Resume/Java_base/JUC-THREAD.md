@@ -52,9 +52,11 @@ CAS: Compare And Swap，是Unsafe类的方法。比较并交换，是一种无�
 首先要清楚ThreadLocal是如何实现线程绑定的空间。ThreadLocal的核心是ThreadLocalMap的数据结构，而ThreadLocalMap是基于Entry[]实现的。Entry[]数组中存放的就是ThreadLocal的key和value。
 
 **内存泄漏问题：**
+
 Entry对象的key是弱引用，也就是说当CG回收时会被回收，但是value是强引用，所以当key被回收时，value不会被回收，这样就会造成内存泄漏。
 
 **解决方法：**
+
 当前线程使用完ThreadLocal后，调用remove方法。
 
 # 1. 你能聊聊线程池么？（简单介绍一下线程池！ 你使用过线程池么？）
@@ -88,7 +90,7 @@ Entry对象的key是弱引用，也就是说当CG回收时会被回收，但是v
 - **`ThreadPoolExecutor.AbortPolicy`**：直接抛出异常。
 - **`ThreadPoolExecutor.CallerRunsPolicy`**：用调用者所在的线程来执行任务。
 - **`ThreadPoolExecutor.DiscardPolicy`**：不处理，丢弃掉。
-- **`ThreadPoolExecutor.DiscardOldestPolicy`**：此策略将丢弃最早的未处理的任务请求，并且添加当前任务进入队列。
+- **`ThreadPoolExecutor.DiscardOldestPolicy`**：此策略将丢弃最早的未处理的任务，并且添加当前任务进入队列。
 
 ## 3.2 最大线程池数量多会发挥作用？
 我们在代码中模拟了10个任务，我们配置的核心线程数为5，最大线程数为10，任务队列的容量为100，所以当有10个任务提交的时候，前5个任务会被立即执行，而后面5个任务会被放入任务队列中等待执行，当任务队列满了以后，还有任务提交的话，就会创建新的线程执行任务，直到线程数达到最大线程数10，如果还有任务提交的话，就会根据我们配置的饱和策略来处理。
@@ -106,7 +108,7 @@ Entry对象的key是弱引用，也就是说当CG回收时会被回收，但是v
 <img src="../images/JAVA-前缀树加载不同数据源.png" width="50%" height="auto">
 
 **此时数据源配置和线程池配置都配置在yml文件：**
-1. 比如我配置了10个数据源（流处理），那么我会配置核心线程1，最大线程10，队列长度1。以达到最大加载速度。最后剩余一个核心线程用于正常的算法树增删。
+1. 比如我配置了10个数据源（流处理），那么我会配置核心线程1，最大线程10，队列长度1。以达到最大加载速度。这个主要根据数据源数量进行调控
 
 <font color='red'><h1>model two</h1></font>
 数据源提供者服务中，可能会出现多个异步查询任务，并且通过IO进行持久化Or返回给前端，此时使用IO密集型的线程池。
