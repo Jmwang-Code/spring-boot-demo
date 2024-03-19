@@ -1,6 +1,7 @@
 # 1. Spring的事务是如何回滚的？
 
-![img_3.png](../images/SPRING-%20Spring的事务是如何回滚的.png)
+
+![SPRING-Spring的事务是如何回滚的.png](../images/SPRING-Spring的事务是如何回滚的.png)
 
 # 2. Spring常用事务传播行为？
 
@@ -14,6 +15,7 @@
 2. 异常处理不当，事务方法中出现try-catch代码块
 3. 数据库引擎不支持事务，如MyISAM
 4. 在父函数设置了@Transactional，子函数没有设置@Transactional
+5. （实战中见过、主要卡了我半天）事务方法中出现了多个数据库连接，导致事务失效（封装方法中调用了多个事务方法）
 
 # 4. 两个事务主要解决的三种模式
 ![img_6.png](../images/SPRING-事务融入.png)
