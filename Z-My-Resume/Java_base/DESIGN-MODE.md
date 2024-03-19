@@ -46,6 +46,38 @@ public class Singleton {
 1. 浅克隆:创建一个新对象，但是属性和原对象都指向相同的内存地址。（实现 Cloneable 接口和重写 Object 类的 clone() 方法）
 2. 深克隆:创建一个新对象，属性和原对象的属性指向不同的内存地址。（序列化和反序列化、递归复制）
 
+```java
+// 浅克隆
+public class Prototype implements Cloneable {
+    @Override
+    public Prototype clone() {
+        try {
+            return (Prototype) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+
+// 深克隆
+public class Prototype implements Serializable {
+    public Prototype deepClone() {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(this);
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            return (Prototype) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+```
+
 # 4. 策略模式（考虑业务场景）
 
 ```java
