@@ -5,20 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.cn.jmw</groupId>
-        <artifactId>spring-boot-demo</artifactId>
+        <artifactId>My-Resume</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>My-Resume</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>JAVA-BASE-CONLLECTIONS</module>
-        <module>JAVA-BASE-DESIGN-MODE</module>
-        <module>JAVA-BASE-CGLIB-JDK</module>
-        <module>JAVA-BASE-JUC-LOCK</module>
-        <module>JAVA-BASE-THREAD</module>
-        <module>JAVA-BASE-SPI</module>
-    </modules>
+    <artifactId>JAVA-BASE-SPI</artifactId>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
