@@ -18,6 +18,15 @@
         <module>JAVA-BASE-JUC-LOCK</module>
         <module>JAVA-BASE-THREAD</module>
         <module>JAVA-BASE-SPI</module>
+        <module>SPRING-CORE</module>
+        <module>SPRING_BEAN_LIFE_CYCLE</module>
+        <module>SPRING_TRANSACTION</module>
+        <module>ES</module>
+        <module>KAFKA</module>
+        <module>REDIS</module>
+        <module>Distributed</module>
+        <module>MYSQL</module>
+        <module>JVM</module>
     </modules>
 
     <properties>
