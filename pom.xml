@@ -95,6 +95,7 @@
     <module>demo-okhttp</module>
       <module>demo-Authentication-Policy</module>
       <module>unix</module>
+      <module>My-Resume</module>
       <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
