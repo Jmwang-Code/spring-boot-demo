@@ -1,6 +1,7 @@
 package myCollections;
 
 import java.util.Arrays;
+import java.util.RandomAccess;
 
 /**
  * 属性:
@@ -20,7 +21,8 @@ import java.util.Arrays;
  * clear()：清空列表中的所有元素。
  *
  */
-public class MyArrayList<E> {
+//RandomAccess作用是instanceof来判断是否支持随机访问
+public class MyArrayList<E> implements RandomAccess {
     // 默认初始容量
     private static final int DEFAULT_CAPACITY = 10;
 
