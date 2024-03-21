@@ -3,6 +3,7 @@ import factory.method.奥迪轮胎工厂;
 import factory.奔驰零件;
 import factory.single.简单工厂;
 import org.junit.Test;
+import prototype.Prototype;
 import singleton.SingletonHunger;
 import singleton.SingletonLazy;
 
@@ -16,7 +17,7 @@ public class TestDesignMode {
         // 创建多个线程，尝试获取 SingletonHunger 的实例
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
-                SingletonHunger instance = SingletonHunger.getInstance();
+                Prototype instance = SingletonHunger.getInstance();
                 System.out.println(Thread.currentThread().getName() + ": " + instance);
             }).start();
         }
@@ -34,7 +35,7 @@ public class TestDesignMode {
         // 创建多个线程，尝试获取 SingletonLazy 的实例
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
-                SingletonLazy instance = SingletonLazy.getInstance();
+                Prototype instance = SingletonLazy.getInstance();
                 System.out.println(Thread.currentThread().getName() + ": " + instance);
             }).start();
         }

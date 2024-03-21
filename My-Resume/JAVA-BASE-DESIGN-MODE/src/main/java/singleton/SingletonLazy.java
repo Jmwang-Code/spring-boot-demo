@@ -1,17 +1,19 @@
 package singleton;
 
+import prototype.Prototype;
+
 public class SingletonLazy {
 
     //懒汉式
-    private static volatile SingletonLazy singletonHunger = null;
+    private static volatile Prototype singletonHunger = null;
 
     SingletonLazy(){};
 
-    public static SingletonLazy getInstance(){
+    public static Prototype getInstance(){
         if (singletonHunger==null){
-            synchronized (SingletonLazy.class){
+            synchronized (Prototype.class){
                 if (singletonHunger==null){
-                    singletonHunger = new SingletonLazy();
+                    singletonHunger = new Prototype();
                 }
             }
         }
