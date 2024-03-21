@@ -78,5 +78,19 @@ public class MyArrayList<E> implements RandomAccess {
     }
 
     // 可选：实现其他方法，如 remove、contains、clear 等
+
+    //
+    public E remove(int index){
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        E oldValue = get(index); // 获取要删除的元素
+        int numMoved = size - index - 1; // 计算需要移动的元素个数
+        if (numMoved > 0) {
+            System.arraycopy(elementData, index + 1, elementData, index, numMoved); // 移动元素
+        }
+        elementData[--size] = null; // 将最后一个元素置为 null，并更新 size
+        return oldValue;
+    }
 }
 
