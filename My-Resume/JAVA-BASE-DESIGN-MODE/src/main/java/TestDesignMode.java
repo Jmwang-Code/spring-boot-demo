@@ -1,3 +1,5 @@
+import factory.method.奔驰发动机工厂;
+import factory.method.奥迪轮胎工厂;
 import factory.汽车零件;
 import factory.single.简单工厂;
 import org.junit.Test;
@@ -55,5 +57,12 @@ public class TestDesignMode {
 
         汽车零件 汽车发动机 = 简单工厂.createProduct("汽车发动机");
         汽车发动机.operation();
+    }
+
+    @Test
+    public void testFactoryMethod(){
+        new 奔驰发动机工厂().createProduct().operation();
+
+        new 奥迪轮胎工厂().createProduct().operation();
     }
 }

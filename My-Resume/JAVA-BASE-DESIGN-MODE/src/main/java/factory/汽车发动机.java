@@ -4,6 +4,6 @@ package factory;
 public class 汽车发动机 implements 汽车零件 {
     @Override
     public void operation() {
-        System.out.println("汽车发动机B生产");
+        System.out.println("汽车发动机生产");
     }
 }
