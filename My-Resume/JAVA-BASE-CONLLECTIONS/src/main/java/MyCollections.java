@@ -1,4 +1,5 @@
 import myCollections.MyArrayList;
+import myCollections.MyConcurrentHashMap;
 import org.junit.Test;
 
 
@@ -15,5 +16,9 @@ public class MyCollections {
         System.out.println(list.get(1));
         System.out.println(list.size());
         System.out.println(list.remove(1));
+
+        MyConcurrentHashMap<Object, Object> map = new MyConcurrentHashMap<>();
+
+
     }
 }
