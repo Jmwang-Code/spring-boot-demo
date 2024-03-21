@@ -12,8 +12,6 @@ import java.util.List;
 
 public class TestDesignMode {
 
-    int[] arr = new int[]{1,2,3};
-
     /**
      * TODO 单例模式
      */
@@ -70,5 +68,26 @@ public class TestDesignMode {
         new 奔驰发动机工厂().createProduct().operation();
 
         new 奥迪轮胎工厂().createProduct().operation();
+    }
+
+    /**
+     * TODO 原型模式
+     */
+    @Test
+    public void testClone(){
+        Prototype instance = SingletonHunger.getInstance();
+        Prototype clone = instance.clone();
+
+        System.out.println(clone==instance);//false
+        System.out.println(clone.arr==instance.arr);//true
+    }
+
+    @Test
+    public void testDeepClone(){
+        Prototype instance = SingletonHunger.getInstance();
+        Prototype prototype = instance.deepClone();
+
+        System.out.println(instance==prototype);//false
+        System.out.println(prototype.arr==instance.arr);//false
     }
 }

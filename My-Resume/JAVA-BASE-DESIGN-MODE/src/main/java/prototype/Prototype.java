@@ -3,6 +3,8 @@ package prototype;
 import java.io.*;
 
 public class Prototype implements Cloneable, Serializable {
+
+    public int[] arr = new int[]{1,2,3};
     @Override
     public Prototype clone() {
         try {
