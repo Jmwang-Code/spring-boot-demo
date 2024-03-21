@@ -1,6 +1,6 @@
 import factory.method.奔驰发动机工厂;
 import factory.method.奥迪轮胎工厂;
-import factory.汽车零件;
+import factory.奔驰零件;
 import factory.single.简单工厂;
 import org.junit.Test;
 import singleton.SingletonHunger;
@@ -52,10 +52,10 @@ public class TestDesignMode {
      */
     @Test
     public void testSingleFactory(){
-        汽车零件 汽车轮胎 = 简单工厂.createProduct("汽车轮胎");
+        奔驰零件 汽车轮胎 = 简单工厂.createProduct("汽车轮胎");
         汽车轮胎.operation();
 
-        汽车零件 汽车发动机 = 简单工厂.createProduct("汽车发动机");
+        奔驰零件 汽车发动机 = 简单工厂.createProduct("汽车发动机");
         汽车发动机.operation();
     }
 

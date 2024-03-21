@@ -1,8 +1,8 @@
 package factory.method;
 
-import factory.汽车零件;
+import factory.奔驰零件;
 
 public interface 工厂方法 {
 
-    汽车零件 createProduct();
+    奔驰零件 createProduct();
 }

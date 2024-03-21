@@ -1,12 +1,12 @@
 package factory.method;
 
-import factory.汽车轮胎;
-import factory.汽车零件;
+import factory.奔驰轮胎;
+import factory.奔驰零件;
 
 public class 奥迪轮胎工厂 implements 工厂方法{
     @Override
-    public 汽车零件 createProduct() {
+    public 奔驰零件 createProduct() {
         System.out.print("奥迪轮胎工厂:");
-        return new 汽车轮胎();
+        return new 奔驰轮胎();
     }
 }
