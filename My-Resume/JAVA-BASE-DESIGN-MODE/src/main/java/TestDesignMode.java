@@ -7,7 +7,12 @@ import prototype.Prototype;
 import singleton.SingletonHunger;
 import singleton.SingletonLazy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestDesignMode {
+
+    int[] arr = new int[]{1,2,3};
 
     /**
      * TODO 单例模式
