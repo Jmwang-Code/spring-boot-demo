@@ -4,11 +4,14 @@ import factory.奔驰零件;
 import factory.single.简单工厂;
 import org.junit.Test;
 import prototype.Prototype;
+import proxy.AbstractObject;
+import proxy.GenericJDKDynamicProxyHandler;
 import proxy.ProxyObject;
 import proxy.RealObject;
 import singleton.SingletonHunger;
 import singleton.SingletonLazy;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +60,7 @@ public class TestDesignMode {
      * TODO 工厂模式
      */
     @Test
-    public void testSingleFactory(){
+    public void testSingleFactory() {
         奔驰零件 汽车轮胎 = 简单工厂.createProduct("汽车轮胎");
         汽车轮胎.operation();
 
@@ -66,7 +69,7 @@ public class TestDesignMode {
     }
 
     @Test
-    public void testFactoryMethod(){
+    public void testFactoryMethod() {
         new 奔驰发动机工厂().createProduct().operation();
 
         new 奥迪轮胎工厂().createProduct().operation();
@@ -76,27 +79,27 @@ public class TestDesignMode {
      * TODO 原型模式
      */
     @Test
-    public void testClone(){
+    public void testClone() {
         Prototype instance = SingletonHunger.getInstance();
         Prototype clone = instance.clone();
 
-        System.out.println(clone==instance);//false
-        System.out.println(clone.arr==instance.arr);//true
+        System.out.println(clone == instance);//false
+        System.out.println(clone.arr == instance.arr);//true
     }
 
     @Test
-    public void testDeepClone(){
+    public void testDeepClone() {
         Prototype instance = SingletonHunger.getInstance();
         Prototype prototype = instance.deepClone();
 
-        System.out.println(instance==prototype);//false
-        System.out.println(prototype.arr==instance.arr);//false
+        System.out.println(instance == prototype);//false
+        System.out.println(prototype.arr == instance.arr);//false
     }
 
     //代理模式
     @Test
-    public void testProxy(){
-        //代理模式
+    public void testProxy() throws Throwable {
+        //静态代理
         //1.真实对象
         RealObject realObject = new RealObject();
         //2.代理对象
@@ -104,8 +107,9 @@ public class TestDesignMode {
         //3.代理对象调用方法
         proxyObject.operation();
 
-        //静态代理
-        //动态代理
+        //JDK动态代理
+        new GenericJDKDynamicProxyHandler(realObject).invoke(realObject, RealObject.class.getMethod("operation"), null);
+
     }
 
 }
