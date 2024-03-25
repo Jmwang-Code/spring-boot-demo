@@ -3,7 +3,9 @@ import factory.method.奥迪轮胎工厂;
 import factory.奔驰零件;
 import factory.single.简单工厂;
 import org.junit.Test;
+import org.springframework.cglib.proxy.Enhancer;
 import prototype.Prototype;
+import proxy.CGLIBDynamicProxyHandler;
 import proxy.JDKDynamicProxyHandler;
 import proxy.ProxyObject;
 import proxy.RealObject;
@@ -105,6 +107,18 @@ public class TestDesignMode {
         //JDK动态代理
         new JDKDynamicProxyHandler(realObject).invoke(realObject, RealObject.class.getMethod("operation"), null);
 
+        //CGLIB动态代理
+        // 创建 Enhancer 对象
+        Enhancer enhancer = new Enhancer();
+        // 设置目标类的父类
+        enhancer.setSuperclass(RealObject.class);
+        // 设置回调对象
+        enhancer.setCallback(new CGLIBDynamicProxyHandler());
+        // 创建代理对象
+        RealObject proxy = (RealObject) enhancer.create();
+
+        // 调用代理对象的方法
+        proxy.operation();
     }
 
 }
