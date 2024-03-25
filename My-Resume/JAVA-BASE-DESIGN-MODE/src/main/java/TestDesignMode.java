@@ -4,6 +4,8 @@ import factory.奔驰零件;
 import factory.single.简单工厂;
 import org.junit.Test;
 import prototype.Prototype;
+import proxy.ProxyObject;
+import proxy.RealObject;
 import singleton.SingletonHunger;
 import singleton.SingletonLazy;
 
@@ -90,4 +92,22 @@ public class TestDesignMode {
         System.out.println(instance==prototype);//false
         System.out.println(prototype.arr==instance.arr);//false
     }
+
+    //代理模式
+    @Test
+    public void testProxy(){
+        //代理模式
+        //1.真实对象
+        RealObject realObject = new RealObject();
+        //2.代理对象
+        ProxyObject proxyObject = new ProxyObject(realObject);
+        //3.代理对象调用方法
+        proxyObject.operation();
+
+        //静态代理
+        //动态代理
+    }
+
 }
+
+
