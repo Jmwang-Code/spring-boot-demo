@@ -3,10 +3,10 @@ package proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class GenericJDKDynamicProxyHandler implements InvocationHandler {
+public class JDKDynamicProxyHandler implements InvocationHandler {
     private Object target;
 
-    public GenericJDKDynamicProxyHandler(Object target) {
+    public JDKDynamicProxyHandler(Object target) {
         this.target = target;
     }
 

@@ -4,16 +4,11 @@ import factory.奔驰零件;
 import factory.single.简单工厂;
 import org.junit.Test;
 import prototype.Prototype;
-import proxy.AbstractObject;
-import proxy.GenericJDKDynamicProxyHandler;
+import proxy.JDKDynamicProxyHandler;
 import proxy.ProxyObject;
 import proxy.RealObject;
 import singleton.SingletonHunger;
 import singleton.SingletonLazy;
-
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestDesignMode {
 
@@ -108,7 +103,7 @@ public class TestDesignMode {
         proxyObject.operation();
 
         //JDK动态代理
-        new GenericJDKDynamicProxyHandler(realObject).invoke(realObject, RealObject.class.getMethod("operation"), null);
+        new JDKDynamicProxyHandler(realObject).invoke(realObject, RealObject.class.getMethod("operation"), null);
 
     }
 
