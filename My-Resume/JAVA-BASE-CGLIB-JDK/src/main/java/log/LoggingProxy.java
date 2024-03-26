@@ -24,16 +24,16 @@ public class LoggingProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 记录方法执行前的日志信息
         long startTime = System.currentTimeMillis();
-        System.out.println("方法 " + method.getName() + " is about to be executed.");
-        System.out.println("Method arguments: " + Arrays.toString(args));
+        System.out.println("方法 " + method.getName() + "即将执行.");
+        System.out.println("方法参数: " + Arrays.toString(args));
 
         // 调用目标方法
         Object result = method.invoke(target, args);
 
         // 记录方法执行后的日志信息
         long endTime = System.currentTimeMillis();
-        System.out.println("方法 " + method.getName() + " execution completed.");
-        System.out.println("Execution time: " + (endTime - startTime) + " milliseconds");
+        System.out.println("方法 " + method.getName() + "执行已完成.");
+        System.out.println("执行时间: " + (endTime - startTime) + " 毫秒");
 
         return result;
     }
