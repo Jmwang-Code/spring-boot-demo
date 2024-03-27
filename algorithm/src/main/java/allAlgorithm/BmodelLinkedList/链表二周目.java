@@ -576,5 +576,49 @@ public class 链表二周目 {
         printList(node5);
     }
 
+    // 876. 链表的中间结点
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
 
+        while (fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    // 876. 链表的中间结点
+    @Test
+    public void testMiddleNode() {
+        ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i <= 5; i++) {
+            node.next = new ListNode(i);
+            node = node.next;
+        }
+        ListNode node1 = middleNode(head);
+        System.out.println(node1.val);
+
+        //再来一个案例
+        ListNode head2 = new ListNode(1);
+        ListNode node2 = head2;
+        for (int i = 2; i <= 6; i++) {
+            node2.next = new ListNode(i);
+            node2 = node2.next;
+        }
+        ListNode node3 = middleNode(head2);
+        System.out.println(node3.val);
+
+        //再来测试边界的案例
+        ListNode head3 = new ListNode(1);
+        ListNode node4 = head3;
+        for (int i = 2; i <= 1; i++) {
+            node4.next = new ListNode(i);
+            node4 = node4.next;
+        }
+        ListNode node5 = middleNode(head3);
+        System.out.println(node5.val);
+    }
 }
