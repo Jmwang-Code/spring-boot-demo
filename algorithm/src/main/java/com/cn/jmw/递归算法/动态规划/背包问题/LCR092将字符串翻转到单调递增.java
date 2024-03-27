@@ -42,31 +42,17 @@ public class LCR092将字符串翻转到单调递增 {
         return Math.min(dp0[n], dp1[n]);
     }
 
-    //递归常式
     public int minFlipsMonoIncr3(String s) {
-        return minFlips(s.toCharArray(), 0, 0);
-    }
+        int n = s.length();
+        int[] dp0 = new int[n + 1]; // dp0[i]表示将前i个字符全部变成0所需的最小翻转次数
+        int[] dp1 = new int[n + 1]; // dp1[i]表示将前i个字符全部变成1所需的最小翻转次数
 
-    private int minFlips(char[] s, int index, int flips) {
-        if (index == s.length) {
-            return flips;
+        for (int i = 1; i <= n; i++) {
+            dp0[i] = dp0[i - 1] + (s.charAt(i - 1) == '1' ? 1 : 0); // 如果当前字符是'1'，则需要进行翻转
+            dp1[i] = Math.min(dp0[i - 1], dp1[i - 1]) + (s.charAt(i - 1) == '0' ? 1 : 0); // 如果当前字符是'0'，则需要进行翻转
         }
 
-        // 第一种情况：将当前位置的字符变为 '0'，并继续递归处理下一个位置
-        int flipsWithZero = s[index] == '0' ? 0 : 1;
-        int flips1 = minFlips(s, index + 1, flips + flipsWithZero);
-
-        // 第二种情况：将当前位置的字符变为 '1'，并将后续所有的字符都变为 '0'，并统计变换次数
-        int flipsWithOne = s[index] == '1' ? 0 : 1;
-        for (int i = index + 1; i < s.length; i++) {
-            if (s[i] == '1') {
-                flipsWithOne++;
-            }
-        }
-        int flips2 = minFlips(s, index + 1, flipsWithOne);
-
-        // 返回两种情况下的较小值
-        return Math.min(flips1, flips2);
+        return Math.min(dp0[n], dp1[n]);
     }
 
 
@@ -78,4 +64,5 @@ public class LCR092将字符串翻转到单调递增 {
 
         System.out.println(minFlipsMonoIncr3("00011000"));
     }
+
 }
