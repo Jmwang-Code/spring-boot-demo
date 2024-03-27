@@ -34,7 +34,7 @@ public class LoggingProxy implements InvocationHandler {
         long endTime = System.currentTimeMillis();
         System.out.println("方法 " + method.getName() + "执行已完成.");
         System.out.println("执行时间: " + (endTime - startTime) + " 毫秒");
-
+        System.out.println("————————————————————————————————————————————");
         return result;
     }
 
