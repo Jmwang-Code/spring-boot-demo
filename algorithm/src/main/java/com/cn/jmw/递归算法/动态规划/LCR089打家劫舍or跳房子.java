@@ -15,7 +15,7 @@ public class LCR089打家劫舍or跳房子 {
             return nums[0];
         }
 
-        return Math.max(process(nums, 0), process(nums, 1));
+        return Math.max(process(nums, 0),Math.max(process(nums, 2), process(nums, 1)));
     }
 
     //nums 数组
@@ -45,7 +45,7 @@ public class LCR089打家劫舍or跳房子 {
         int[] dp = new int[nums.length + 1];
         Arrays.fill(dp, -1);
 
-        return Math.max(process2(nums, 0, dp), process2(nums, 1, dp));
+        return Math.max(process2(nums, 0, dp), Math.max(process2(nums, 2, dp), process2(nums, 1, dp)));
     }
 
     public int process2(int[] nums, int index, int[] dp) {
@@ -84,7 +84,7 @@ public class LCR089打家劫舍or跳房子 {
             dp[i] = nums[i] + Math.max(dp[i+2],dp[i+3]);
         }
 
-        return Math.max(dp[0],dp[1]);
+        return Math.max(dp[0],Math.max(dp[1],dp[2]));
     }
 
     /**
@@ -119,13 +119,13 @@ public class LCR089打家劫舍or跳房子 {
         //rob 不是静态的
         LCR089打家劫舍or跳房子 lcr089打家劫舍or跳房子 = new LCR089打家劫舍or跳房子();
         int[] nums = {2, 7, 9, 3, 1};
-        System.out.println(lcr089打家劫舍or跳房子.rob4(nums));
+        System.out.println(lcr089打家劫舍or跳房子.rob3(nums));
         //继续案例
         int[] nums1 = {1, 2, 3, 1};
-        System.out.println(lcr089打家劫舍or跳房子.rob4(nums1));
+        System.out.println(lcr089打家劫舍or跳房子.rob3(nums1));
         //继续案例
         int[] nums2 = {1, 3, 1};
-        System.out.println(lcr089打家劫舍or跳房子.rob4(nums2));
+        System.out.println(lcr089打家劫舍or跳房子.rob3(nums2));
 
     }
 
