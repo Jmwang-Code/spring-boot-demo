@@ -7,45 +7,46 @@ import java.util.List;
 
 public class LCR087复原IP地址 {
 
-    int SEG_COUNT = 4;
-    List<String> ret = new ArrayList<>();
-    int[] segments = new int[4];
+    int IP_LENGTH = 4;
+    List<String> addresses = new ArrayList<>();
+    int[] ipAddress = new int[IP_LENGTH];
 
     public List<String> restoreIpAddresses(String s) {
         dfs(s, 0, 0);
 
-        List<String> list = new ArrayList<>();
-        return ret;
+        return addresses;
 
     }
 
-    private void dfs(String s, int segId, int segStart) {
-        if (segId == 4) {
-            if (segStart == s.length()) {
+    //segId 表示当前是第几段，segStart表示当前段的起始位置
+    //segStart表示当前段的起始位置
+    private void dfs(String s, int ipAddressIndex, int arrIndex) {
+        if (ipAddressIndex == IP_LENGTH) {
+            if (arrIndex == s.length()) {
                 StringBuilder ipAddr = new StringBuilder();
                 for (int i = 0; i < 4; i++) {
-                    ipAddr.append(segments[i]);
+                    ipAddr.append(ipAddress[i]);
                     if (i != 4 - 1) {
                         ipAddr.append('.');
                     }
                 }
-                ret.add(ipAddr.toString());
+                addresses.add(ipAddr.toString());
             }
             return;
         }
-        if (segStart == s.length()) {
+        if (arrIndex == s.length()) {
             return;
         }
-        if (s.charAt(segStart) == '0') {
-            segments[segId] = 0;
-            dfs(s, segId + 1, segStart + 1);
+        if (s.charAt(arrIndex) == '0') {
+            ipAddress[ipAddressIndex] = 0;
+            dfs(s, ipAddressIndex + 1, arrIndex + 1);
         }
         int addr = 0;
-        for (int segEnd = segStart; segEnd < s.length(); segEnd++) {
+        for (int segEnd = arrIndex; segEnd < s.length(); segEnd++) {
             addr = addr * 10 + (s.charAt(segEnd) - '0');
             if (addr > 0 && addr <= 0xff) {
-                segments[segId] = addr;
-                dfs(s, segId + 1, segEnd + 1);
+                ipAddress[ipAddressIndex] = addr;
+                dfs(s, ipAddressIndex + 1, segEnd + 1);
             } else {
                 break;
             }
