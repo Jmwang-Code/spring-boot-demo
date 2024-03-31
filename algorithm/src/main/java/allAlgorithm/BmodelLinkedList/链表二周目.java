@@ -2,6 +2,7 @@ package allAlgorithm.BmodelLinkedList;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class 链表二周目 {
@@ -581,7 +582,7 @@ public class 链表二周目 {
         ListNode slow = head;
         ListNode fast = head;
 
-        while (fast!=null && fast.next!=null){
+        while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
@@ -620,5 +621,60 @@ public class 链表二周目 {
         }
         ListNode node5 = middleNode(head3);
         System.out.println(node5.val);
+    }
+
+    //725. 分隔链表
+    public ListNode[] splitListToParts(ListNode root, int k) {
+        //剪断连接 存入List
+        List<ListNode> listNodes = new ArrayList<>();
+        ListNode node = root;
+        while (node != null) {
+            listNodes.add(node);
+            ListNode next = node.next;
+            node.next = null;
+            node = next;
+        }
+
+        //计算每个链表的长度
+        int len = listNodes.size();
+        int avg = len / k;
+        int mod = len % k;
+
+
+        ListNode[] res = new ListNode[k];
+        for (int i = 0; i < k; i++) {
+            ListNode head = new ListNode(-1);
+            ListNode cur = head;
+            for (int j = 0; j < avg + (i < mod ? 1 : 0); j++) {
+                cur.next = listNodes.remove(0);
+                cur = cur.next;
+            }
+            res[i] = head.next;
+        }
+
+        return res;
+    }
+
+    //725. 分隔链表
+    @Test
+    public void testSplitListToParts() {
+        //head = [1,2,3], k = 5
+        ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i <= 3; i++) {
+            node.next = new ListNode(i);
+            node = node.next;
+        }
+        ListNode[] listNodes = splitListToParts(head, 5);
+
+        //head = [1,2,3,4,5,6,7,8,9,10], k = 3
+        ListNode head2 = new ListNode(1);
+        ListNode node2 = head2;
+        for (int i = 2; i <= 10; i++) {
+            node2.next = new ListNode(i);
+            node2 = node2.next;
+        }
+        ListNode[] listNodes2 = splitListToParts(head2, 3);
+
     }
 }
