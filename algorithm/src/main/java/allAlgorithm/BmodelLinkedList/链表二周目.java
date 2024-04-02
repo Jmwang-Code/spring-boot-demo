@@ -696,8 +696,8 @@ public class 链表二周目 {
 
     //109. 有序链表转换二叉搜索树
     public TreeNode sortedListToBST(ListNode head) {
-        if (head==null)return null;
-        if (head.next==null)return new TreeNode(head.val);
+        if (head == null) return null;
+        if (head.next == null) return new TreeNode(head.val);
         ListNode cur = fastSlow(head);
 
         TreeNode node = new TreeNode(cur.val);
@@ -707,14 +707,14 @@ public class 链表二周目 {
         return node;
     }
 
-    public ListNode fastSlow(ListNode head){
-        if (head==null) return null;
-        if (head.next==null)return head;
+    public ListNode fastSlow(ListNode head) {
+        if (head == null) return null;
+        if (head.next == null) return head;
         ListNode fast = head;
         ListNode slow = head;
 
         ListNode slowPre = null;
-        while (fast!=null && fast.next!=null){
+        while (fast != null && fast.next != null) {
             fast = fast.next.next;
             slowPre = slow;
             slow = slow.next;
@@ -755,7 +755,35 @@ public class 链表二周目 {
 
     //147. 对链表进行插入排序
     public ListNode insertionSortList(ListNode head) {
+        // 1. 首先判断给定的链表是否为空，若为空，则不需要进行排序，直接返回。
+        if (head == null) {
+            return head;
+        }
 
+        // 2. 链表初始化操作
+        ListNode dummyHead = new ListNode(0); // 引入哑节点
+        dummyHead.next = head;                // 目的是在head之前插入节点
+        ListNode lastSorted = head;           // 维护lastSorted为链表已经排好序的最后一个节点并初始化
+        ListNode curr = head.next;            // 维护curr 为待插入的元素并初始化
+
+        // 3. 插入排序
+        while (curr != null) {
+            if (lastSorted.val <= curr.val) {     // 说明curr应该位于lastSorted之后
+                lastSorted = lastSorted.next;   // 将lastSorted后移一位,curr变成新的lastSorted
+            } else {                              // 否则,从链表头结点开始向后遍历链表中的节点
+                ListNode prev = dummyHead;      // 从链表头开始遍历 prev是插入节点curr位置的前一个节点
+                while (prev.next.val <= curr.val) { // 循环退出的条件是找到curr应该插入的位置
+                    prev = prev.next;
+                }
+                // 以下三行是为了完成对curr的插入（配合题解动图可以直观看出）
+                lastSorted.next = curr.next;
+                curr.next = prev.next;
+                prev.next = curr;
+            }
+            curr = lastSorted.next; // 此时 curr 为下一个待插入的元素
+        }
+        // 返回排好序的链表
+        return dummyHead.next;
     }
 
     // 147. 对链表进行插入排序
@@ -773,6 +801,29 @@ public class 链表二周目 {
         head2.next = new ListNode(5, new ListNode(3, new ListNode(4, new ListNode(0))));
         ListNode node2 = head2;
         ListNode node3 = insertionSortList(node2);
+        printList(node3);
+    }
+
+    //148. 排序链表
+    public ListNode sortList(ListNode head) {
+
+    }
+
+    //148. 排序链表
+    @Test
+    public void testSortList() {
+        //head = [4,2,1,3]
+        ListNode head = new ListNode(4);
+        head.next = new ListNode(2, new ListNode(1, new ListNode(3)));
+        ListNode node = head;
+        ListNode node1 = sortList(node);
+        printList(node1);
+
+        //head = [-1,5,3,4,0]
+        ListNode head2 = new ListNode(-1);
+        head2.next = new ListNode(5, new ListNode(3, new ListNode(4, new ListNode(0))));
+        ListNode node2 = head2;
+        ListNode node3 = sortList(node2);
         printList(node3);
     }
 }
