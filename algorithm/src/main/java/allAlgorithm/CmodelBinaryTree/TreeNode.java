@@ -2,11 +2,11 @@ package allAlgorithm.CmodelBinaryTree;
 
 public class TreeNode {
 
-    int val;
-    TreeNode left;
-    TreeNode right;
+    public int val;
+    public TreeNode left;
+    public TreeNode right;
 
-    TreeNode(int x) {
+    public TreeNode(int x) {
         val = x;
     }
 
@@ -27,6 +27,16 @@ public class TreeNode {
         //置空左指针
         root.left = null;
         return minNode;
+    }
+
+    //按照层次遍历的方式打印二叉树
+    public static void printTree(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        System.out.println(root.val);
+        printTree(root.left);
+        printTree(root.right);
     }
     public static void main(String[] args) {
         TreeNode root = new TreeNode(4);

@@ -1,5 +1,6 @@
 package allAlgorithm.BmodelLinkedList;
 
+import allAlgorithm.CmodelBinaryTree.TreeNode;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,6 +15,21 @@ public class 链表二周目 {
 
         ListNode(int x) {
             val = x;
+        }
+
+        ListNode(int x, ListNode next) {
+            val = x;
+            this.next = next;
+        }
+
+        //打印链表
+        public void printList(ListNode head) {
+            ListNode node = head;
+            while (node != null) {
+                System.out.print(node.val + " ");
+                node = node.next;
+            }
+            System.out.println();
         }
     }
 
@@ -676,5 +692,87 @@ public class 链表二周目 {
         }
         ListNode[] listNodes2 = splitListToParts(head2, 3);
 
+    }
+
+    //109. 有序链表转换二叉搜索树
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head==null)return null;
+        if (head.next==null)return new TreeNode(head.val);
+        ListNode cur = fastSlow(head);
+
+        TreeNode node = new TreeNode(cur.val);
+        node.left = sortedListToBST(head);
+        node.right = sortedListToBST(cur.next);
+
+        return node;
+    }
+
+    public ListNode fastSlow(ListNode head){
+        if (head==null) return null;
+        if (head.next==null)return head;
+        ListNode fast = head;
+        ListNode slow = head;
+
+        ListNode slowPre = null;
+        while (fast!=null && fast.next!=null){
+            fast = fast.next.next;
+            slowPre = slow;
+            slow = slow.next;
+        }
+        slowPre.next = null;
+
+        return slow;
+    }
+
+    //109. 有序链表转换二叉搜索树
+    @Test
+    public void testSortedListToBST() {
+        ListNode head = new ListNode(1);
+        ListNode node = head;
+        for (int i = 2; i <= 5; i++) {
+            node.next = new ListNode(i);
+            node = node.next;
+        }
+        TreeNode treeNode = sortedListToBST(head);
+        treeNode.printTree(treeNode);
+
+        //head = [-10,-3,0,5,9]
+        ListNode head2 = new ListNode(-10);
+        ListNode node2 = head2;
+        for (int i = -3; i <= 9; i += 3) {
+            node2.next = new ListNode(i);
+            node2 = node2.next;
+        }
+        TreeNode treeNode2 = sortedListToBST(head2);
+        treeNode.printTree(treeNode2);
+
+        //head = []
+        ListNode head3 = null;
+        TreeNode treeNode3 = sortedListToBST(head3);
+        treeNode.printTree(treeNode3);
+
+    }
+
+    //147. 对链表进行插入排序
+    public ListNode insertionSortList(ListNode head) {
+
+    }
+
+    // 147. 对链表进行插入排序
+    @Test
+    public void testInsertionSortList() {
+        //head = [4,2,1,3]
+        ListNode head = new ListNode(4);
+        head.next = new ListNode(2, new ListNode(1, new ListNode(3)));
+        ListNode node = head;
+        ListNode node1 = insertionSortList(node);
+        printList(node1);
+
+        //head = [-1,5,3,4,0]
+        ListNode head2 = new ListNode(-1);
+        head2.next = new ListNode(5, new ListNode(3, new ListNode(4, new ListNode(0))));
+        ListNode node2 = head2;
+        ListNode node3 = insertionSortList(node2);
+        printList(node3);
     }
 }
