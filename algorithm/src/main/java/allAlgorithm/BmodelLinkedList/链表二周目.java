@@ -4,6 +4,7 @@ import allAlgorithm.CmodelBinaryTree.TreeNode;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class 链表二周目 {
@@ -806,7 +807,29 @@ public class 链表二周目 {
 
     //148. 排序链表
     public ListNode sortList(ListNode head) {
+        ListNode node = head;
 
+        int count = 0;
+        while (node!=null){
+            count++;
+            node = node.next;
+        }
+        int[] arr =new int[count];
+        node = head;
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = node.val;
+            node = node.next;
+        }
+        Arrays.sort(arr);
+        ListNode tempNode = new ListNode(0);
+        ListNode re = tempNode;
+        for (int i = 0; i < arr.length; i++) {
+            tempNode.next = new ListNode(arr[i]);
+            tempNode = tempNode.next;
+        }
+
+        return re.next;
     }
 
     //148. 排序链表
