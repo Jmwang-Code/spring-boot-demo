@@ -172,8 +172,7 @@ public class StopwatchTimer extends JFrame {
                     //如果lineNumber等于0,就说明没有找到包含 public class 的行，提示到GUI上
                     if (lineNumber == 0) {
                         JOptionPane.showMessageDialog(null, "没有找到包含 public class 的行");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "找到了包含 public class 的行：" + line + "，位于第 " + lineNumber + " 行");
+                        return;
                     }
                     reader.close();
 
@@ -183,8 +182,9 @@ public class StopwatchTimer extends JFrame {
                     boolean classCommented = false;
                     // 继续读取后续行，检查是否存在多行注释
                     boolean isComment = false;
+                    int temp = lineNumber;
                     while ((line = readerRe.readLine()) != null) {
-                        lineNumber++;
+                        temp++;
                         line = line.trim();
                         if (line.startsWith("/**")) {
                             isComment = true;
@@ -192,7 +192,7 @@ public class StopwatchTimer extends JFrame {
                             if (!line.endsWith("*/")) {
                                 // 继续读取下一行，检查是否以 * 开头
                                 while ((line = readerRe.readLine()) != null) {
-                                    lineNumber++;
+                                    temp++;
                                     line = line.trim();
                                     if (!line.startsWith("*")) {
                                         break;
