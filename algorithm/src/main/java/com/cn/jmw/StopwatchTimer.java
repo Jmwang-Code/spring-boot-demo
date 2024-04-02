@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 //使用GUI开发一个秒表要求STOP的时候可以打印时间到控制台
 public class StopwatchTimer extends JFrame {
@@ -24,10 +26,7 @@ public class StopwatchTimer extends JFrame {
     private static final String CHOOSE = "Choose";
     private static String FILENAME = "time.txt";
     private static final String FILEPATH =
-    "C:\\Users\\wjm\\IdeaProjects\\spring-boot-demo\\algorithm\\src\\main\\java\\com\\cn\\jmw\\华为C卷\\一百分\\";
-
-    //存储地址
-    private static String SAVEFILEPATH = "C:\\Users\\wjm\\IdeaProjects\\spring-boot-demo\\algorithm\\src\\main\\java\\com\\cn\\jmw\\华为C卷\\一百分\\" + FILENAME;
+            "C:\\Users\\wjm\\IdeaProjects\\spring-boot-demo\\algorithm\\src\\main\\java\\com\\cn\\jmw\\华为C卷\\一百分\\";
 
     private Timer timer;
     private int hour;
@@ -190,28 +189,8 @@ public class StopwatchTimer extends JFrame {
                             isComment = true;
                             // 如果是多行注释的起始行，检查是否存在 *
                             if (!line.endsWith("*/")) {
-                                // 继续读取下一行，检查是否以 * 开头
-                                while ((line = readerRe.readLine()) != null) {
-                                    temp++;
-                                    line = line.trim();
-                                    if (!line.startsWith("*")) {
-                                        break;
-                                    }
-                                }
-                            }
-                        } else if (line.endsWith("*/")) {
-                            // 如果是多行注释的结束行
-                            if (!isComment) {
-                                // 如果没有以 /** 开头，则不是多行注释的结束行
-                                break;
-                            } else {
-                                // 如果存在以 /** 开头，则表示class被注释了
                                 classCommented = true;
-                                break;
                             }
-                        } else if (!line.startsWith("*") && !line.isEmpty()) {
-                            // 如果遇到非注释行，则结束检查
-                            break;
                         }
                     }
                     readerRe.close();
@@ -231,8 +210,15 @@ public class StopwatchTimer extends JFrame {
                         StringBuilder newContent = new StringBuilder();
                         for (int i = 0; i < lines.length; i++) {
                             newContent.append(lines[i]).append("\n");
-                            if (lines[i].trim().equals("*/")) {
-                                newContent.append(" * 这是一个新添加的注释\n");
+                            if (lines[i].trim().startsWith("/**")) {
+                                //几年几月几号时分秒，展示当前时间
+                                LocalDateTime now = LocalDateTime.now();
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                                String dateTimeString = now.format(formatter);
+                                newContent.append(" *╭——————————————————————————————╮\n");
+                                newContent.append(" *│ 当前时间：" + dateTimeString + "  │\n");
+                                newContent.append(" *│ 完成时间：" + String.format("%02d:%02d:%02d", hour, minute, second) + "             │\n");
+                                newContent.append(" *╰——————————————————————————————╯\n");
                             }
                         }
 
@@ -313,7 +299,6 @@ public class StopwatchTimer extends JFrame {
     public static void main(String[] args) {
         new StopwatchTimer();
     }
-
 
 
 }
