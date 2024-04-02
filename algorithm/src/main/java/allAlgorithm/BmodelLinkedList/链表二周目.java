@@ -849,4 +849,29 @@ public class 链表二周目 {
         ListNode node3 = sortList(node2);
         printList(node3);
     }
+
+    //数组快排
+    public void quickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int i = left, j = right, x = arr[left];
+            while (i < j) {
+                while (i < j && arr[j] >= x) {
+                    j--;
+                }
+                if (i < j) {
+                    arr[i++] = arr[j];
+                }
+                while (i < j && arr[i] < x) {
+                    i++;
+                }
+                if (i < j) {
+                    arr[j--] = arr[i];
+                }
+            }
+            arr[i] = x;
+            quickSort(arr, left, i - 1);
+            quickSort(arr, i + 1, right);
+        }
+    }
+
 }
