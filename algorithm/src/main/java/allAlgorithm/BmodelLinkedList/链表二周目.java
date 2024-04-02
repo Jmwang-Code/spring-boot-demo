@@ -874,4 +874,47 @@ public class 链表二周目 {
         }
     }
 
+    //328. 奇偶链表
+    public ListNode oddEvenList(ListNode head) {
+        ListNode preF = head;
+        ListNode pre = new ListNode(-1);
+        ListNode next = new ListNode(-1);
+        ListNode end = next;
+        boolean logo = true;
+        while (preF!=null){
+            if (logo){
+                pre.next = preF;
+                pre = pre.next;
+                logo = false;
+            }else {
+                next.next = preF;
+                next = next.next;
+                logo = true;
+            }
+            preF = preF.next;
+        }
+
+        next.next = null;
+        pre.next = end.next;
+
+        return head;
+    }
+
+    //328. 奇偶链表
+    @Test
+    public void testOddEvenList() {
+        //head = [1,2,3,4,5]
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))));
+        ListNode node = head;
+        ListNode node1 = oddEvenList(node);
+        printList(node1);
+
+        //head = [2,1,3,5,6,4,7]
+        ListNode head2 = new ListNode(2);
+        head2.next = new ListNode(1, new ListNode(3, new ListNode(5, new ListNode(6, new ListNode(4, new ListNode(7))))));
+        ListNode node2 = head2;
+        ListNode node3 = oddEvenList(node2);
+        printList(node3);
+    }
 }
