@@ -1,16 +1,23 @@
 package allAlgorithm.并查集;
 
+/**
+ * 正常情况下并查集
+ * 1. 扁平化
+ * 2. 小挂大
+ */
+
+/**
+ * 演示的是 简化扁平化的并查集
+ */
 public class UnionFindSet {
 
+    //表示指针,一开始都是指向自己
     private int[] parent;
-    private int[] rank;
 
     public UnionFindSet(int n) {
-        parent = new int[n];
-        rank = new int[n];
-        for (int i = 0; i < n; i++) {
+        parent = new int[n+1];
+        for (int i = 0; i < n+1; i++) {
             parent[i] = i;
-            rank[i] = 1;
         }
     }
 
@@ -24,18 +31,7 @@ public class UnionFindSet {
 
     // union方法是并查集的核心，用于合并两个元素x和y
     public void union(int x, int y) {
-        int rootX = find(x);
-        int rootY = find(y);
-        if (rootX != rootY) {
-            if (rank[rootX] > rank[rootY]) {
-                parent[rootY] = rootX;
-            } else if (rank[rootX] < rank[rootY]) {
-                parent[rootX] = rootY;
-            } else {
-                parent[rootY] = rootX;
-                rank[rootX]++;
-            }
-        }
+        parent[find(x)] = find(y);
     }
 
     // isConnected方法是并查集的核心，用于判断两个元素x和y是否属于同一个集合
