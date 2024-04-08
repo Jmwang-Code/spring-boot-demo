@@ -14,7 +14,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class 表达式括号匹配 {
+public class 表达式括号匹配X栈或LinkedList {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
