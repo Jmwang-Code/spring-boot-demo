@@ -10,7 +10,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  * 
  */
-public class 测试用例执行计划 {
+public class 测试用例执行计划X多维数组排序 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
