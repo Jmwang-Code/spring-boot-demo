@@ -14,7 +14,7 @@ import java.util.Set;
  *╰—————————————————————————————╯
  * 
  */
-public class CPU算力分配 {
+public class CPU算力分配x模拟 {
 
     @Test
     public void test(){

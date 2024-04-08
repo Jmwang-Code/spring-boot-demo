@@ -35,7 +35,7 @@ import java.util.Scanner;
  * 输出描述
  * 输出一个数字，为最终屏幕上字母的数量。
  */
-public class 键键盘5 {
+public class 键键盘5X模拟 {
     public static void main(String[] args) {
         //帮我举出一堆测试案例 最好极端
         //比如 1 1 5 1 5 2 4 4

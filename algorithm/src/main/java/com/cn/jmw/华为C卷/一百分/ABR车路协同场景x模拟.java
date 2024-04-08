@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * 1. A<=B ,①B-A<=R，就直接append ②获取一个最近的就是大于A的第一个
  *
  */
-public class ABR车路协同场景 {
+public class ABR车路协同场景x模拟 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

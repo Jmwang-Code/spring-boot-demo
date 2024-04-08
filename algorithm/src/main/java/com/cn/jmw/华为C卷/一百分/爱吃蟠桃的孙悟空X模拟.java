@@ -10,7 +10,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class 爱吃蟠桃的孙悟空 {
+public class 爱吃蟠桃的孙悟空X模拟 {
 
     //有N棵树
     //每小时吃K个

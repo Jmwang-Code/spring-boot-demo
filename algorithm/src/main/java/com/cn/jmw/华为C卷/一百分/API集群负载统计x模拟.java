@@ -9,7 +9,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class API集群负载统计 {
+public class API集群负载统计x模拟 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

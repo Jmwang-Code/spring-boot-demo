@@ -10,7 +10,7 @@ import java.util.StringJoiner;
  * │ 完成时间：00:12:01            │
  * ╰—————————————————————————————╯
  */
-public class 按身高和体重排队 {
+public class 按身高和体重排队X多条件排序多维数组 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

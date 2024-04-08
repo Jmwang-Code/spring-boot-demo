@@ -13,7 +13,7 @@ import java.util.*;
  * ╰—————————————————————————————╯
  * 并查集
  */
-public class WeAreATeam {
+public class WeAreATeamX并查集 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
