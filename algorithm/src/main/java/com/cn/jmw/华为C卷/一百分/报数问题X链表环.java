@@ -9,7 +9,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  * 
  */
-public class 报数问题 {
+public class 报数问题X链表环 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
