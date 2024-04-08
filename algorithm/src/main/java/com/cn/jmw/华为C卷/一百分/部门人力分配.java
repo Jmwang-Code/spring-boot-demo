@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * 
+ *
+ * 二分法
  */
 public class 部门人力分配 {
-
+    //需要最少的人力应该大于 （requirements的最大值）小于（requirements第一大+第二大）
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -34,6 +35,8 @@ public class 部门人力分配 {
         while (min <= max) {
             long mid = (min + max) >> 1; // 需要注意的是，min，max单独看都不超过int，但是二者相加会超过int，因此需要用long类型
 
+            //如果限重的情况下还是可以带走，那么就尝试更小的配重
+            //否则就尝试更大的配重
             if (check(mid, m, requirements)) {
                 // 如果mid限重，可以满足m辆车带走n个人，则mid就是一个可能解，但不一定是最优解
                 ans = mid;
@@ -54,6 +57,7 @@ public class 部门人力分配 {
      * @param requirements n个人的体重数组
      * @return m辆自行车，每辆限重limit的情况下，能否带走n个人
      */
+    //检查当前的配重在当前车次下运走所有人
     public static boolean check(long limit, int m, int[] requirements) {
         int l = 0; // 指向体重最轻的人
         int r = requirements.length - 1; // 指向体重最重的人
