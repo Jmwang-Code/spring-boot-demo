@@ -11,47 +11,60 @@ import java.util.*;
  */
 public class 查找接口成功率最优时间段 {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        while (scanner.hasNext()){
-            int minAverageLost = scanner.nextInt();
-            //去掉空行
-            scanner.nextLine();
-            int[] arr = Arrays.stream(scanner.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            StringJoiner stringJoiner = new StringJoiner(" ");
-            int sum = 0;
-            int start = 0;
-            for (int i = 0; i < arr.length; i++) {
-                //是时间段 不是时间点
-                if (i<=start)continue;
-                int cur = arr[i];
-                if ((double)(sum+cur)/(i-start+1)<=minAverageLost){
-                    sum+=cur;
-                    if (i == arr.length-1){
-                        stringJoiner.add(start+"-"+(i));
-                    }
-                }else {
-                    //cur这个可以当新的头
-                    if (cur<=minAverageLost){
-                        start = i;
-                    }else {
-                        sum = 0;
-                        if (start!=i-1){
-                            stringJoiner.add(start+"-"+(i-1));
+    //用双层for来试试
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int minAverageLost = Integer.parseInt(sc.nextLine());
+        int[] nums = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+
+        System.out.println(getResult(nums, minAverageLost));
+    }
+
+    public static String getResult(int[] nums, int minAverageLost) {
+        int n = nums.length;
+
+        //preSum 是前缀和数组
+        int[] preSum = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            preSum[i] = preSum[i - 1] + nums[i - 1];
+        }
+        //ans 是答案数组
+        ArrayList<int[]> ans = new ArrayList<>();
+        //maxLen 是最大长度
+        int maxLen = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j <= n; j++) {
+                // sum 是 区间 [i, j-1] 的和
+                int sum = preSum[j] - preSum[i];
+                int len = j - i;
+                int lost = len * minAverageLost;
+
+                // 如果区间和小于等于 lost，那么就是一个符合条件的区间
+                if (sum <= lost) {
+                    // 如果区间长度大于等于 maxLen，那么就是一个更优的区间
+                    if (len >= maxLen) {
+                        if (len > maxLen) {
+                            //只要是更好的区间，就清空之前的，如果只是相等的话，就添加最新的
+                            ans = new ArrayList<>();
                         }
-                        start = i+1;
+                        ans.add(new int[] {i, j - 1});
+                        maxLen = len;
                     }
                 }
             }
-            if (stringJoiner.length()==0){
-                System.out.println("NULL");
-            }else {
-                System.out.println(stringJoiner.toString());
-            }
         }
 
+        if (ans.size() == 0) return "NULL";
 
+        ans.sort((a, b) -> a[0] - b[0]);
+
+        StringJoiner sj = new StringJoiner(" ");
+        for (int[] an : ans) sj.add(an[0] + "-" + an[1]);
+        return sj.toString();
     }
+
 
 }
