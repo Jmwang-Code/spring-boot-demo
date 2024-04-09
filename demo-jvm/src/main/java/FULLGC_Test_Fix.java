@@ -8,15 +8,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 1. 编译javac -encoding UTF-8 FULLGC_Test.java
- * 2. 打包jar cvfe FULLGC_Test.jar FULLGC_Test FULLGC_Test.class FULLGC_Test$CardInfo.class
- * 3. 运行java -jar FULLGC_Test.jar
+ * 1. 编译javac -encoding UTF-8 FULLGC_Test_Fix.java
+ * 2. 打包jar cvfe FULLGC_Test.jar FULLGC_Test_Fix FULLGC_Test_Fix.class FULLGC_Test_Fix$CardInfo.class
+ * 3. 运行java -jar FULLGC_Test_Fix.jar
  *
- * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test.jar
+ * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test_Fix.jar
  *
- * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test.jar
+ * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test_Fix.jar
  * */
-public class FULLGC_Test {
+public class FULLGC_Test_Fix {
 
     private static final AtomicInteger count = new AtomicInteger(0);
 
@@ -46,6 +46,10 @@ public class FULLGC_Test {
         for (; ; ) {
             modelFit();
             Thread.sleep(100);
+            executor = new ScheduledThreadPoolExecutor(50, r -> {
+                Thread t = new Thread(r, "业务" + count.getAndIncrement());
+                return t;
+            }, new ThreadPoolExecutor.DiscardOldestPolicy());
         }
     }
 
@@ -56,6 +60,7 @@ public class FULLGC_Test {
                 info.m();
             }, 2, 3, TimeUnit.SECONDS);
         });
+        executor.shutdown();
     }
 
     private static List<CardInfo> getAllCardInfo() {
