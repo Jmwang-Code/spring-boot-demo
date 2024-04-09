@@ -7,6 +7,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 1. 编译javac -encoding UTF-8 FULLGC_Test.java
+ * 2. 打包jar cvfe FULLGC_Test.jar FULLGC_Test FULLGC_Test.class FULLGC_Test$CardInfo.class
+ * 3. 运行java -jar FULLGC_Test.jar
+ *
+ * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test.jar
+ * */
 public class FULLGC_Test {
 
     private static final AtomicInteger count = new AtomicInteger(0);
@@ -23,7 +30,6 @@ public class FULLGC_Test {
         Date birthDay = new Date();
 
         public void m() {
-            System.out.println("m");
         }
     }
 
