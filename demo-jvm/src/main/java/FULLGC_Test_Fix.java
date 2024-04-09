@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 1. 编译javac -encoding UTF-8 FULLGC_Test_Fix.java
- * 2. 打包jar cvfe FULLGC_Test.jar FULLGC_Test_Fix FULLGC_Test_Fix.class FULLGC_Test_Fix$CardInfo.class
+ * 2. 打包jar cvfe FULLGC_Test_Fix.jar FULLGC_Test_Fix FULLGC_Test_Fix.class FULLGC_Test_Fix$CardInfo.class
  * 3. 运行java -jar FULLGC_Test_Fix.jar
  *
  * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test_Fix.jar
