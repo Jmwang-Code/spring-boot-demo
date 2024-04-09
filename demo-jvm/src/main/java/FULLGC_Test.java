@@ -35,6 +35,7 @@ public class FULLGC_Test {
         }
     }
 
+    //线程没被回收导致对应创建的缓存无法被回收
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50, r -> {
         Thread t = new Thread(r, "业务" + count.getAndIncrement());
         return t;

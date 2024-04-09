@@ -113,6 +113,7 @@ G1将堆区划分成多个Region区块，大小都为2的N次幂。
 4. top 查看那个线程占用CPU高和内存高
 5. top -Hp pid 查看不同线程的状态
 6. jstack pid | more 查看线程堆栈信息,调用的方法。线程的状态，如果都Object.wait()同一把锁，就是死锁了。
+7. jmap -histo pid | head -n20 查看堆内存中的存活对象，并按空间排序
 
 
 ```shell
