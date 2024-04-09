@@ -406,13 +406,6 @@ public class 秒表 extends JFrame {
         buttonPanel.add(chooseButton);
         add(buttonPanel);
 
-//        add(startButton);
-//        add(stopButton);
-//        add(resetButton);
-//        add(printButton);
-//        add(fileButton);
-//        add(exitButton);
-//        add(chooseButton);
         add(timeLabel);
 
         setJMenuBar(menuBar);
