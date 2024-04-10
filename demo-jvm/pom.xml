@@ -17,4 +17,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!-- 添加 JOL 依赖 -->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.14</version> <!-- 这里是 JOL 的版本号，你可以根据需要更改 -->
+        </dependency>
+    </dependencies>
 </project>
