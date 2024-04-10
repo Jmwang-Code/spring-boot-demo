@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test.jar
  * */
-public class FULLGC_Test {
+public class FULLGC_Test_Fix2 {
 
     private static final AtomicInteger count = new AtomicInteger(0);
 
@@ -61,6 +61,7 @@ public class FULLGC_Test {
                 info.m();
             }, 2, 3, TimeUnit.SECONDS);
         });
+        taskList.clear();
     }
 
     private static List<CardInfo> getAllCardInfo() {
