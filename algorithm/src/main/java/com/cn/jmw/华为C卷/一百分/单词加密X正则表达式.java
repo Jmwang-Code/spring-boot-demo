@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  *╰—————————————————————————————╯
  *
  */
-public class 单词加密 {
+public class 单词加密X正则表达式 {
 
     public static void main(String[] args) {
         while (true){

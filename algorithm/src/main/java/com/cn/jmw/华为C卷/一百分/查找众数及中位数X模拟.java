@@ -12,7 +12,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class 查找众数及中位数 {
+public class 查找众数及中位数X模拟 {
 
     public static void main(String[] args) {
 
