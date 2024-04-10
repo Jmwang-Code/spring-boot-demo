@@ -8,15 +8,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 1. 编译javac -encoding UTF-8 FULLGC_Test_Fix.java
- * 2. 打包jar cvfe FULLGC_Test_Fix.jar FULLGC_Test_Fix FULLGC_Test_Fix.class FULLGC_Test_Fix$CardInfo.class
- * 3. 运行java -jar FULLGC_Test_Fix.jar
+ * 任务的生命周期和任务中使用的对象的生命周期，以避免潜在的内存泄漏问题。
  *
- * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test_Fix.jar
+ * 怎么控制对象的生命周期，让无用的对象快速被销毁。
+ */
+
+/**
+ * 1. 编译javac -encoding UTF-8 FULLGC_Test_Fix2.java
+ * 2. 打包jar cvfe FULLGC_Test_Fix2.jar FULLGC_Test_Fix2 FULLGC_Test_Fix2.class FULLGC_Test_Fix2$CardInfo.class
+ * 3. 运行java -jar FULLGC_Test_Fix2.jar
  *
- * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test_Fix.jar
+ * java -jar -Xms80m -Xmx80m -XX:+PrintGC FULLGC_Test_Fix2.jar
+ *
+ * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test_Fix2.jar
  * */
-public class FULLGC_Test_Fix {
+public class Memory_leakage_caused_by_object_ifecycle_Test_Fix2 {
 
     private static final AtomicInteger count = new AtomicInteger(0);
 
@@ -35,6 +41,7 @@ public class FULLGC_Test_Fix {
         }
     }
 
+    //线程没被回收导致对应创建的缓存无法被回收
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50, r -> {
         Thread t = new Thread(r, "业务" + count.getAndIncrement());
         return t;
@@ -46,21 +53,21 @@ public class FULLGC_Test_Fix {
         for (; ; ) {
             modelFit();
             Thread.sleep(100);
-            executor = new ScheduledThreadPoolExecutor(50, r -> {
-                Thread t = new Thread(r, "业务" + count.getAndIncrement());
-                return t;
-            }, new ThreadPoolExecutor.DiscardOldestPolicy());
         }
     }
 
     private static void modelFit() {
         List<CardInfo> taskList = getAllCardInfo();
-        taskList.forEach(info -> {
+        for (CardInfo info : taskList) {
+            // 在lambda表达式外部声明一个final变量
+            final CardInfo[] finalInfo = {info};
             executor.scheduleWithFixedDelay(() -> {
-                info.m();
+                finalInfo[0].m();
+                // 手动将不再需要的对象引用设置为null
+                finalInfo[0] = null; // 这里会爆红，因为finalInfo已经是final的了，所以无法再次赋值
             }, 2, 3, TimeUnit.SECONDS);
-        });
-        executor.shutdown();
+        }
+        taskList.clear();
     }
 
     private static List<CardInfo> getAllCardInfo() {

@@ -8,19 +8,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 任务的生命周期和任务中使用的对象的生命周期，以避免潜在的内存泄漏问题。
- */
-
-/**
- * 1. 编译javac -encoding UTF-8 FULLGC_Test.java
- * 2. 打包jar cvfe FULLGC_Test.jar FULLGC_Test FULLGC_Test.class FULLGC_Test$CardInfo.class
- * 3. 运行java -jar FULLGC_Test.jar
+ * 1. 编译javac -encoding UTF-8 FULLGC_Test_Fix.java
+ * 2. 打包jar cvfe FULLGC_Test_Fix.jar FULLGC_Test_Fix FULLGC_Test_Fix.class FULLGC_Test_Fix$CardInfo.class
+ * 3. 运行java -jar FULLGC_Test_Fix.jar
  *
- * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test.jar
+ * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test_Fix.jar
  *
- * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test.jar
+ * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test_Fix.jar
  * */
-public class FULLGC_Test {
+public class Memory_leakage_caused_by_object_ifecycle_Test_Fix {
 
     private static final AtomicInteger count = new AtomicInteger(0);
 
@@ -39,7 +35,6 @@ public class FULLGC_Test {
         }
     }
 
-    //线程没被回收导致对应创建的缓存无法被回收
     private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(50, r -> {
         Thread t = new Thread(r, "业务" + count.getAndIncrement());
         return t;
@@ -51,6 +46,10 @@ public class FULLGC_Test {
         for (; ; ) {
             modelFit();
             Thread.sleep(100);
+            executor = new ScheduledThreadPoolExecutor(50, r -> {
+                Thread t = new Thread(r, "业务" + count.getAndIncrement());
+                return t;
+            }, new ThreadPoolExecutor.DiscardOldestPolicy());
         }
     }
 
@@ -61,6 +60,7 @@ public class FULLGC_Test {
                 info.m();
             }, 2, 3, TimeUnit.SECONDS);
         });
+        executor.shutdown();
     }
 
     private static List<CardInfo> getAllCardInfo() {
