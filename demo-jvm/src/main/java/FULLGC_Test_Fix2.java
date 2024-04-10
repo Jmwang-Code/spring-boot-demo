@@ -9,16 +9,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 任务的生命周期和任务中使用的对象的生命周期，以避免潜在的内存泄漏问题。
+ *
+ * 怎么控制对象的生命周期，让无用的对象快速被销毁。
  */
 
 /**
- * 1. 编译javac -encoding UTF-8 FULLGC_Test.java
- * 2. 打包jar cvfe FULLGC_Test.jar FULLGC_Test FULLGC_Test.class FULLGC_Test$CardInfo.class
- * 3. 运行java -jar FULLGC_Test.jar
+ * 1. 编译javac -encoding UTF-8 FULLGC_Test_Fix2.java
+ * 2. 打包jar cvfe FULLGC_Test_Fix2.jar FULLGC_Test_Fix2 FULLGC_Test_Fix2.class FULLGC_Test_Fix2$CardInfo.class
+ * 3. 运行java -jar FULLGC_Test_Fix2.jar
  *
- * java -jar -Xms200m -Xmx200m -Xmn100m -XX:+PrintGC FULLGC_Test.jar
+ * java -jar -Xms80m -Xmx80m -XX:+PrintGC FULLGC_Test_Fix2.jar
  *
- * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test.jar
+ * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar FULLGC_Test_Fix2.jar
  * */
 public class FULLGC_Test_Fix2 {
 
@@ -56,11 +58,15 @@ public class FULLGC_Test_Fix2 {
 
     private static void modelFit() {
         List<CardInfo> taskList = getAllCardInfo();
-        taskList.forEach(info -> {
+        for (CardInfo info : taskList) {
+            // 在lambda表达式外部声明一个final变量
+            final CardInfo[] finalInfo = {info};
             executor.scheduleWithFixedDelay(() -> {
-                info.m();
+                finalInfo[0].m();
+                // 手动将不再需要的对象引用设置为null
+                finalInfo[0] = null; // 这里会爆红，因为finalInfo已经是final的了，所以无法再次赋值
             }, 2, 3, TimeUnit.SECONDS);
-        });
+        }
         taskList.clear();
     }
 
