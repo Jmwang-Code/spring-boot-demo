@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -XX:+HeapDumpOnOutOfMemoryError -jar DeadlockExample.jar
  */
-public class DeadlockExample {
+public class Thread_deadlock_business_interruption {
     /**
      * 1. 查看CPU 内存占用都没有异常
      * 2. 就把当前线程栈信息打印出来 jstack PID > thread_dump.txt
