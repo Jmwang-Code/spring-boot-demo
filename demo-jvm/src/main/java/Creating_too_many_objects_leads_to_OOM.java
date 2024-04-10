@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.openjdk.jol.info.GraphLayout;
 
-public class OutOfMemoryExample {
+public class Creating_too_many_objects_leads_to_OOM {
     public static void main(String[] args) {
         List<Object> list = new ArrayList<>();
         int objectCount = 0;
