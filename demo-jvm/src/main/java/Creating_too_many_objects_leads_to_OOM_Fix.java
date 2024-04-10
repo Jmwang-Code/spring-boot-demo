@@ -1,4 +1,3 @@
-import org.openjdk.jol.info.GraphLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +6,15 @@ import java.util.List;
  * 在很多复杂业务中(计算)，增加堆栈的切面日志。
  *
  */
+/**
+ * 1. 编译javac -encoding UTF-8 Creating_too_many_objects_leads_to_OOM_Fix.java
+ * 2. 打包jar cvfe Creating_too_many_objects_leads_to_OOM_Fix.jar Creating_too_many_objects_leads_to_OOM_Fix Creating_too_many_objects_leads_to_OOM_Fix.class
+ * 3. 运行java -jar Creating_too_many_objects_leads_to_OOM.jar
+ *
+ * java -jar -Xms80m -Xmx80m -XX:+PrintGC Creating_too_many_objects_leads_to_OOM_Fix.jar
+ *
+ * java -Xms80m -Xmx80m -XX:+PrintGC -Xloggc:gc.log -jar Creating_too_many_objects_leads_to_OOM_Fix.jar
+ * */
 public class Creating_too_many_objects_leads_to_OOM_Fix {
     public static void main(String[] args) {
         List<Object> list = new ArrayList<>();
@@ -21,7 +29,7 @@ public class Creating_too_many_objects_leads_to_OOM_Fix {
                 objectCount++;
 
                 // 使用 JOL 来测量对象的大小
-                objectSize += GraphLayout.parseInstance(obj).totalSize();
+                objectSize += 16;
 //                System.out.println("对象大小: " + objectSize + " bytes");
 
                 // 每创建一定数量的对象后，输出一次内存情况
