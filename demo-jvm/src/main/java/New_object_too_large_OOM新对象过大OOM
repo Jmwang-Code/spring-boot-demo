@@ -1,0 +1,3 @@
+New_object_too_large_OOM新对象过大OOM
+
+-XX:+HeapDumpOnOutOfMemoryError 开启这个OOM的dump记录文件
