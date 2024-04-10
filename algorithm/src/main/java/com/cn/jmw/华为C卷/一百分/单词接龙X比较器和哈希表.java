@@ -16,7 +16,7 @@ import java.util.Scanner;
  *
  * 然后
  */
-public class 单词接龙 {
+public class 单词接龙X比较器和哈希表 {
 
     public static void main(String[] args) {
         while (true){
