@@ -18,3 +18,9 @@ Spark最优秀的是批处理，主要用于处理有界的数据集，Spark的�
 
 1. 编写一个函数继承ScalarFunction（对应的类），重写eval方法，实现自定义函数的逻辑
 2. 进行注册到flinkSQL中
+
+# 5.flink流计算和SparkStreaming的区别
+
+1. 流: flink是真正的流计算可以处理无界数据流，SparkStreaming是微批处理，是将实时数据分段处理
+2. 延迟: flink的延迟更低，SparkStreaming因为要分段所以延迟更高
+3. 状态管理: flink在JVM实现了自己的内存管理，保证更好的一致性恢复，SparkStreaming使用的是RDD模型
