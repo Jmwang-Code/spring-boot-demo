@@ -6,7 +6,7 @@
 ## 1.1 Redis中的Rehash
 
 这时候就要提到Redis底层的存储结构框架：全局哈希表
-
+16000
 - 全局哈希表：类似JDK1.6的hashMap，它维护的一个哈希桶数组，每个桶里面存储的是一个链表，链表里面存储的是一个个的键值对节点元素。
 - 节点元素：是以Key-Value的形式存储，key是一个字符串，value是一个Redis数据结构。 
 ![img_8.png](../images/MID-全局哈希表(REDIS).png)
