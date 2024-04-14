@@ -9,7 +9,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class 单词重量 {
+public class 单词重量X字符串格式化 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
