@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  *
  */
-public class 德州扑克 {
+public class 德州扑克X模拟 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
