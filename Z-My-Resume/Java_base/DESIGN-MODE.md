@@ -100,7 +100,6 @@ public class StrategyFactory {
         return strategyMap.get(type);
     }
 }
-``
 ```
 
 # 5. 代理模式（考虑业务场景）
