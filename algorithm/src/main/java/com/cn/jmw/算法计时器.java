@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 //使用GUI开发一个秒表要求STOP的时候可以打印时间到控制台
-public class 秒表 extends JFrame {
+public class 算法计时器 extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final int WIDTH = 300;
     private static final int HEIGHT = 200;
@@ -48,7 +48,7 @@ public class 秒表 extends JFrame {
     private JMenuItem exitItem;
     private File file;
 
-    public 秒表() {
+    public 算法计时器() {
         setTitle(TITLE);
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -416,7 +416,7 @@ public class 秒表 extends JFrame {
     }
 
     public static void main(String[] args) {
-        new 秒表();
+        new 算法计时器();
     }
 
 
