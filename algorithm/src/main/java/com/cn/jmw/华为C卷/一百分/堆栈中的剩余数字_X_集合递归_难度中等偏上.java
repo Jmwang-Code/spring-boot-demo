@@ -14,7 +14,7 @@ import java.util.*;
  * 比如: 1 2 5 7  => 1 2+5=7 => 1 14
  * 比如: 1 2 5 7 9 1 2 2 => 1 2+5=7 9 1 2 2 => 1 14 9 1 2 2 => 1 14 9 1 2+2=4 => 1 14 9 1 4
  */
-public class 堆栈中的剩余数字 {
+public class 堆栈中的剩余数字_X_集合递归_难度中等偏上 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -57,7 +57,7 @@ public class 堆栈中的剩余数字 {
                 break;
             }
         }
-
+        // 如果不相等就直接插入
         stack.add(num);
     }
 }
