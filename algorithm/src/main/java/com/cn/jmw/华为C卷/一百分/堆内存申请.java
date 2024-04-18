@@ -2,16 +2,15 @@ package com.cn.jmw.华为C卷.一百分;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Scanner;
 
 /**
  * ╭—————————————————————————————╮
  * │ 当前时间：2024-04-18 18:52:28 │
- * │ 完成时间：00:27:45            │
+ * │ 完成时间：00:30:45            │
  * ╰—————————————————————————————╯
  */
-public class 堆内存申请 {
+public class 堆内存申请X模拟数组 {
 
     static class Memory {
         // 内存块起始位置
