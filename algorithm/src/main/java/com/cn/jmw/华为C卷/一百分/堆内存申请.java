@@ -6,11 +6,10 @@ import java.util.BitSet;
 import java.util.Scanner;
 
 /**
- *╭—————————————————————————————╮
- *│ 当前时间：2024-04-18 18:52:28 │
- *│ 完成时间：00:22:45            │
- *╰—————————————————————————————╯
- *
+ * ╭—————————————————————————————╮
+ * │ 当前时间：2024-04-18 18:52:28 │
+ * │ 完成时间：00:27:45            │
+ * ╰—————————————————————————————╯
  */
 public class 堆内存申请 {
 
@@ -46,29 +45,33 @@ public class 堆内存申请 {
             used_memory.add(new Memory(tmp[0], tmp[1]));
         }
 
+        System.out.println(getResult(arr,malloc_size,used_memory));
+    }
+
+    public static int getResult(int[] arr, int malloc_size, ArrayList<Memory> used_memory) {
         for (int i = 0; i < used_memory.size(); i++) {
             Memory memory = used_memory.get(i);
-            for (int j = memory.offset; j < memory.size+memory.offset; j++) {
-                arr[j] = 1;
+            for (int j = memory.offset; j < memory.size + memory.offset; j++) {
+                if (arr[j] == 1) {
+                    return -1;
+                } else {
+                    arr[j] = 1;
+                }
             }
         }
 
         int sum = 0;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i]!=1){
+            if (arr[i] != 1) {
                 sum++;
-                if (sum>=malloc_size){
-                    System.out.println(i-malloc_size+1);
-                    break;
+                if (sum >= malloc_size) {
+                    return i - malloc_size + 1;
                 }
-            }else {
-                sum=0;
+            } else {
+                sum = 0;
             }
         }
 
-        if (sum<malloc_size){
-            System.out.println(-1);
-        }
-
+        return -1;
     }
 }
