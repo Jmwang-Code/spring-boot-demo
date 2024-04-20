@@ -39,6 +39,7 @@ public class 分披萨_X_动态规划 {
         }
     }
 
+    //这种环形的处理，使用数组，可以通过双指针的方式来表示不同出牌方。通过边界处理到环连接起来
     public static int check(int idx,int[] arr) {
         if (idx < 0) {
             idx = arr.length - 1;
