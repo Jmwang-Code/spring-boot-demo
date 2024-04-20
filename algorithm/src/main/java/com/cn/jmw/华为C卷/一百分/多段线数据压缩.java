@@ -1,11 +1,12 @@
 package com.cn.jmw.华为C卷.一百分;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
+ *╭—————————————————————————————╮
+ *│ 当前时间：2024-04-20 17:40:59 │
+ *│ 完成时间：00:20:44            │
+ *╰—————————————————————————————╯
  *
  */
 public class 多段线数据压缩 {
@@ -27,13 +28,41 @@ public class 多段线数据压缩 {
         for (int i = 0; i < arr.length; i+=2) {
             locations.add(new Location(arr[i],arr[i+1]));
         }
-        System.out.println(getResult());
+        System.out.println(getResult(locations));
     }
 
-    public static String getResult(){
+    public static String getResult(List<Location> locations){
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if (locations.size()<=2){
+            for (int i = 0; i < locations.size(); i++) {
+                Location location = locations.get(i);
+                stringJoiner.add(location.y+" "+location.x);
+            }
+            return stringJoiner.toString();
+        }
         //向量值
-        int Xv = 0;
-        int Yv = 0;
-        return null;
+        int Xv = locations.get(0).x - locations.get(1).x;
+        int Yv = locations.get(0).y - locations.get(1).y;
+
+        for (int i = 2; i < locations.size(); i++) {
+            Location pre = locations.get(i - 1);
+            Location cur = locations.get(i);
+            //当前向量 Xcur Ycur
+            int Xcur = pre.x - cur.x;
+            int Ycur = pre.y - cur.y;
+            if (Xcur==Xv && Ycur ==Yv){
+                locations.set(i-1,null);
+            }
+            Xv = Xcur;
+            Yv = Ycur;
+        }
+
+
+        for (int i = 0; i < locations.size(); i++) {
+            Location location = locations.get(i);
+            if (location==null) continue;
+            stringJoiner.add(location.y+" "+location.x);
+        }
+        return stringJoiner.toString();
     }
 }
