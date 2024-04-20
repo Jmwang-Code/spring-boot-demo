@@ -10,4 +10,9 @@ public class 计算礼品发放的最小分组数目 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

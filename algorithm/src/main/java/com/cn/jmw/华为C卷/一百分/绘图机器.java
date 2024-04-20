@@ -10,4 +10,9 @@ public class 绘图机器 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

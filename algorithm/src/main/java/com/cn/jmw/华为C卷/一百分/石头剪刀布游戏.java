@@ -10,4 +10,9 @@ public class 石头剪刀布游戏 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 考勤信息 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 消消乐游戏 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

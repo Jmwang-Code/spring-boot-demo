@@ -10,4 +10,9 @@ public class 靠谱的车 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

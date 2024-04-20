@@ -10,4 +10,9 @@ public class 密码输入检测 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

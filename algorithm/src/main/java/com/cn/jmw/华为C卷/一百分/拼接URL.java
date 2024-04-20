@@ -10,4 +10,9 @@ public class 拼接URL {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

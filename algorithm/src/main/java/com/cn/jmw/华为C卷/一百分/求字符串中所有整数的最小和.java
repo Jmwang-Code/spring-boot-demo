@@ -10,4 +10,9 @@ public class 求字符串中所有整数的最小和 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

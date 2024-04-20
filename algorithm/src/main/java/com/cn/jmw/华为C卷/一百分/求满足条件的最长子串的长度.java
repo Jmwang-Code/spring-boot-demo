@@ -10,4 +10,9 @@ public class 求满足条件的最长子串的长度 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

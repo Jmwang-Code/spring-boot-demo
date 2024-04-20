@@ -10,4 +10,9 @@ public class 生成哈夫曼树 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

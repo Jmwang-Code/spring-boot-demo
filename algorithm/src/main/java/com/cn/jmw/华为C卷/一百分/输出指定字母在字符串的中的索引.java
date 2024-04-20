@@ -10,4 +10,9 @@ public class 输出指定字母在字符串的中的索引 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

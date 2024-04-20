@@ -10,4 +10,9 @@ public class 求最多可以派出多少支团队 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

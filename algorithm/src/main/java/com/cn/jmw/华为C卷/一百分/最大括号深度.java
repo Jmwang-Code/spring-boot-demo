@@ -10,4 +10,9 @@ public class 最大括号深度 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

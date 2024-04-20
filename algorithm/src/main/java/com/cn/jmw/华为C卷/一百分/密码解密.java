@@ -10,4 +10,9 @@ public class 密码解密 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

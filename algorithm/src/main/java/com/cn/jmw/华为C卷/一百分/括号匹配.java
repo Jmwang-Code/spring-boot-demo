@@ -10,4 +10,9 @@ public class 括号匹配 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

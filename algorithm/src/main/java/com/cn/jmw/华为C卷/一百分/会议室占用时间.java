@@ -10,4 +10,9 @@ public class 会议室占用时间 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

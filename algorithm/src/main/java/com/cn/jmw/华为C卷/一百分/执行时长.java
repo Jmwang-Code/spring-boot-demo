@@ -10,4 +10,9 @@ public class 执行时长 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

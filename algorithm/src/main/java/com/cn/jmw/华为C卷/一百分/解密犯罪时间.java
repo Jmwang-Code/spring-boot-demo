@@ -10,4 +10,9 @@ public class 解密犯罪时间 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

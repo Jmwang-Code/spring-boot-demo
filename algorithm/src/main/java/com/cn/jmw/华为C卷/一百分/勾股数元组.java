@@ -10,4 +10,9 @@ public class 勾股数元组 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

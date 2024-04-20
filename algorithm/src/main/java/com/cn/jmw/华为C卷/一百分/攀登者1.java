@@ -10,4 +10,9 @@ public class 攀登者1 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

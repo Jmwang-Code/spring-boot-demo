@@ -10,4 +10,9 @@ public class 火星文计算 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

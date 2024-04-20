@@ -10,4 +10,9 @@ public class 悄悄话 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

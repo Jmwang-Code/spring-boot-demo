@@ -10,4 +10,9 @@ public class 滑动窗口最大和 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

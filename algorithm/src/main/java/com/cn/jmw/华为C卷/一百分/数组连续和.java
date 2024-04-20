@@ -10,4 +10,9 @@ public class 数组连续和 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

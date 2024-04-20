@@ -10,4 +10,9 @@ public class 用户调度问题 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 寻找相同子串 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

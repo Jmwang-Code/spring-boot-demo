@@ -10,4 +10,9 @@ public class 寻找身高相近的小朋友 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

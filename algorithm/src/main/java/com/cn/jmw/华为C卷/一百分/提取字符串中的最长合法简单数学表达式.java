@@ -10,4 +10,9 @@ public class 提取字符串中的最长合法简单数学表达式 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

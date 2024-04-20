@@ -10,4 +10,9 @@ public class 机器人搬砖 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

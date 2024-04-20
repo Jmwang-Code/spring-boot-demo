@@ -10,4 +10,9 @@ public class 小明找位置 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 精准核酸检测 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

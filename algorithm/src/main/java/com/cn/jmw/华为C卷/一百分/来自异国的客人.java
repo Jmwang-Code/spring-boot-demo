@@ -10,4 +10,9 @@ public class 来自异国的客人 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

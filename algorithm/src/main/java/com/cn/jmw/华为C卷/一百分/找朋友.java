@@ -10,4 +10,9 @@ public class 找朋友 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

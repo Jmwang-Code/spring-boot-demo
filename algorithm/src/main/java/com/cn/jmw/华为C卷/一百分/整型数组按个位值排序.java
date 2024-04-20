@@ -10,4 +10,9 @@ public class 整型数组按个位值排序 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

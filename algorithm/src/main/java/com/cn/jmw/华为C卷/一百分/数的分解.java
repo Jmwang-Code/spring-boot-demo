@@ -10,4 +10,9 @@ public class 数的分解 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 最大N个数与最小N个数的和 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 智能成绩表 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

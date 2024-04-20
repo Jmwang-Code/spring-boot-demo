@@ -10,4 +10,9 @@ public class 密钥格式化 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

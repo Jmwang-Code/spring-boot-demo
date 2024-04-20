@@ -10,4 +10,9 @@ public class 求解连续数列 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

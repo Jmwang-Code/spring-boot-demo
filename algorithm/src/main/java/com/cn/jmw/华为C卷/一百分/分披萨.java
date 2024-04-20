@@ -10,4 +10,9 @@ public class 分披萨 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

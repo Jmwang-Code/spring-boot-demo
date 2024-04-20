@@ -10,4 +10,9 @@ public class 约瑟夫问题 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

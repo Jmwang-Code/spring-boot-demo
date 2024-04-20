@@ -10,4 +10,9 @@ public class 猴子爬山 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

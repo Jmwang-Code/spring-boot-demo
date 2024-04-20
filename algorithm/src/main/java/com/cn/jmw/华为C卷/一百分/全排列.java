@@ -10,4 +10,9 @@ public class 全排列 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

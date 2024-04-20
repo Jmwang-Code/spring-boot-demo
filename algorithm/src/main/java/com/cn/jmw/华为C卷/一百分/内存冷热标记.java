@@ -10,4 +10,9 @@ public class 内存冷热标记 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

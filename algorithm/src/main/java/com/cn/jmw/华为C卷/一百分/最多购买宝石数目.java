@@ -10,4 +10,9 @@ public class 最多购买宝石数目 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

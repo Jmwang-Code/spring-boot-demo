@@ -10,4 +10,9 @@ public class 小华地图寻宝 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

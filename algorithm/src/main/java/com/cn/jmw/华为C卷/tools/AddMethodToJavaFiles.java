@@ -8,12 +8,12 @@ public class AddMethodToJavaFiles {
 
     public static void main(String[] args) {
         String directoryPath = "C:\\Users\\wjm\\IdeaProjects\\spring-boot-demo\\algorithm\\src\\main\\java\\com\\cn\\jmw\\华为C卷\\一百分"; // 替换为你的目录路径
-        String methodName = "\n    public static String getResult() {\n\t// 在这里编写你自定义的方法逻辑\n        return null;\n    }\n";
-
-        addMethodToJavaFiles(directoryPath, methodName);
+        String methodName = "\n    public static void main(String[] args) {\n\n   }\n";
+        String pre = "    public static void main(String[] args) {";
+        addMethodToJavaFiles(directoryPath, methodName,pre);
     }
 
-    public static void addMethodToJavaFiles(String directoryPath, String method) {
+    public static void addMethodToJavaFiles(String directoryPath, String method,String pre) {
         try {
             // 遍历目录下的所有文件
             Files.walk(Paths.get(directoryPath))
@@ -24,7 +24,7 @@ public class AddMethodToJavaFiles {
                             // 读取文件内容
                             String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
                             // 检查文件中是否已存在相同名称的函数
-                            if (!content.contains(method.split("\\{")[0].trim())) {
+                            if (!content.contains(pre.split("\\{")[0].trim())) {
                                 // 找到最后一个 } 符号的位置
                                 int lastIndex = content.lastIndexOf("}");
                                 // 在最后一个 } 符号的上一行添加方法

@@ -10,4 +10,9 @@ public class 字符串筛选排序 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

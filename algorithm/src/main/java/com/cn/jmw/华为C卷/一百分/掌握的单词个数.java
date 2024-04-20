@@ -10,4 +10,9 @@ public class 掌握的单词个数 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

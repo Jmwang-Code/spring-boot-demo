@@ -10,4 +10,9 @@ public class 水仙花数 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

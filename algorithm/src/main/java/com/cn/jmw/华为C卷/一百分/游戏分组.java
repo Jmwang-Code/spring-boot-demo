@@ -10,4 +10,9 @@ public class 游戏分组 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

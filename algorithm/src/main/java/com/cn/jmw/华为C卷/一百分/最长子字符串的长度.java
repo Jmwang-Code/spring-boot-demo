@@ -10,4 +10,9 @@ public class 最长子字符串的长度 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

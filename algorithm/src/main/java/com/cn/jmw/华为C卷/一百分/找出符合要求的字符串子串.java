@@ -10,4 +10,9 @@ public class 找出符合要求的字符串子串 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

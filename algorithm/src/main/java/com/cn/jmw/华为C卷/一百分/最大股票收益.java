@@ -10,4 +10,9 @@ public class 最大股票收益 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 字符串分割二 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

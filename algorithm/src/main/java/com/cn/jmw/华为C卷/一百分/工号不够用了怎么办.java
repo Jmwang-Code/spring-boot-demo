@@ -10,4 +10,9 @@ public class 工号不够用了怎么办 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

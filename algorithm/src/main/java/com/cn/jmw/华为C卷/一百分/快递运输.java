@@ -10,4 +10,9 @@ public class 快递运输 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

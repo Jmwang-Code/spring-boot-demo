@@ -10,4 +10,9 @@ public class 转盘寿司 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 连续字母长度 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

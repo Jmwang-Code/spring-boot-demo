@@ -10,4 +10,9 @@ public class 小明的幸运数 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

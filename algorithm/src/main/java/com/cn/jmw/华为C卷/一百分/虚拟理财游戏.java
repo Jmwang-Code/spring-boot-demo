@@ -10,4 +10,9 @@ public class 虚拟理财游戏 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

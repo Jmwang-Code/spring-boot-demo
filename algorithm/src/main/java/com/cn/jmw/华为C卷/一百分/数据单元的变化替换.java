@@ -10,4 +10,9 @@ public class 数据单元的变化替换 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

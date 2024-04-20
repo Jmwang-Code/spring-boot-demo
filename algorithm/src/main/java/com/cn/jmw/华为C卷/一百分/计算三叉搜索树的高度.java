@@ -10,4 +10,9 @@ public class 计算三叉搜索树的高度 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

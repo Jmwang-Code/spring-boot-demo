@@ -10,4 +10,9 @@ public class 最大矩阵和 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

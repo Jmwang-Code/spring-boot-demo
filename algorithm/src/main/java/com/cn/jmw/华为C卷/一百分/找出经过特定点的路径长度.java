@@ -10,4 +10,9 @@ public class 找出经过特定点的路径长度 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

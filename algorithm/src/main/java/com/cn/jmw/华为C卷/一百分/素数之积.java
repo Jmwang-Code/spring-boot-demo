@@ -10,4 +10,9 @@ public class 素数之积 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

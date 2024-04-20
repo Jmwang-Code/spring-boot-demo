@@ -10,4 +10,9 @@ public class 螺旋数字矩阵 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

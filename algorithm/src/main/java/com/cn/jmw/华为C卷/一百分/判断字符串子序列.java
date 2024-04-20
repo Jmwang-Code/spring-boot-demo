@@ -10,4 +10,9 @@ public class 判断字符串子序列 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

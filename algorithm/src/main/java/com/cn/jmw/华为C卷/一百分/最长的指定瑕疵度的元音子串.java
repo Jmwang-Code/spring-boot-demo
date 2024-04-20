@@ -10,4 +10,9 @@ public class 最长的指定瑕疵度的元音子串 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 求符合要求的结对方式 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

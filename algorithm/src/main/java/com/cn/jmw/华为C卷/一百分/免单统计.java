@@ -10,4 +10,9 @@ public class 免单统计 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

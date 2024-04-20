@@ -10,4 +10,9 @@ public class 求幸存数之和 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

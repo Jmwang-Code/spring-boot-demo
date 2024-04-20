@@ -10,4 +10,9 @@ public class 灰度图存储 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

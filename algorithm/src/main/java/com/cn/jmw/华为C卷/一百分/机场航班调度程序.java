@@ -10,4 +10,9 @@ public class 机场航班调度程序 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

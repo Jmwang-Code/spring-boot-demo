@@ -10,4 +10,9 @@ public class 检查是否存在满足条件的数字组合 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

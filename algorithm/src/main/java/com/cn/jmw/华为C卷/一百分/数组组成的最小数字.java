@@ -10,4 +10,9 @@ public class 数组组成的最小数字 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

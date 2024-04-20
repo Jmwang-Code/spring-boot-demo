@@ -10,4 +10,9 @@ public class 数字字符串组合倒序 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

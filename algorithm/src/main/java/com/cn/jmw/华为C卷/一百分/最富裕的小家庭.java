@@ -10,4 +10,9 @@ public class 最富裕的小家庭 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

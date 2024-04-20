@@ -10,4 +10,9 @@ public class 剩余银饰的重量 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

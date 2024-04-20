@@ -10,4 +10,9 @@ public class 两数之和绝对值最小 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

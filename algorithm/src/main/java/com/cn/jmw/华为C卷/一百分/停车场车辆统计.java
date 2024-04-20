@@ -10,4 +10,9 @@ public class 停车场车辆统计 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

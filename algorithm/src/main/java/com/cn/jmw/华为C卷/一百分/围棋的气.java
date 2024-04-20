@@ -10,4 +10,9 @@ public class 围棋的气 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

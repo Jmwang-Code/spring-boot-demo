@@ -10,4 +10,9 @@ public class 手机App防沉迷系统 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

@@ -10,4 +10,9 @@ public class 冠亚军排名奖牌榜排名 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

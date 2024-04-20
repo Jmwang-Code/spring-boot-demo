@@ -10,4 +10,9 @@ public class 开源项目热度榜单 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

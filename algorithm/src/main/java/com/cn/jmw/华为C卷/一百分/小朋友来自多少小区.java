@@ -10,4 +10,9 @@ public class 小朋友来自多少小区 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

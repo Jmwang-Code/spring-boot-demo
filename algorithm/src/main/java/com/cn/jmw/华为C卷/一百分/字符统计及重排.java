@@ -10,4 +10,9 @@ public class 字符统计及重排 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }

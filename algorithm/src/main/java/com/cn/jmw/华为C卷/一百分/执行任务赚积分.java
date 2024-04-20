@@ -10,4 +10,9 @@ public class 执行任务赚积分 {
         return null;
     }
 
+
+    public static void main(String[] args) {
+
+   }
+
 }
