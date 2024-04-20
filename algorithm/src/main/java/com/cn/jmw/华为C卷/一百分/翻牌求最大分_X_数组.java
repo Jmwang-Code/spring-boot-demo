@@ -10,7 +10,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class 翻牌求最大分 {
+public class 翻牌求最大分_X_数组 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
