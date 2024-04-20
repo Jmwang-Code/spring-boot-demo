@@ -9,7 +9,7 @@ import java.util.Scanner;
  *╰—————————————————————————————╯
  *
  */
-public class 分割均衡字符串 {
+public class 分割均衡字符串_X_字符串 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
