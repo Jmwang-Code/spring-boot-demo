@@ -9,7 +9,7 @@ import java.util.*;
  *╰—————————————————————————————╯
  *
  */
-public class 多段线数据压缩 {
+public class 多段线数据压缩_X_数学向量 {
 
     static class Location{
         int x;
