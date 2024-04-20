@@ -32,4 +32,13 @@ public class 翻牌求最大分_X_数组 {
         }
         return sum;
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

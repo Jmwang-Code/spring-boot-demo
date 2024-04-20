@@ -48,4 +48,13 @@ public class 第k个排列XDFS {
         }
 
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

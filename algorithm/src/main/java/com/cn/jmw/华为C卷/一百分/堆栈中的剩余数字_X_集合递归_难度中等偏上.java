@@ -60,4 +60,13 @@ public class 堆栈中的剩余数字_X_集合递归_难度中等偏上 {
         // 如果不相等就直接插入
         stack.add(num);
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

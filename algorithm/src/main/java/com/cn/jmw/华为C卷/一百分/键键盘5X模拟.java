@@ -85,4 +85,13 @@ public class 键键盘5X模拟 {
 
         return screen.size();
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

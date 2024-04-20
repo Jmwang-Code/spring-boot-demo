@@ -37,4 +37,13 @@ public class 爱吃蟠桃的孙悟空X模拟 {
             }
         }
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

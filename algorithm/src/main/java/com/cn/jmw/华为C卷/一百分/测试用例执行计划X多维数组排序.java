@@ -55,4 +55,13 @@ public class 测试用例执行计划X多维数组排序 {
 
         }
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

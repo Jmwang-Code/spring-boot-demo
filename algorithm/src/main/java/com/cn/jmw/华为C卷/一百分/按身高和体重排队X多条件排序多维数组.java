@@ -43,4 +43,13 @@ public class 按身高和体重排队X多条件排序多维数组 {
         }
         System.out.println(sj);
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

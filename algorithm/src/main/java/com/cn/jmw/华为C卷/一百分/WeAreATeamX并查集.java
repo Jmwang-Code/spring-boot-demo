@@ -86,4 +86,13 @@ public class WeAreATeamX并查集 {
             return find(x) == find(y);
         }
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

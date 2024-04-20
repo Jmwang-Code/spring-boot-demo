@@ -73,4 +73,13 @@ public class 堆内存申请X模拟数组 {
 
         return -1;
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

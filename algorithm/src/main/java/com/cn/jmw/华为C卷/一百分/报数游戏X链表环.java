@@ -74,4 +74,13 @@ public class 报数游戏X链表环 {
         }
 
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

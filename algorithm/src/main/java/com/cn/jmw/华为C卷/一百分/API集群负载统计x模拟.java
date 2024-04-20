@@ -41,4 +41,13 @@ public class API集群负载统计x模拟 {
         System.out.println(count);
     }
 
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

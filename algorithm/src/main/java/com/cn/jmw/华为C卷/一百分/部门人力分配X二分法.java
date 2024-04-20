@@ -117,4 +117,13 @@ public class 部门人力分配X二分法 {
         return M >= useMonth;
     }
 
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

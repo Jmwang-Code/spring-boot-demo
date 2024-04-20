@@ -21,4 +21,13 @@ public class 单词重量X字符串格式化 {
         }
         System.out.println(String.format("%.2f", sum / strings.length).toString());
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

@@ -65,4 +65,13 @@ public class 多段线数据压缩_X_数学向量 {
         }
         return stringJoiner.toString();
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

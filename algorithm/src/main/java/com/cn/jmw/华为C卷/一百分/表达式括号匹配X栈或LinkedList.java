@@ -38,4 +38,13 @@ public class 表达式括号匹配X栈或LinkedList {
         if (strings.size()!=0)count=-1;
         System.out.println(count);
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

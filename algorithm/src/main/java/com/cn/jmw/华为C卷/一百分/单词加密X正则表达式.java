@@ -37,4 +37,13 @@ public class 单词加密X正则表达式 {
             System.out.println(String.join(" ", words));
         }
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

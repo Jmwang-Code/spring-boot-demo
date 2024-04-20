@@ -68,4 +68,13 @@ public class 单词接龙X比较器和哈希表 {
 
         }
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

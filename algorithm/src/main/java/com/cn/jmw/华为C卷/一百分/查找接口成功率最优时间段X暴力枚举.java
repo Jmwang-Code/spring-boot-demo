@@ -67,4 +67,13 @@ public class 查找接口成功率最优时间段X暴力枚举 {
     }
 
 
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

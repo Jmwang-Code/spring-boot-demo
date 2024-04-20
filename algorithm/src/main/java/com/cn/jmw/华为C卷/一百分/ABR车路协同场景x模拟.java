@@ -54,4 +54,13 @@ public class ABR车路协同场景x模拟 {
 
         return sb.toString();
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

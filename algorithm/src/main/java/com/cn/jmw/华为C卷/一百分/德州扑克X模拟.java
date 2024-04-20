@@ -95,4 +95,13 @@ public class 德州扑克X模拟 {
 
         return count.containsValue(maxSameNumCount);
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }

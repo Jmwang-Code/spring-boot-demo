@@ -99,4 +99,13 @@ public class CPU算力分配x模拟 {
             }
         }
     }
+
+    
+
+
+    public static String getResult() {
+	// 在这里编写你自定义的方法逻辑
+        return null;
+    }
+
 }
