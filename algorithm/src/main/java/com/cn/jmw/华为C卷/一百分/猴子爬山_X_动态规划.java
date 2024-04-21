@@ -3,7 +3,7 @@ package com.cn.jmw.华为C卷.一百分;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class 猴子爬山 {
+public class 猴子爬山_X_动态规划 {
 
     public static int getResult(int target,int indexCur,int[] arr) {
         if (indexCur>target){
