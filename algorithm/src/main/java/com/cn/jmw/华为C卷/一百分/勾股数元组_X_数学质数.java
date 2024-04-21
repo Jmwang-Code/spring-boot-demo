@@ -12,7 +12,7 @@ import java.util.StringJoiner;
  *╰—————————————————————————————╯
  * 
  */
-public class 勾股数元组 {
+public class 勾股数元组_X_数学质数 {
 
 
     public static void getResult(int X, int Y) {
