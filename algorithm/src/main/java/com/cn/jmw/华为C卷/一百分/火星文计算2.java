@@ -6,11 +6,27 @@ import java.util.regex.Pattern;
 
 public class 火星文计算2 {
 
-    public static String getResult(String s) {
-        Pattern compile = Pattern.compile("\\d\\$\\d");
-        Matcher matcher = compile.matcher(s);
+    public static long getResult(String s) {
+        Pattern compile2 = Pattern.compile("(\\d+)#(\\d+)");
 
         while (true){
+            Matcher matcher2 = compile2.matcher(s);
+            if (!matcher2.find()){
+                break;
+            }
+
+            //整体
+            String group = matcher2.group(0);
+            long x = Long.parseLong(matcher2.group(1));
+            long y = Long.parseLong(matcher2.group(2));
+            s = s.replaceFirst(group,4*x+3*y+2+"");
+        }
+
+
+        Pattern compile = Pattern.compile("(\\d+)\\$(\\d+)");
+
+        while (true){
+            Matcher matcher = compile.matcher(s);
             if (!matcher.find()){
                 break;
             }
@@ -19,11 +35,10 @@ public class 火星文计算2 {
             String group = matcher.group(0);
             long x = Long.parseLong(matcher.group(1));
             long y = Long.parseLong(matcher.group(2));
-            s.replaceFirst(group.replace("$", "\\$"),3*x+y+2+"");
+            s = s.replaceFirst(group.replace("$", "\\$"),2*x+y+3+"");
         }
 
-
-        return null;
+        return Long.parseLong(s);
     }
 
 
@@ -32,5 +47,6 @@ public class 火星文计算2 {
         String s = scanner.nextLine();
         System.out.println(getResult(s));
     }
+
 
 }
