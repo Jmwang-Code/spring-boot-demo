@@ -8,7 +8,7 @@ public class AddMethodToJavaFiles {
 
     public static void main(String[] args) {
         String directoryPath = "C:\\Users\\wjm\\IdeaProjects\\spring-boot-demo\\algorithm\\src\\main\\java\\com\\cn\\jmw\\华为C卷\\一百分"; // 替换为你的目录路径
-        String methodName = "\n    public static void main(String[] args) {\n\n   }\n";
+        String methodName = "\n    public static void main(String[] args) {\n\n    }\n";
         String pre = "    public static void main(String[] args) {";
         addMethodToJavaFiles(directoryPath, methodName,pre);
     }
