@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
-public class 机场航班调度程序 {
+public class 机场航班调度程序_X_排序 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
