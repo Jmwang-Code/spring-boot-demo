@@ -1,12 +1,17 @@
 package com.cn.jmw.华为C卷.一百分;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class 猴子爬山 {
 
-    public static int getResult(int target,int indexCur) {
+    public static int getResult(int target,int indexCur,int[] arr) {
         if (indexCur>target){
             return 0;
+        }
+
+        if (arr[indexCur]!=-1){
+            return arr[indexCur];
         }
 
         if (indexCur==target){
@@ -14,8 +19,11 @@ public class 猴子爬山 {
         }
 
         int sum = 0;
-        sum += getResult(target,indexCur+1);
-        sum += getResult(target,indexCur+3);
+        sum += getResult(target,indexCur+1,arr);
+        sum += getResult(target,indexCur+3,arr);
+
+        arr[indexCur] = sum;
+
         return sum;
     }
 
@@ -23,7 +31,9 @@ public class 猴子爬山 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int target = scanner.nextInt();
-        System.out.println(getResult(target,0));
+        int[] arr = new int[target+1];
+        Arrays.fill(arr,-1);
+        System.out.println(getResult(target,0,arr));
     }
 
 }
