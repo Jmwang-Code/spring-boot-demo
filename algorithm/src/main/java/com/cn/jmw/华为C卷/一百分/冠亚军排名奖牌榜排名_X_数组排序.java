@@ -3,7 +3,7 @@ package com.cn.jmw.华为C卷.一百分;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class 冠亚军排名奖牌榜排名 {
+public class 冠亚军排名奖牌榜排名_X_数组排序 {
 
 
     public static void getResult(String[][] arr) {
