@@ -9,7 +9,7 @@ import java.util.*;
  *╰—————————————————————————————╯
  * 
  */
-public class 分配土地 {
+public class 分配土地_X_数组_简单 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
