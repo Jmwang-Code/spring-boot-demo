@@ -2,7 +2,7 @@ package com.cn.jmw.华为C卷.一百分;
 
 import java.util.Scanner;
 
-public class 滑动窗口最大和 {
+public class 滑动窗口最大和_X_滑动窗口_简单 {
 
     // 输入获取
     public static void main(String[] args) {
