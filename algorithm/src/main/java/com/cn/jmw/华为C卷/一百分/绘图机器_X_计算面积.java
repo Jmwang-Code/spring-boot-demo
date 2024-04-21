@@ -2,7 +2,7 @@ package com.cn.jmw.华为C卷.一百分;
 
 import java.util.Scanner;
 
-public class 绘图机器 {
+public class 绘图机器_X_计算面积 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
