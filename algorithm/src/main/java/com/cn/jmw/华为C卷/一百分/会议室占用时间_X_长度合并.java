@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class 会议室占用时间 {
+public class 会议室占用时间_X_长度合并 {
 
     // 输入输出处理
     public static void main(String[] args) {
