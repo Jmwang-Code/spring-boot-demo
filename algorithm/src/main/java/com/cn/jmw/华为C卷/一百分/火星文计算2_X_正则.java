@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class 火星文计算2 {
+public class 火星文计算2_X_正则 {
 
     public static long getResult(String s) {
         Pattern compile2 = Pattern.compile("(\\d+)#(\\d+)");
