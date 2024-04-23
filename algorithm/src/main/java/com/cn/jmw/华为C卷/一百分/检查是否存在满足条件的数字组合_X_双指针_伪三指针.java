@@ -3,7 +3,7 @@ package com.cn.jmw.华为C卷.一百分;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class 检查是否存在满足条件的数字组合 {
+public class 检查是否存在满足条件的数字组合_X_双指针_伪三指针 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
