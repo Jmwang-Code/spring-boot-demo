@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class 解密犯罪时间 {
+public class 解密犯罪时间_X_dfs全排列 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
