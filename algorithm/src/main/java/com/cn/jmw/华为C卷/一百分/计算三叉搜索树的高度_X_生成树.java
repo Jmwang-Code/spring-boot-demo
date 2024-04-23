@@ -1,7 +1,5 @@
 package com.cn.jmw.华为C卷.一百分;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class 计算三叉搜索树的高度_X_生成树 {
