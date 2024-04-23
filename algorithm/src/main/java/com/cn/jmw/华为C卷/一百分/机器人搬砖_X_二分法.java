@@ -3,7 +3,7 @@ package com.cn.jmw.华为C卷.一百分;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class 机器人搬砖 {
+public class 机器人搬砖_X_二分法 {
 
     public static int getResult(int[] split) {
         int n = split.length;
