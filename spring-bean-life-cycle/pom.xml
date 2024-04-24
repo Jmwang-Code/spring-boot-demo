@@ -13,7 +13,7 @@
     <name>spring-bean-life-cycle</name>
     <description>spring-bean-life-cycle</description>
     <properties>
-        <java.version>19</java.version>
+        <java.version>22</java.version>
     </properties>
     <dependencies>
         <dependency>

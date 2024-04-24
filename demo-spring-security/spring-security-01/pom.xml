@@ -14,7 +14,7 @@
     <name>spring-security-01</name>
     <description>spring-security-01</description>
     <properties>
-        <java.version>19</java.version>
+        <java.version>22</java.version>
     </properties>
     <dependencies>
         <dependency>

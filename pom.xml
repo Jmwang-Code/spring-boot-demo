@@ -97,6 +97,7 @@
       <module>unix</module>
       <module>My-Resume</module>
       <module>demo-jvm</module>
+      <module>demo-source-code</module>
       <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
@@ -108,9 +109,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-    <java.version>19</java.version>
-    <maven.compiler.source>19</maven.compiler.source>
-    <maven.compiler.target>19</maven.compiler.target>
+    <java.version>22</java.version>
+    <maven.compiler.source>22</maven.compiler.source>
+    <maven.compiler.target>22</maven.compiler.target>
     <spring.boot.version>3.0.3</spring.boot.version>
     <mysql.version>8.0.21</mysql.version>
     <hutool.version>5.4.5</hutool.version>
