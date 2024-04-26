@@ -8,6 +8,7 @@ public class SegmentTest {
 
     @Test
     public void ConcurrentHashMap_Segment(){
+
         Map map = new ConcurrentHashMap();
         map.put(1,1);
     }
