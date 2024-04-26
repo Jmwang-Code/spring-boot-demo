@@ -3,6 +3,7 @@ package newTrie.inner;
 public class TrieNode {
     public char c;
     public TrieNode[] children;
+    public int isEnd;
 
     // Node的其他代码...
 

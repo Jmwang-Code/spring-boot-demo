@@ -1,16 +1,20 @@
 package newTrie;
 
 import newTrie.inner.ForEachTrieTask;
+import newTrie.inner.SearchTask;
 import newTrie.inner.TrieNode;
 import newTrie.inner.TrieIterator;
-import newTrie.inter.TrieForkJoinInterface;
+import newTrie.inter.ForEachForkJoinInterface;
+import newTrie.inter.SearchForkJoinInterface;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * <code><b>一、基本介绍</b></code>
@@ -34,10 +38,17 @@ import java.util.function.Function;
  * <p>这里的节点扩容是指的是给某个节点上的下一层数组进行扩容，这个扩容是线程安全的，不会出现并发问题。不会预留空间。每次扩容或者缩容。
  * 在有参构造器中进行深拷贝。自定义迭代器，实现了{@link Iterable}接口。默认的迭代器是层序顺序遍历。BFS广度有限搜索。不保证顺序。
  *
+ * <br>
+ * <p><code><b>四、ForkJoin分支合并函数</b></code>
+ * <p>这个{@link ForEachTrieTask}实现了{@link ForEachForkJoinInterface}接口，支持ForkJoin的函数。可以并行遍历前缀树的任务。
+ * 在这个系列中，我们将会实现更多的ForkJoin的函数。可以设置并行阈值，当size大于这个阈值的时候，就会进行并行遍历。
+ * 并行阈值（parallelismThreshold）：批量操作接受一个名为parallelismThreshold的参数。如果当前映射的大小预计小于给定的阈值，方法将顺序执行。
+ * 通过划分足够的子任务来充分利用ForkJoinPool.commonPool()，这个池用于所有并行计算。通常，你会首先选择这些极端值中的一个，然后测量使用介于两者之间的值（在开销和吞吐量之间进行权衡）的性能。
  *
  *
  */
-public class Trie implements Serializable, Iterable<TrieNode>, TrieForkJoinInterface {
+public class Trie implements Serializable, Iterable<TrieNode>,
+        ForEachForkJoinInterface, SearchForkJoinInterface {
 
     //序列号
     private static final long serialVersionUID = 7249069246763182397L;
@@ -83,7 +94,7 @@ public class Trie implements Serializable, Iterable<TrieNode>, TrieForkJoinInter
     }
 
     /**
-     *
+     * 并行遍历前缀树的任务。
      * @param parallelismThreshold 并行阈值
      * @param transformer 转换器
      * @param action 操作
@@ -96,5 +107,11 @@ public class Trie implements Serializable, Iterable<TrieNode>, TrieForkJoinInter
         } else {
             forEach(node -> action.accept(transformer.apply(node)));
         }
+    }
+
+    @Override
+    public TrieNode searchParallel(int parallelismThreshold) {
+        ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
+        return pool.invoke(new SearchTask(getRoot(), new ArrayList<>()));
     }
 }

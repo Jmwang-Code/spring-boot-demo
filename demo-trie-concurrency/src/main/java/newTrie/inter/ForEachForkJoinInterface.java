@@ -8,10 +8,9 @@ import newTrie.inner.TrieNode;
 /**
  * 主要Trie中支持ForkJoin的函数
  */
-public interface TrieForkJoinInterface {
+public interface ForEachForkJoinInterface extends ForkJoinInterface {
 
     //ForEachTrieTask
-
     /**
      * @param parallelismThreshold 并行阈值
      * @param transformer          转换器
