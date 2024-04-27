@@ -112,6 +112,12 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     @Override
     public TrieNode searchParallel(int parallelismThreshold) {
         ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
-        return pool.invoke(new SearchTask(getRoot(), new ArrayList<>()));
+        try {
+            return pool.invoke(new SearchTask(getRoot(), new ArrayList<>()));
+        } finally {
+            pool.shutdown();  // 关闭ForkJoinPool
+        }
     }
+
+
 }
