@@ -7,9 +7,11 @@ import newTrie.inner.TrieIterator;
 import newTrie.inter.ForEachForkJoinInterface;
 import newTrie.inter.SearchForkJoinInterface;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
@@ -51,6 +53,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         ForEachForkJoinInterface, SearchForkJoinInterface {
 
     //序列号
+    @Serial
     private static final long serialVersionUID = 7249069246763182397L;
 
     //根节点
@@ -58,6 +61,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
 
     //实体数量,是瞬间值，可能是过去某一时刻的值
     private transient int size = 0;
+    private transient int deep = 0;
 
     /**
      * 无参构造函数 (初始化)
@@ -87,9 +91,16 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     }
 
     /**
+     * deep
+     */
+    public int deep(){
+        return deep;
+    }
+
+    /**
      * getRoot
      */
-    public TrieNode getRoot() {
+    private TrieNode getRoot() {
         return root;
     }
 
@@ -103,7 +114,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     @Override
     public <U> void forEachParallel(int parallelismThreshold, Function<TrieNode, U> transformer, Consumer<U> action) {
         if (size() > parallelismThreshold) {
-            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<>(getRoot(), transformer, action,new Semaphore(parallelismThreshold)));
+            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(getRoot(), transformer, action,new Semaphore(parallelismThreshold)));
         } else {
             forEach(node -> action.accept(transformer.apply(node)));
         }
@@ -119,5 +130,34 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         }
     }
 
+    /**
+     * 通过反射获取Unsafe实例
+     * 提供了一组底层的原子操作，包括对内存的直接访问和CAS（Compare and Swap）操作。
+     */
+    private static final sun.misc.Unsafe U;
+    //控制表的大小，用于并发控制。
+    private static final long SIZECTL;
+    //控制调整大小的操作，用于并发控制（扩容）
+    private static final long TRANSFERINDEX;
+    //保存ConcurrentHashMap的元素数量。
+    private static final long BASECOUNT;
+    //控制对counterCells数组的访问，用于并发控制。
+    private static final long CELLSBUSY;
 
+    static {
+        try {
+            U = sun.misc.Unsafe.getUnsafe();
+            Class<?> k = ConcurrentHashMap.class;
+            SIZECTL = U.objectFieldOffset
+                    (k.getDeclaredField("sizeCtl"));
+            TRANSFERINDEX = U.objectFieldOffset
+                    (k.getDeclaredField("transferIndex"));
+            BASECOUNT = U.objectFieldOffset
+                    (k.getDeclaredField("baseCount"));
+            CELLSBUSY = U.objectFieldOffset
+                    (k.getDeclaredField("cellsBusy"));
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+    }
 }

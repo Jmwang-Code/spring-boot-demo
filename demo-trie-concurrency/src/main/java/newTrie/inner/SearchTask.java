@@ -16,14 +16,14 @@ public class SearchTask extends RecursiveTask<TrieNode> {
 
     @Override
     protected TrieNode compute() {
-        if (node.isEnd == 1 || node.isEnd == 2) {
+        if (node.status == 1 || node.status == 2) {
             // If the current node satisfies the condition, return it
             return node;
         } else {
             // Otherwise, create new tasks for all children
             List<SearchTask> tasks = new ArrayList<>();
-            for (int i = 0; i < node.children.length; i++) {
-                TrieNode child = node.children[i];
+            for (int i = 0; i < node.branches.length; i++) {
+                TrieNode child = node.branches[i];
                 if (child != null) {
                     List<Integer> childPath = new ArrayList<>(path);
                     childPath.add(i);  // Add the character of the child to the path

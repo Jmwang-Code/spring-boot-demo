@@ -33,7 +33,7 @@ public final class ForEachTrieTask<U> extends RecursiveAction {
             action.accept(transformer.apply(node));
 
             // 对每个子节点创建并执行新的任务
-            for (TrieNode child : node.children) {
+            for (TrieNode child : node.branches) {
                 if (child != null) {
                     new ForEachTrieTask<>(child, transformer, action, semaphore).fork();
                 }

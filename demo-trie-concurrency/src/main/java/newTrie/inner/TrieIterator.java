@@ -22,8 +22,8 @@ public class TrieIterator implements Iterator<TrieNode> {
     public TrieNode next() {
         TrieNode node = stack.pop();
         //通过数组
-        if (node.children != null) {
-            for (TrieNode child : node.children) {
+        if (node.branches != null) {
+            for (TrieNode child : node.branches) {
                 if (child != null) {
                     stack.push(child);
                 }
