@@ -2,12 +2,22 @@ package newTrie.inner;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class TrieNode implements Serializable,Comparable<TrieNode> {
+public class TrieNode implements Serializable, Comparable<TrieNode> {
 
     @Serial
     private static final long serialVersionUID = 5727284941846160588L;
+
+    private final static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+
+    private final static Lock r = rwl.readLock();
+
+    private final static Lock w = rwl.writeLock();
+
 
     /**
      * 树节点字符
@@ -30,7 +40,21 @@ public class TrieNode implements Serializable,Comparable<TrieNode> {
 
     /**
      * 分支子节点
-     * TODO 暂时使用public后面改private
+     * <p>TODO 暂时使用public后面改private
+     *
+     * <p>使用一个固定长度为65536的数组，并且你可以直接通过字符映射到数组的索引位置，那么检索操作的时间复杂度确实是O(1)。这是因为数组允许通过索引直接访问元素，无论数组的大小如何，这个操作的时间复杂度都是常数时间，即O(1)。
+     * <p>然而，这种方法的一个主要缺点是可能会浪费大量的内存空间。如果你的应用中并不会使用到所有的Unicode字符，那么大部分的数组空间将会被浪费。具体来说，如果你的数组中大部分元素都是空的，那么你就在存储这些空元素上浪费了空间。这种空间浪费可能会成为问题，特别是如果你的应用有严格的内存限制，或者如果你需要创建多个这样的数组。
+     * <p>总的来说，这种方法在查询速度（时间复杂度为O(1)）和内存使用（可能会浪费大量空间）之间做出了权衡。
+     *
+     * <p>另一种就是慢慢扩展不要顺序，不维护顺序。O(n)去找
+     * <br>
+     * <p><code><b>解决数组设计的方式：</b></code>
+     * <br>
+     * <p><code><b>一、O(n)二进制查找、空间复杂度无限接近O(1)*n</b></code>
+     * <br>
+     * <p><code><b>二、O(logN)维持顺序二进制查找、空间复杂度无限接近O(1)*n,但是要维护顺序额外开销</b></code>
+     * <br>
+     * <p><code><b>一、O(1)索引定位、空间复杂度O(65536)*n,会消耗大量开辟内存并且可能不使用</b></code>
      */
     public TrieNode[] branches;
 
@@ -44,12 +68,13 @@ public class TrieNode implements Serializable,Comparable<TrieNode> {
     /**
      * 无参构造器
      */
-    public TrieNode(){
+    public TrieNode() {
         c = -1;
     }
 
     /**
      * 有参构造
+     *
      * @see #c
      * c
      */
@@ -101,6 +126,7 @@ public class TrieNode implements Serializable,Comparable<TrieNode> {
 
     /**
      * 复制构造函数
+     *
      * @param node TrieNode
      */
     public TrieNode(TrieNode node) {
@@ -126,7 +152,7 @@ public class TrieNode implements Serializable,Comparable<TrieNode> {
         return tc > oc ? 1 : (tc == oc ? 0 : -1);
     }
 
-    public int getCode(){
+    public int getCode() {
         return this.c;
     }
 
@@ -146,4 +172,61 @@ public class TrieNode implements Serializable,Comparable<TrieNode> {
     public int hashCode() {
         return Objects.hash(c, status, code);
     }
+
+    /**
+     * 获取TrieNode,节点通过前缀方式
+     *
+     * @return com.cn.jmw.trie.TrieNode
+     * @throws
+     * @Param [c]
+     */
+    public TrieNode get(int c) {
+        r.lock();
+        try {
+            return getBranch(c);
+        } finally {
+            r.unlock();
+        }
+    }
+
+    /**
+     * 通过传入字符查询当前数组索引，获取分支节点
+     *
+     * @return com.cn.jmw.trie.TrieNode
+     * @throws
+     * @Param [c]
+     */
+    public TrieNode getBranch(int c) {
+        int index = getIndex(c);
+        if (index < 0) {
+            return null;
+        } else {
+            return this.branches[index];
+        }
+    }
+
+    /**
+     * 获取数组索引
+     *
+     * @return int
+     * @throws
+     * @Param [c]
+     * <p>值得考虑二分么？ 如果你的数组长度固定为65536，且每个元素都可能被使用，那么使用二分搜索是值得的。因为二分搜索的时间复杂度为O(log n)，在这种情况下，它将比线性搜索更高效。
+     * <p>会出现的问题？ 如果你的数组长度固定为65536，但实际使用的元素数量远小于这个数，那么你将面临内存浪费的问题。此外，如果你需要存储的元素数量超过65536，你将无法在数组中存储它们。
+     * <p>缺点和优点？ 优点：访问速度快，可以通过索引直接访问对应的元素，时间复杂度为O(1)。能够覆盖所有Unicode字符，不会出现字符无法存储的情况。 缺点：内存浪费，如果你的应用中并不会使用到所有的Unicode字符，那么大部分的数组空间将会被浪费。扩展性差，如果在未来需要存储更多的信息（例如超出Unicode范围的字符），你需要改变数组的大小，这可能会导致大量的数据迁移和复制。
+     * <p>世界上所有的字符会超过Unicode的65536么? Unicode字符集目前定义了超过130,000个字符。但是，这些字符并不都在基本多语言平面（BMP）中，BMP包含的字符数量是65536。超出BMP的字符存储在其他16个辅助平面中，每个平面包含65536个字符位置。因此，如果你需要处理超出BMP的字符，你需要使用更大的数组或者其他数据结构来存储它们。
+     */
+    public int getIndex(int c) {
+        r.lock();
+        try {
+            if (branches == null) {
+                return -1;
+            }
+            int i = Arrays.binarySearch(this.branches, new TrieNode(c));
+            return i;
+        } finally {
+            r.unlock();
+        }
+    }
+
 }
