@@ -4,6 +4,9 @@ import newTrie.util.CodePointUtil;
 
 import java.util.Arrays;
 
+/**
+ * 单词字符串引用
+ */
 public class WordStringRef implements WordString {
 
     private final WordString string;

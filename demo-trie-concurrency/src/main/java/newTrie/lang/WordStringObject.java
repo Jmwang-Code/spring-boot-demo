@@ -5,6 +5,9 @@ import newTrie.util.CodePointUtil;
 
 import java.util.Arrays;
 
+/**
+ * 单词字符串对象
+ */
 public class WordStringObject implements WordString {
 
 	private final int[] characters;
