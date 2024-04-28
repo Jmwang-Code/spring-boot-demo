@@ -222,6 +222,14 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         }
     }
 
+
+    /**
+     * 查询操作
+     */
+    public TrieQueryResult query() {
+        return next();
+    }
+
     /**
      * 查询操作
      * @return
