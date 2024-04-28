@@ -414,7 +414,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 分支 重置模式
+     * 分支 重置替换（新替旧）模式
      *
      * @return java.lang.Boolean
      * @throws
@@ -423,6 +423,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      */
     private Boolean addBranchOnReplaceMode(TrieNode newBranch, TrieNode branch) {
         try {
+            // 状态为确定的词语，且新词语的状态为确定，且新词语的码不等于老词语的码
             if (newBranch.status == 3
                     && (branch.status == 3 || branch.status == 2)
                     && newBranch.code != branch.code) {
@@ -437,7 +438,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 分支 大模式
+     * 分支 保留小的码模式
      * @param newBranch
      * @param branch
      * @return
@@ -475,7 +476,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 分支 大模式
+     * 分支 保留大的码模式
      * @param newBranch
      * @param branch
      * @return
