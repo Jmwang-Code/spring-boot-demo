@@ -6,6 +6,8 @@ import newTrie.lang.WordString;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -249,6 +251,47 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
                 }
             }
             return tempBranch;
+        } finally {
+            r.unlock();
+        }
+    }
+
+    /**
+     * 获取分支路径
+     *
+     * @param word int[]
+     */
+    public TrieNodePath getBranchPath(int[] word) {
+        List<TrieNode> nodes = new LinkedList<TrieNode>();
+        r.lock();
+        try {
+            TrieNode tempBranch = this;
+            nodes.add(tempBranch);
+            int index = 0;
+            for (int j = 0; j < word.length; j++) {
+                index = tempBranch.getIndex(word[j]);
+                if (index < 0) {
+                    return null;
+                }
+                if ((tempBranch = tempBranch.branches[index]) == null) {
+                    return null;
+                }
+                nodes.add(tempBranch);
+            }
+            TrieNodePath result = null;
+            TrieNodePath prevPath = null;
+            for (int i = nodes.size() - 1; i >= 0; i--) {
+                TrieNodePath currentPath = new TrieNodePath();
+                currentPath.setNode(nodes.get(i));
+                if (prevPath != null) {
+                    prevPath.setParent(currentPath);
+                }
+                if (result == null) {
+                    result = currentPath;
+                }
+                prevPath = currentPath;
+            }
+            return result;
         } finally {
             r.unlock();
         }
