@@ -93,6 +93,15 @@ public class MultiCodeLookupTable {
     /**
      * 获取Code
      * @param key
+     * @return
+     */
+    public synchronized TrieCode[] getCode(long key) {
+        return multiCodeExtMap.get(key);
+    }
+
+    /**
+     * 获取Code
+     * @param key
      * @param type
      * @return
      */

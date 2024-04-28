@@ -37,7 +37,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     public long code;
 
     /**
-     * Code类型，用于扩展
+     * Code类型，单码节点还是多码节点
      * TODO 暂时使用public后面改private
      */
     public byte type;
@@ -168,7 +168,11 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     public TrieCode[] getCodes() {
         r.lock();
         try {
-            return new TrieCode[]{new TrieCode(this.code, this.type)};
+            if (this.type == CodeTypes.MULTI_CODE) {
+                return multiCodeLookupTable.getCode(this.code);
+            } else {
+                return new TrieCode[] { new TrieCode(this.code, this.type) };
+            }
         } finally {
             r.unlock();
         }
@@ -414,6 +418,9 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             int l = branches.length;
             // 创建一个新的 branches 数组，长度比原来的数组多1
             TrieNode[] newBranches = new TrieNode[branches.length + 1];
+            /**
+             * 这里插入维护了一个有序的branches数组
+             */
             // 计算新节点应该插入的位置,位置0
             int insert = -(bs + 1);
             // 如果插入位置不是数组的起始位置，将原数组从起始位置到插入位置的元素复制到新数组
@@ -602,6 +609,123 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             }
         } else {
             return multiCodeLookupTable.addCode(branch.code, newValue);
+        }
+    }
+
+    /**
+     * Trie 树中移除一个结束节点,比如 abc 是一个词语,那么 c 是一个结束节点
+     * 当前存在 a ab abc,此时把 abc 移除,那么 c 也需要移除
+     * @param path 路径
+     * @param code 绑定的编码
+     * @param type 编码类型
+     * @return
+     */
+    private boolean removeEndNode(TrieNodePath path, int code, int type) {
+        TrieNode branch = path.getNode();
+        if (branch.getStatus() == 2 || branch.getStatus() == 3) {
+            if (branch.type != CodeTypes.MULTI_CODE) {
+                // 单码的情况
+                if (branch.code == code && branch.type == type) {
+                    // 找到匹配的节点，从父节点移除该节点
+                    TrieNodePath parentPath = path.getParent();
+                    TrieNode parent = parentPath.getNode();
+                    removeFromParent(branch, parent);
+                    if (branch.getStatus() == 3) {
+                        // 如果移除的节点为终节点，还可能需要移除路径上的无用中间节点
+                        removeOrphonNode(parentPath);
+                    }
+                    return true;
+                } else {
+                    // 没有找到匹配的节点
+                    return false;
+                }
+            } else {
+                // 多码的情况
+                boolean remove = multiCodeLookupTable.removeCode(branch.code,
+                        new TrieCode(code, type));
+                if (remove) {
+                    TrieCode[] codes = multiCodeLookupTable
+                            .getCode(branch.code);
+                    if (codes != null && codes.length == 1) {
+                        // 多码变单码的调整
+                        branch.code = codes[0].getCode();
+                        branch.type = codes[0].getType();
+                    } else if (codes == null || codes.length == 0) {
+                        // 找到匹配的节点，从父节点移除该节点
+                        TrieNodePath parentPath = path.getParent();
+                        TrieNode parent = parentPath.getNode();
+                        removeFromParent(branch, parent);
+                        if (branch.getStatus() == 3) {
+                            // 如果移除的节点为终节点，还需移除中间节点
+                            removeOrphonNode(parentPath);
+                        }
+                    } else {
+                        // 无需调整
+                    }
+                    return true;
+                } else {
+                    // 没有找到匹配的节点
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 从父节点移除一个分支
+     * @param branch
+     * @param parent
+     */
+    private void removeFromParent(TrieNode branch, TrieNode parent) {
+        int index = parent.getIndex(branch.c);
+        TrieNode[] newBranches = null;
+        if (parent.branches.length - 1 > 0) {
+            newBranches = new TrieNode[parent.branches.length - 1];
+            if (index > 0) {
+                System.arraycopy(parent.branches, 0, newBranches, 0, index);
+            }
+            if (parent.branches.length - index > 0) {
+                System.arraycopy(parent.branches, index + 1, newBranches,
+                        index, newBranches.length - index);
+            }
+        }
+        parent.branches = newBranches;
+    }
+
+    /**
+     * 移除一个词
+     * @param path
+     */
+    private void removeOrphanNode(TrieNodePath path) {
+        TrieNode node = path.getNode();
+        if ((node.branches == null || node.branches.length == 0)) {
+            if (node.getStatus() == 1) {
+                if (path.getParent() != null) {
+                    removeFromParent(path.getNode(), path.getParent().getNode());
+                    removeOrphanNode(path.getParent());
+                }
+            } else if (node.getStatus() == 2) {
+                node.status = 3;
+            }
+        }
+    }
+
+    /**
+     * 二分查找是否包含
+     *
+     * @param c
+     * @return
+     */
+    public boolean contains(int c) {
+        r.lock();
+        try {
+            if (this.branches == null) {
+                return false;
+            }
+            return Arrays.binarySearch(this.branches, c) > -1;
+        } finally {
+            r.unlock();
         }
     }
 }
