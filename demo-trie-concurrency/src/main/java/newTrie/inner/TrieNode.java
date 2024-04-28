@@ -3,7 +3,6 @@ package newTrie.inner;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -39,6 +38,11 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     public byte type;
 
     /**
+     * 多码查找表，查找节点上绑定的Code值
+     */
+    private static MultiCodeLookupTable multiCodeLookupTable = new MultiCodeLookupTable();
+
+    /**
      * 分支子节点
      * <p>TODO 暂时使用public后面改private
      *
@@ -48,13 +52,13 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      *
      * <p>另一种就是慢慢扩展不要顺序，不维护顺序。O(n)去找
      * <br>
-     * <p><code><b>解决数组设计的方式：</b></code>
+     * <p><code>解决数组设计的方式：</code>
      * <br>
-     * <p><code><b>一、O(n)二进制查找、空间复杂度无限接近O(1)*n</b></code>
+     * <p><code>一、O(n)二进制查找、空间复杂度无限接近O(1)*n</code>
      * <br>
-     * <p><code><b>二、O(logN)维持顺序二进制查找、空间复杂度无限接近O(1)*n,但是要维护顺序额外开销</b></code>
+     * <p><code>二、O(logN)维持顺序二进制查找、空间复杂度无限接近O(1)*n,但是要维护顺序额外开销</code>
      * <br>
-     * <p><code><b>一、O(1)索引定位、空间复杂度O(65536)*n,会消耗大量开辟内存并且可能不使用</b></code>
+     * <p><code>一、O(1)索引定位、空间复杂度O(65536)*n,会消耗大量开辟内存并且可能不使用</code>
      */
     public TrieNode[] branches;
 
@@ -165,12 +169,19 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 在前缀树中，每个节点都有一个分支数组，这个数组包含了指向该节点的所有子节点的引用。这个数组的索引通常是根据子节点的字符值来确定的。因此，即使两个节点的哈希码相同，只要它们在树中的位置不同（即它们的父节点不同或者它们在分支数组中的索引不同），我们仍然可以区分它们。
-     * <p>根据c，status和code这三个字段来生成哈希码的。这意味着，如果两个TrieNode对象的这三个字段都相等，那么它们的哈希码也会相等。</p>
+     * <p>在前缀树中，每个节点都有一个分支数组，这个数组包含了指向该节点的所有子节点的引用。这个数组的索引通常是根据子节点的字符值来确定的。因此，即使两个节点的哈希码相同，只要它们在树中的位置不同（即它们的父节点不同或者它们在分支数组中的索引不同），我们仍然可以区分它们。
+     * <p>根据c，status和code这三个字段来生成哈希码的。这意味着，如果两个TrieNode对象的这三个字段都相等，那么它们的哈希码也会相等。
+     * <br>
+     * <p><code>31倍哈希码</code>
+     * <p>首先初始化一个非零的常数（在这里是17），然后对每个要包含在哈希码计算中的字段，我们都将结果乘以31（一个奇素数）然后加上该字段的哈希码。这种方法被称为Effective Java中的“31倍哈希码”技巧。
      */
     @Override
     public int hashCode() {
-        return Objects.hash(c, status, code);
+        int result = 1;
+        result = 31 * result + c;
+        result = 31 * result + status;
+        result = 31 * result + code;
+        return result;
     }
 
     /**
@@ -206,16 +217,15 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 获取数组索引
+     * 获取字符在数组中的索引
      *
+     * <p><code>值得考虑二分么？</code> 如果你的数组长度固定为65536，且每个元素都可能被使用，那么使用二分搜索是值得的。因为二分搜索的时间复杂度为O(log n)，在这种情况下，它将比线性搜索更高效。
+     * <p><code>会出现的问题？</code> 如果你的数组长度固定为65536，但实际使用的元素数量远小于这个数，那么你将面临内存浪费的问题。此外，如果你需要存储的元素数量超过65536，你将无法在数组中存储它们。
+     * <p><code>世界上所有的字符会超过Unicode的65536么?</code> Unicode字符集目前定义了超过130,000个字符。但是，这些字符并不都在基本多语言平面（BMP）中，BMP包含的字符数量是65536。超出BMP的字符存储在其他16个辅助平面中，每个平面包含65536个字符位置。因此，如果你需要处理超出BMP的字符，你需要使用更大的数组或者其他数据结构来存储它们。
      * @return int
      * @throws
      * @Param [c]
-     * <p>值得考虑二分么？ 如果你的数组长度固定为65536，且每个元素都可能被使用，那么使用二分搜索是值得的。因为二分搜索的时间复杂度为O(log n)，在这种情况下，它将比线性搜索更高效。
-     * <p>会出现的问题？ 如果你的数组长度固定为65536，但实际使用的元素数量远小于这个数，那么你将面临内存浪费的问题。此外，如果你需要存储的元素数量超过65536，你将无法在数组中存储它们。
-     * <p>缺点和优点？ 优点：访问速度快，可以通过索引直接访问对应的元素，时间复杂度为O(1)。能够覆盖所有Unicode字符，不会出现字符无法存储的情况。 缺点：内存浪费，如果你的应用中并不会使用到所有的Unicode字符，那么大部分的数组空间将会被浪费。扩展性差，如果在未来需要存储更多的信息（例如超出Unicode范围的字符），你需要改变数组的大小，这可能会导致大量的数据迁移和复制。
-     * <p>世界上所有的字符会超过Unicode的65536么? Unicode字符集目前定义了超过130,000个字符。但是，这些字符并不都在基本多语言平面（BMP）中，BMP包含的字符数量是65536。超出BMP的字符存储在其他16个辅助平面中，每个平面包含65536个字符位置。因此，如果你需要处理超出BMP的字符，你需要使用更大的数组或者其他数据结构来存储它们。
-     */
+         */
     public int getIndex(int c) {
         r.lock();
         try {
