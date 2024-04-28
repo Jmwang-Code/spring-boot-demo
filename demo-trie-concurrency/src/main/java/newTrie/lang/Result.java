@@ -1,4 +1,4 @@
-package newTrie.inner;
+package newTrie.lang;
 
 /**
  * @author jmw

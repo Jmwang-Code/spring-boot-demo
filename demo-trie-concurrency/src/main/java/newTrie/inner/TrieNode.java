@@ -1,5 +1,8 @@
 package newTrie.inner;
 
+import newTrie.lang.Result;
+import newTrie.lang.WordString;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -200,8 +203,6 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     /**
      * 获取TrieNode,节点通过前缀方式
      *
-     * @return com.cn.jmw.trie.TrieNode
-     * @throws
      * @Param [c]
      */
     public TrieNode get(int c) {
@@ -216,8 +217,6 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     /**
      * 通过传入字符查询当前数组索引，获取分支节点
      *
-     * @return com.cn.jmw.trie.TrieNode
-     * @throws
      * @Param [c]
      */
     public TrieNode getBranch(int c) {
@@ -226,6 +225,32 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             return null;
         } else {
             return this.branches[index];
+        }
+    }
+
+    /**
+     * 根据一个词获得所取的参数,没有就返回null
+     *
+     * @param keyWord WordString
+     */
+    public TrieNode getBranch(WordString keyWord) {
+        r.lock();
+        try {
+            TrieNode tempBranch = this;
+            int index = 0;
+            for (int j = 0; j < keyWord.length(); j++) {
+                index = tempBranch.getIndex(keyWord.charAt(j));
+                if (index < 0) {
+                    return null;
+                }
+                // 获取下一个节点，如果没有就返回null
+                if ((tempBranch = tempBranch.branches[index]) == null) {
+                    return null;
+                }
+            }
+            return tempBranch;
+        } finally {
+            r.unlock();
         }
     }
 
@@ -253,8 +278,6 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * @return com.cn.jmw.trie.TrieNode
-     * @throws
      * @Param [newBranch]
      * @description 添加新词
      */
@@ -348,7 +371,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             int l = branches.length;
             // 创建一个新的 branches 数组，长度比原来的数组多1
             TrieNode[] newBranches = new TrieNode[branches.length + 1];
-            // 计算新节点应该插入的位置
+            // 计算新节点应该插入的位置,位置0
             int insert = -(bs + 1);
             // 如果插入位置不是数组的起始位置，将原数组从起始位置到插入位置的元素复制到新数组
             if (insert > 0) {
