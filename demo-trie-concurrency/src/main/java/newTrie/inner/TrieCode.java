@@ -11,23 +11,23 @@ public class TrieCode implements Serializable {
     @Serial
     private static final long serialVersionUID = 3881643557612826255L;
 
-    private long code;
+    private int code;
     private byte type;
 
     public TrieCode() {
     }
 
-    public TrieCode(long code, byte type) {
+    public TrieCode(int code, byte type) {
         this.code = code;
         this.type = type;
     }
 
-    public TrieCode(long code, int type) {
+    public TrieCode(int code, int type) {
         this.code = code;
         this.type = (byte) type;
     }
 
-    public long getCode() {
+    public int getCode() {
         return code;
     }
 

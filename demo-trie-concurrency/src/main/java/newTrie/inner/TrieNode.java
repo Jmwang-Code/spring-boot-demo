@@ -1,5 +1,6 @@
 package newTrie.inner;
 
+import newTrie.Trie;
 import newTrie.lang.Result;
 import newTrie.lang.WordString;
 
@@ -32,9 +33,12 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
 
     /**
      * 节点上绑定的Code值
+     *
+     * 1.使用Integer.MAX_VALUE 也就是多码表的上限是2147483647
+     * 2.使用long类型的最大值9223372036854775807，实际上不会达到，如果有需求就改成long
      * TODO 暂时使用public后面改private
      */
-    public long code;
+    public int code;
 
     /**
      * Code类型，单码节点还是多码节点
@@ -196,12 +200,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      * @Param [c]
      */
     public TrieNode get(int c) {
-        r.lock();
-        try {
-            return getBranch(c);
-        } finally {
-            r.unlock();
-        }
+        return getBranch(c);
     }
 
     /**
@@ -210,11 +209,16 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      * @Param [c]
      */
     public TrieNode getBranch(int c) {
-        int index = getIndex(c);
-        if (index < 0) {
-            return null;
-        } else {
-            return this.branches[index];
+        r.lock();
+        try {
+            int index = getIndex(c);
+            if (index < 0) {
+                return null;
+            } else {
+                return this.branches[index];
+            }
+        } finally {
+            r.unlock();
         }
     }
 
@@ -283,6 +287,16 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
         } finally {
             r.unlock();
         }
+    }
+
+    /**
+     * 获取单词
+     * @param str
+     * @param enableTrieAllSearch
+     * @return
+     */
+    public Trie getWord(WordString str, boolean enableTrieAllSearch) {
+        return new Trie(this, str,enableTrieAllSearch);
     }
 
     /**
@@ -462,7 +476,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     private boolean addExtCode(TrieNode branch, TrieNode newBranch) {
         TrieCode newValue = new TrieCode(newBranch.code, newBranch.type);
         TrieCode oldValue = new TrieCode(branch.code, branch.type);
-        long key = multiCodeLookupTable.newCode(oldValue, newValue);
+        int key = multiCodeLookupTable.newCode(oldValue, newValue);
         // 设置新的Code
         branch.code = key;
         // 设置为多码
@@ -582,7 +596,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
         if (branch.type != CodeTypes.MULTI_CODE) {
             TrieCode oldValue = new TrieCode(branch.code, branch.type);
             if (!newValue.equals(oldValue)) {
-                long key = multiCodeLookupTable.newCode(oldValue, newValue);
+                int key = multiCodeLookupTable.newCode(oldValue, newValue);
                 branch.code = key;
                 branch.type = CodeTypes.MULTI_CODE;
                 return true;
@@ -593,6 +607,26 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             }
         } else {
             return multiCodeLookupTable.addCode(branch.code, newValue);
+        }
+    }
+
+    /**
+     * 移除一个词
+     * @param word
+     * @param code
+     * @param type
+     * @return
+     */
+    public boolean remove(int[] word, int code, int type) {
+        w.lock();
+        try {
+            TrieNodePath path = getBranchPath(word);
+            if (path != null) {
+                return removeEndNode(path, code, type);
+            }
+            return false;
+        } finally {
+            w.unlock();
         }
     }
 

@@ -9,12 +9,12 @@ import java.util.*;
  */
 public class MultiCodeLookupTable {
 
-    private Map<Long, TrieCode[]> multiCodeExtMap = new LinkedHashMap<Long, TrieCode[]>();
+    private Map<Integer, TrieCode[]> multiCodeExtMap = new LinkedHashMap<Integer, TrieCode[]>();
 
     /**
      * currentKey 就确保了每个添加到 multiCodeExtMap 的键值对都有一个唯一的键。
      */
-    private long currentKey = 0;
+    private int currentKey = 0;
 
     /**
      * 创建Code在多码查找表上
@@ -22,8 +22,8 @@ public class MultiCodeLookupTable {
      * @param value2
      * @return
      */
-    public synchronized long newCode(TrieCode value1, TrieCode value2) {
-        long newKey = currentKey++;
+    public synchronized int newCode(TrieCode value1, TrieCode value2) {
+        int newKey = currentKey++;
         if (!value1.equals(value2)) {
             multiCodeExtMap.put(newKey, new TrieCode[]{value1, value2});
         } else {
@@ -38,7 +38,7 @@ public class MultiCodeLookupTable {
      * @param code
      * @return
      */
-    public synchronized boolean addCode(long key, TrieCode code) {
+    public synchronized boolean addCode(int key, TrieCode code) {
         TrieCode[] oldCodes = multiCodeExtMap.get(key);
         for (TrieCode oldCode : oldCodes) {
             // 如已存在，则不再添加
@@ -58,7 +58,7 @@ public class MultiCodeLookupTable {
      * @param tCode
      * @return
      */
-    public synchronized TrieCode getMinCode(long key, TrieCode tCode) {
+    public synchronized TrieCode getMinCode(int key, TrieCode tCode) {
         TrieCode[] codes = multiCodeExtMap.get(key);
         TrieCode minCode = tCode;
         for (TrieCode code : codes) {
@@ -77,7 +77,7 @@ public class MultiCodeLookupTable {
      * @param tCode
      * @return
      */
-    public synchronized TrieCode getMaxCode(long key, TrieCode tCode) {
+    public synchronized TrieCode getMaxCode(int key, TrieCode tCode) {
         TrieCode[] codes = multiCodeExtMap.get(key);
         TrieCode maxCode = null;
         for (TrieCode code : codes) {
@@ -95,7 +95,7 @@ public class MultiCodeLookupTable {
      * @param key
      * @return
      */
-    public synchronized TrieCode[] getCode(long key) {
+    public synchronized TrieCode[] getCode(int key) {
         return multiCodeExtMap.get(key);
     }
 
@@ -105,7 +105,7 @@ public class MultiCodeLookupTable {
      * @param type
      * @return
      */
-    public synchronized TrieCode[] getCode(long key, byte type) {
+    public synchronized TrieCode[] getCode(int key, byte type) {
         List<TrieCode> result = new LinkedList<TrieCode>();
         TrieCode[] codes = multiCodeExtMap.get(key);
         for (TrieCode code : codes) {
@@ -122,7 +122,7 @@ public class MultiCodeLookupTable {
      * @param code
      * @return
      */
-    public synchronized int replaceOrRemoveCode(long key, TrieCode code) {
+    public synchronized int replaceOrRemoveCode(int key, TrieCode code) {
         List<TrieCode> newCodes = new LinkedList<TrieCode>();
         TrieCode[] oldCodes = multiCodeExtMap.get(key);
         for (TrieCode oldCode : oldCodes) {
@@ -146,7 +146,7 @@ public class MultiCodeLookupTable {
      * @param code
      * @return
      */
-    public synchronized boolean removeCode(long key, TrieCode code) {
+    public synchronized boolean removeCode(int key, TrieCode code) {
         List<TrieCode> newCodes = new LinkedList<TrieCode>();
         TrieCode[] oldCodes = multiCodeExtMap.get(key);
         boolean needRemove = false;
