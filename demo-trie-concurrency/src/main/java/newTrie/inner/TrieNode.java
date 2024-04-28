@@ -1,5 +1,7 @@
 package newTrie.inner;
 
+import trie.TrieCode;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -156,6 +158,19 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
         return tc > oc ? 1 : (tc == oc ? 0 : -1);
     }
 
+    /**
+     * 获取对应的Code数组
+     * @return TrieCode
+     */
+    public TrieCode[] getCodes() {
+        r.lock();
+        try {
+            return new trie.TrieCode[]{new TrieCode(this.code, this.type)};
+        } finally {
+            r.unlock();
+        }
+    }
+
     public int getCode() {
         return this.c;
     }
@@ -238,5 +253,6 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             r.unlock();
         }
     }
+
 
 }
