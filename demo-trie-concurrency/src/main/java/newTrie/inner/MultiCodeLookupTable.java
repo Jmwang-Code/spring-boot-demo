@@ -58,7 +58,7 @@ public class MultiCodeLookupTable {
      * @param tCode
      * @return
      */
-    public synchronized TrieCode getMinCode(int key, TrieCode tCode) {
+    public synchronized TrieCode getMinCode(long key, TrieCode tCode) {
         TrieCode[] codes = multiCodeExtMap.get(key);
         TrieCode minCode = tCode;
         for (TrieCode code : codes) {

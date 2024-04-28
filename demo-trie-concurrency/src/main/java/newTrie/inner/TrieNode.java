@@ -1,7 +1,5 @@
 package newTrie.inner;
 
-import trie.entity.MultiCodeMode;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -324,6 +322,10 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
                             added.setValue(addBranchOnDropMode(newBranch, branch));
                         } else if (MultiCodeMode.Replace == mode) {
                             added.setValue(addBranchOnReplaceMode(newBranch, branch));
+                        } else if (MultiCodeMode.Small == mode) {
+                            added.setValue(addBranchOnSmallMode(newBranch, branch));
+                        } else if (MultiCodeMode.Big == mode) {
+                            added.setValue(addBranchOnBigMode(newBranch, branch));
                         } else if (MultiCodeMode.Append == mode) {
                             added.setValue(addBranchOnAppendMode(newBranch, branch));
                         } else if (MultiCodeMode.ThrowException == mode) {
@@ -340,20 +342,28 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             return branch;
         }
 
-        // 新增子节点
+        // 如果 bs 小于 0，表示需要新增子节点
         if (bs < 0) {
+            // 获取当前 branches 数组的长度
             int l = branches.length;
+            // 创建一个新的 branches 数组，长度比原来的数组多1
             TrieNode[] newBranches = new TrieNode[branches.length + 1];
+            // 计算新节点应该插入的位置
             int insert = -(bs + 1);
+            // 如果插入位置不是数组的起始位置，将原数组从起始位置到插入位置的元素复制到新数组
             if (insert > 0) {
                 System.arraycopy(this.branches, 0, newBranches, 0, insert);
             }
+            // 如果插入位置不是数组的末尾位置，将原数组从插入位置到末尾的元素复制到新数组的插入位置之后
             if (branches.length - insert > 0) {
                 System.arraycopy(branches, insert, newBranches, insert + 1,
                         branches.length - insert);
             }
+            // 在新数组的插入位置添加新节点
             newBranches[insert] = newBranch;
+            // 标记已经添加了新节点
             added.setValue(true);
+            // 将新的 branches 数组赋值给当前对象的 branches 属性
             this.branches = newBranches;
         }
         return newBranch;
@@ -387,18 +397,144 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 通过替换码添加
-     * @param tbranch
-     * @param newbranch
+     * 通过替换TrieCode添加
+     * @param branch 老的分支
+     * @param newBranch 新的分支
      * @return
      */
-    private boolean addExtCode(TrieNode tbranch, TrieNode newbranch) {
-        TrieCode newValue = new TrieCode(newbranch.code, newbranch.type);
-        TrieCode oldValue = new TrieCode(tbranch.code, tbranch.type);
+    private boolean addExtCode(TrieNode branch, TrieNode newBranch) {
+        TrieCode newValue = new TrieCode(newBranch.code, newBranch.type);
+        TrieCode oldValue = new TrieCode(branch.code, branch.type);
         long key = multiCodeLookupTable.newCode(oldValue, newValue);
-        tbranch.code = key;
-        tbranch.type = CodeTypes.MULTI_CODE;
+        // 设置新的Code
+        branch.code = key;
+        // 设置为多码
+        branch.type = CodeTypes.MULTI_CODE;
         return true;
     }
 
+    /**
+     * 分支 重置模式
+     *
+     * @return java.lang.Boolean
+     * @throws
+     * @Param [newBranch, branch]
+     * @Date 2023/1/16 20:52
+     */
+    private Boolean addBranchOnReplaceMode(TrieNode newBranch, TrieNode branch) {
+        try {
+            if (newBranch.status == 3
+                    && (branch.status == 3 || branch.status == 2)
+                    && newBranch.code != branch.code) {
+                branch.code = newBranch.code;
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 分支 大模式
+     * @param newBranch
+     * @param branch
+     * @return
+     */
+    private boolean addBranchOnSmallMode(TrieNode newBranch, TrieNode branch) {
+        if (branch.type != CodeTypes.MULTI_CODE) {
+            if (newBranch.type == branch.type) {
+                // 保留码小的
+                if (newBranch.code < branch.code) {
+                    branch.type = newBranch.type;
+                    branch.code = newBranch.code;
+                    return true;
+                } else {
+                    // 丢弃
+                    return false;
+                }
+            } else {
+                // 通过扩展码添加
+                return addExtCode(branch, newBranch);
+            }
+        } else {
+            TrieCode newCode = new TrieCode(newBranch.code, newBranch.type);
+            TrieCode minCode = multiCodeLookupTable.getMinCode(branch.code,
+                    newCode);
+            // 保留码小的
+            int ret = multiCodeLookupTable.replaceOrRemoveCode(branch.code,
+                    minCode);
+            if (ret == 0) {
+                // 多码变单码的调整
+                branch.code = minCode.getCode();
+                branch.type = minCode.getType();
+            }
+            return true;
+        }
+    }
+
+    /**
+     * 分支 大模式
+     * @param newBranch
+     * @param branch
+     * @return
+     */
+    private boolean addBranchOnBigMode(TrieNode newBranch, TrieNode branch) {
+        if (branch.type != CodeTypes.MULTI_CODE) {
+            if (newBranch.type == branch.type) {
+                // 保留码大的
+                if (newBranch.code > branch.code) {
+                    branch.type = newBranch.type;
+                    branch.code = newBranch.code;
+                    return true;
+                } else {
+                    // 丢弃
+                    return false;
+                }
+            } else {
+                // 通过扩展码添加
+                return addExtCode(branch, newBranch);
+            }
+        } else {
+            TrieCode newCode = new TrieCode(newBranch.code, newBranch.type);
+            TrieCode maxCode = multiCodeLookupTable.getMaxCode(branch.code,
+                    newCode);
+            // 保留码大的
+            int ret = multiCodeLookupTable.replaceOrRemoveCode(branch.code,
+                    maxCode);
+            if (ret == 0) {
+                // 多码变单码的调整
+                branch.code = maxCode.getCode();
+                branch.type = maxCode.getType();
+            }
+            return true;
+        }
+    }
+
+    /**
+     * 分支 追加模式
+     * @param newBranch
+     * @param branch
+     * @return
+     */
+    private boolean addBranchOnAppendMode(TrieNode newBranch, TrieNode branch) {
+        // 追加模式
+        TrieCode newValue = new TrieCode(newBranch.code, newBranch.type);
+        if (branch.type != CodeTypes.MULTI_CODE) {
+            TrieCode oldValue = new TrieCode(branch.code, branch.type);
+            if (!newValue.equals(oldValue)) {
+                long key = multiCodeLookupTable.newCode(oldValue, newValue);
+                branch.code = key;
+                branch.type = CodeTypes.MULTI_CODE;
+                return true;
+            } else {
+                branch.type = newBranch.type;
+                branch.code = newBranch.code;
+                return true;
+            }
+        } else {
+            return multiCodeLookupTable.addCode(branch.code, newValue);
+        }
+    }
 }
