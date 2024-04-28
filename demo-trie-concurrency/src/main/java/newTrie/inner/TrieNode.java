@@ -1,6 +1,6 @@
 package newTrie.inner;
 
-import trie.TrieCode;
+import trie.entity.MultiCodeMode;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -31,7 +31,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      * 节点上绑定的Code值
      * TODO 暂时使用public后面改private
      */
-    public int code;
+    public long code;
 
     /**
      * Code类型，用于扩展
@@ -165,7 +165,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     public TrieCode[] getCodes() {
         r.lock();
         try {
-            return new trie.TrieCode[]{new TrieCode(this.code, this.type)};
+            return new TrieCode[]{new TrieCode(this.code, this.type)};
         } finally {
             r.unlock();
         }
@@ -195,7 +195,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
         int result = 1;
         result = 31 * result + c;
         result = 31 * result + status;
-        result = 31 * result + code;
+        result = 31 * result + (int) code;
         return result;
     }
 
@@ -254,5 +254,151 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
         }
     }
 
+    /**
+     * @return com.cn.jmw.trie.TrieNode
+     * @throws
+     * @Param [newBranch]
+     * @description 添加新词
+     */
+    public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
+        w.lock();
+        try {
+            TrieNode tempBranch = this;
+            Result<Boolean> added = new Result<Boolean>();
+            added.setValue(false);
+            for (int i = 0; i < word.length; i++) {
+                if (word.length == i + 1) {
+                    tempBranch = tempBranch.add(new TrieNode(word[i], 3, code, type), mode, added);
+                } else {
+                    tempBranch = tempBranch.add(new TrieNode(word[i], 1), mode, added);
+                }
+            }
+            return added.getValue();
+        } finally {
+            w.unlock();
+        }
+    }
+
+    /**
+     * 增加子页节点
+     * 添加一个叶子节点 需要判断当前节点的子节点集合中是否包含该节点
+     * 如果包含 则需要更新 不包含则直接进行添加
+     *
+     * @param newBranch
+     * @param mode
+     * @return
+     */
+    private TrieNode add(TrieNode newBranch, MultiCodeMode mode,
+                              Result<Boolean> added) {
+        //默认设置为false
+        added.setValue(false);
+        //如果当前节点的子节点集合为空，则初始化一个空数组
+        if (branches == null) {
+            branches = new TrieNode[0];
+        }
+        //获取当前节点的子节点集合中是否包含该节点(当前字符)
+        int bs = getIndex(newBranch.getC());
+        //当前位置的子节点已经存在
+        if (bs > -1) {
+            // 更新既存子节点
+            if (this.branches[bs] == null) {
+                this.branches[bs] = newBranch;
+            }
+            // 获取当前节点的子节点
+            TrieNode branch = this.branches[bs];
+            // 判断当前节点的状态 -1无值 1是继续 2是个词语但是还可以继续 3是确定
+            // 这里只可能是-1 1 3
+            switch (newBranch.getStatus()) {
+                case -1:
+                    branch.status = 1;
+                    break;
+                case 1:
+                    if (branch.status == 3) {
+                        branch.status = 2;
+                    }
+                    break;
+                case 3:
+                    if (branch.status == 2 || branch.status == 3) {
+                        // 多Code情况
+                        if (MultiCodeMode.Drop == mode) {
+                            added.setValue(addBranchOnDropMode(newBranch, branch));
+                        } else if (MultiCodeMode.Replace == mode) {
+                            added.setValue(addBranchOnReplaceMode(newBranch, branch));
+                        } else if (MultiCodeMode.Append == mode) {
+                            added.setValue(addBranchOnAppendMode(newBranch, branch));
+                        } else if (MultiCodeMode.ThrowException == mode) {
+                            throw new UnsupportedOperationException("加入了不允许重复的词");
+                        } else {
+                            throw new UnsupportedOperationException("不支持的多码处理模式");
+                        }
+                    } else {
+                        branch.type = newBranch.type;
+                        branch.code = newBranch.code;
+                        branch.status = 2;
+                    }
+            }
+            return branch;
+        }
+
+        // 新增子节点
+        if (bs < 0) {
+            int l = branches.length;
+            TrieNode[] newBranches = new TrieNode[branches.length + 1];
+            int insert = -(bs + 1);
+            if (insert > 0) {
+                System.arraycopy(this.branches, 0, newBranches, 0, insert);
+            }
+            if (branches.length - insert > 0) {
+                System.arraycopy(branches, insert, newBranches, insert + 1,
+                        branches.length - insert);
+            }
+            newBranches[insert] = newBranch;
+            added.setValue(true);
+            this.branches = newBranches;
+        }
+        return newBranch;
+    }
+
+    /**
+     * 通过扩展码添加
+     * @param newBranch
+     * @param branch
+     * @return
+     */
+    private boolean addBranchOnDropMode(TrieNode newBranch, TrieNode branch) {
+        if (branch.type != CodeTypes.MULTI_CODE) {
+            if (newBranch.type == branch.type) {
+                // 后加的码被丢弃
+                return false;
+            } else {
+                // 通过扩展码添加
+                return addExtCode(branch, newBranch);
+            }
+        } else {
+            if (multiCodeLookupTable.getCode(branch.code, newBranch.type).length > 0) {
+                // 后加的码被丢弃
+                return false;
+            } else {
+                // 通过扩展码添加
+                return multiCodeLookupTable.addCode(branch.code, new TrieCode(
+                        newBranch.code, newBranch.type));
+            }
+        }
+    }
+
+    /**
+     * 通过替换码添加
+     * @param tbranch
+     * @param newbranch
+     * @return
+     */
+    private boolean addExtCode(TrieNode tbranch, TrieNode newbranch) {
+        TrieCode newValue = new TrieCode(newbranch.code, newbranch.type);
+        TrieCode oldValue = new TrieCode(tbranch.code, tbranch.type);
+        long key = multiCodeLookupTable.newCode(oldValue, newValue);
+        tbranch.code = key;
+        tbranch.type = CodeTypes.MULTI_CODE;
+        return true;
+    }
 
 }
