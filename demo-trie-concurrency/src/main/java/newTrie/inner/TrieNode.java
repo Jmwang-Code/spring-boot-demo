@@ -3,12 +3,14 @@ package newTrie.inner;
 import newTrie.Trie;
 import newTrie.lang.Result;
 import newTrie.lang.WordString;
+import newTrie.util.CodePointUtil;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -297,6 +299,15 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      */
     public Trie getWord(WordString str, boolean enableTrieAllSearch) {
         return new Trie(this, str,enableTrieAllSearch);
+    }
+
+    /**
+     * 取得所有的分支
+     *
+     * @return
+     */
+    public TrieNode[] getBranches() {
+        return this.branches;
     }
 
     /**
@@ -730,6 +741,93 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
+     * 清空当前TrieNode节点
+     */
+    public void clear() {
+        w.lock();
+        try {
+            this.branches = null;
+        } finally {
+            w.unlock();
+        }
+    }
+
+    /**
+     * 获取分支数量
+     * @return
+     */
+    public long totalBranchCount() {
+        r.lock();
+        try {
+            AtomicLong atomicLong = new AtomicLong(0);
+            visit(this, atomicLong);
+            return atomicLong.get();
+        } finally {
+            r.unlock();
+        }
+    }
+
+    /**
+     * dfs遍历
+     * @param forest
+     * @param atomicLong
+     */
+    private void visit(TrieNode forest, AtomicLong atomicLong) {
+        atomicLong.incrementAndGet();
+        if (forest.branches != null) {
+            for (TrieNode child : forest.branches) {
+                visit(child, atomicLong);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        int tc = this.c;
+        if (tc < CodePointUtil.EXT_CHAR_BASE) {
+            return CodePointUtil.toString(tc) + "(" + getExtString() + ")";
+        } else {
+            return String.valueOf(tc) + "(" + getExtString() + ")";
+        }
+    }
+
+    /**
+     * 获取扩展字符串
+     * @return
+     */
+    private String getExtString() {
+        StringBuilder buf = new StringBuilder();
+        buf.append("status:");
+        buf.append(this.status);
+        if (this.type == CodeTypes.MULTI_CODE) {
+            TrieCode[] codes = multiCodeLookupTable.getCode(this.code);
+            if (codes != null) {
+                buf.append(",[");
+                int index = 0;
+                for (TrieCode code : codes) {
+                    if (index > 0) {
+                        buf.append(",");
+                    }
+                    buf.append("{");
+                    buf.append("code:");
+                    buf.append(code.getCode());
+                    buf.append(",type:");
+                    buf.append(code.getType());
+                    buf.append("}");
+                    index++;
+                }
+                buf.append("]");
+            }
+        } else {
+            buf.append(",code:");
+            buf.append(this.code);
+            buf.append(",type:");
+            buf.append(this.type);
+        }
+        return buf.toString();
+    }
+
+    /**
      * 二分查找是否包含字符
      *
      * @param c
@@ -761,5 +859,27 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
         return result;
     }
 
+    public void print() {
+        print("", true);
+    }
 
+    private void print(String prefix, boolean isTail) {
+        r.lock();
+        try {
+            System.out
+                    .println(prefix + (isTail ? "└── " : "├── ") + toString());
+            if (branches != null) {
+                for (int i = 0; i < branches.length - 1; i++) {
+                    branches[i].print(prefix + (isTail ? "    " : "│   "),
+                            false);
+                }
+                if (branches.length > 0) {
+                    branches[branches.length - 1].print(prefix
+                            + (isTail ? "    " : "│   "), true);
+                }
+            }
+        } finally {
+            r.unlock();
+        }
+    }
 }
