@@ -191,22 +191,6 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * <p>在前缀树中，每个节点都有一个分支数组，这个数组包含了指向该节点的所有子节点的引用。这个数组的索引通常是根据子节点的字符值来确定的。因此，即使两个节点的哈希码相同，只要它们在树中的位置不同（即它们的父节点不同或者它们在分支数组中的索引不同），我们仍然可以区分它们。
-     * <p>根据c，status和code这三个字段来生成哈希码的。这意味着，如果两个TrieNode对象的这三个字段都相等，那么它们的哈希码也会相等。
-     * <br>
-     * <p><code>31倍哈希码</code>
-     * <p>首先初始化一个非零的常数（在这里是17），然后对每个要包含在哈希码计算中的字段，我们都将结果乘以31（一个奇素数）然后加上该字段的哈希码。这种方法被称为Effective Java中的“31倍哈希码”技巧。
-     */
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = 31 * result + c;
-        result = 31 * result + status;
-        result = 31 * result + (int) code;
-        return result;
-    }
-
-    /**
      * 获取TrieNode,节点通过前缀方式
      *
      * @Param [c]
@@ -632,7 +616,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
                     removeFromParent(branch, parent);
                     if (branch.getStatus() == 3) {
                         // 如果移除的节点为终节点，还可能需要移除路径上的无用中间节点
-                        removeOrphonNode(parentPath);
+                        removeOrphanNode(parentPath);
                     }
                     return true;
                 } else {
@@ -657,7 +641,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
                         removeFromParent(branch, parent);
                         if (branch.getStatus() == 3) {
                             // 如果移除的节点为终节点，还需移除中间节点
-                            removeOrphonNode(parentPath);
+                            removeOrphanNode(parentPath);
                         }
                     } else {
                         // 无需调整
@@ -712,7 +696,7 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
-     * 二分查找是否包含
+     * 二分查找是否包含字符
      *
      * @param c
      * @return
@@ -728,4 +712,20 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
             r.unlock();
         }
     }
+
+    /**
+     * <p>在前缀树中，每个节点都有一个分支数组，这个数组包含了指向该节点的所有子节点的引用。这个数组的索引通常是根据子节点的字符值来确定的。因此，即使两个节点的哈希码相同，只要它们在树中的位置不同（即它们的父节点不同或者它们在分支数组中的索引不同），我们仍然可以区分它们。
+     * <p>根据c，status和code这三个字段来生成哈希码的。这意味着，如果两个TrieNode对象的这三个字段都相等，那么它们的哈希码也会相等。
+     * <br>
+     * <p><code>31倍哈希码</code>
+     * <p>首先初始化一个非零的常数（在这里是17），然后对每个要包含在哈希码计算中的字段，我们都将结果乘以31（一个奇素数）然后加上该字段的哈希码。这种方法被称为Effective Java中的“31倍哈希码”技巧。
+     */
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = 31 * result + c;
+        return result;
+    }
+
+
 }
