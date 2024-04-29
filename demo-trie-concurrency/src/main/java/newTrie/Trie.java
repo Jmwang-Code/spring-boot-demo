@@ -55,12 +55,12 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     /**
      * 前缀树根节点，搜索、插入和删除操作的起点
      */
-    private TrieNode trieRootNode;
+    private volatile TrieNode trieRootNode;
     /**
      * 存储前缀树的根节点，TrieQuery 类中的作用是作为一个备份或原始的根节点。
      * next() 方法中，trieRootNode 可能会被修改为其他节点，而 sourceRoot 则始终保持为原始的根节点。这样做的目的是为了在需要时能够重置 trieRootNode 到原始的根节点，例如在 next() 方法中，当找到一个匹配的词语后，trieRootNode 会被重置为 sourceRoot。
      */
-    private TrieNode sourceRoot;
+    private volatile TrieNode sourceRoot;
     /**
      * 辅助树查询器，辅助树本身应该是一个只读的树，不应该被修改。并且和主树没有任何关联。（除非你分离主树分支进行查询）
      */
@@ -72,8 +72,8 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     private WordString content;
 
     //实体数量,是瞬间值，可能是过去某一时刻的值
-    private transient int size = 0;
-    private transient int deep = 0;
+    private transient volatile int size = 0;
+    private transient volatile int deep = 0;
 
     /**
      * 是否开启全量搜索
@@ -162,10 +162,11 @@ public class Trie implements Serializable, Iterable<TrieNode>,
 
     /**
      * 设置辅助树
+     *
      * @param assistedTrie
      */
     public void setAssistedTrie(TrieNode assistedTrie) {
-        this.assistedQuery = new Trie(assistedTrie, this.content,false);
+        this.assistedQuery = new Trie(assistedTrie, this.content, false);
         this.assistedQuery.setBeginOnly(true);
     }
 
@@ -222,16 +223,26 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         }
     }
 
+    /**
+     * 增加操作
+     */
+    public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
+        if (!lengthLimit(word)) return false;
+        boolean add = trieRootNode.add(word, mode, code, type);
+        if (add) size++;
+        return add;
+    }
 
     /**
      * 查询操作
      */
-    public TrieQueryResult query() {
+    public TrieQueryResult get() {
         return next();
     }
 
     /**
      * 查询操作
+     *
      * @return
      */
     public TrieQueryResult next() {
@@ -261,7 +272,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                 node = node.getBranch(c); // 查找下一个节点
             }
             if (node == null) {
-                if(isRootReset) {
+                if (isRootReset) {
                     this.trieRootNode = this.sourceRoot;
                     this.isRootReset = false;
                 }
@@ -273,10 +284,10 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                     String str = new String(this.content.toIntArray(),
                             this.curIndex, this.iTemp - this.curIndex + 1);
                     if (str.length() > 0) {
-                        if(enableTrieAllSearch) {
-                            this.i = this.curIndex+1;
-                        }else {
-                            this.i = this.iTemp+1;//原有会从匹配的尾部的下一个位置开始扫描
+                        if (enableTrieAllSearch) {
+                            this.i = this.curIndex + 1;
+                        } else {
+                            this.i = this.iTemp + 1;//原有会从匹配的尾部的下一个位置开始扫描
                         }
                         this.curIndex = this.i;
                         result = new TrieQueryResult(str, this.offset,
@@ -297,7 +308,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                         // 2状态（是个词语但是还可以继续），继续往下探测，如没有则可能进行回退，因此这里进行一下记录
                         this.iTemp = this.i;
                         this.nodeTemp = node;
-                        if(enableTrieAllSearch) {
+                        if (enableTrieAllSearch) {
                             //返回
                             String str1 = new String(this.content.toIntArray(),
                                     this.curIndex, this.iTemp - this.curIndex + 1);
@@ -311,7 +322,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                                 this.isRootReset = true;
                                 return result;
                             }
-                        }else {
+                        } else {
                             this.isBack = true;
                         }
                         break;
@@ -321,10 +332,10 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                                 this.curIndex, this.i - this.curIndex + 1);
                         this.isBack = false;
                         if (str.length() > 0) {
-                            if(enableTrieAllSearch) {
+                            if (enableTrieAllSearch) {
                                 this.i = this.offset + 1; // 移动
                                 this.isRootReset = false;
-                            }else {
+                            } else {
                                 this.i = this.i + 1; // 移动已探测到的字符串位置
                             }
                             this.curIndex = this.i;
@@ -377,4 +388,15 @@ public class Trie implements Serializable, Iterable<TrieNode>,
             throw new Error(e);
         }
     }
+
+    /**
+     * 添加单词的长度要不超过50,防止层数过深
+     *
+     * @param word
+     * @return
+     */
+    public boolean lengthLimit(int[] word) {
+        return word.length <= 50;
+    }
+
 }
