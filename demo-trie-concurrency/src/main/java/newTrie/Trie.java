@@ -4,9 +4,11 @@ import newTrie.inner.*;
 import newTrie.inter.ForEachForkJoinInterface;
 import newTrie.inter.SearchForkJoinInterface;
 import newTrie.lang.WordString;
+import sun.misc.Unsafe;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -235,8 +237,9 @@ public class Trie implements Serializable, Iterable<TrieNode>,
 
     /**
      * 查询操作
+     * 获取第一个匹配到的数据
      */
-    public TrieQueryResult get() {
+    public TrieQueryResult get(String word) {
         return next();
     }
 
@@ -245,15 +248,26 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      *
      * @return
      */
-    public TrieQueryResult next() {
+    public TrieQueryResult next(WordString content,TrieNode trieRootNode,
+                                TrieNode assistedQuery,boolean isRootReset) {
+        //当前查询字符长度
         int len = this.content.length();
-        TrieNode node = this.trieRootNode; // 从前缀树根节点开始探测
+        //根节点探测
+        TrieNode node = this.trieRootNode;
+        //返回结果
         TrieQueryResult result = null;
         for (; this.i < len + 1; this.i++) {
+            /**
+             * 1.如果到达终点，则将当前节点置空。
+             * 2.如果未到达终点，则将将当前子树的引用指向
+             */
             if (i == len) {
+                //如果探测位置以及等于字符长度，说明到达终点
                 node = null;
             } else {
+                //获取当前位置字符
                 int c = this.content.charAt(this.i);
+                //当前前缀子树返回
                 if (this.assistedQuery != null) {
                     // 查询压缩后的字符编码
                     this.assistedQuery.reset(this.i);
@@ -261,47 +275,55 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                     if (res != null && res.getCodes() != null
                             && res.getCodes().length > 0) {
                         c = res.getCodes()[0].getCode();
-//						if(enableTrieAllSearch) {
-//							this.i += 1;
-//						}else {
-//							this.i += res.getWord().length() - 1;
-//						}
                         this.i += res.getWord().length() - 1;
                     }
                 }
-                node = node.getBranch(c); // 查找下一个节点
+                // 查找下一个节点
+                node = node.getBranch(c);
             }
+            /**
+             * 1.当前节点等于null,说明已经到底，可以考虑回退的问题了。
+             * 2.如果当前节点不为null，说明可以继续探查。
+             */
             if (node == null) {
+                //根节点是否重置
                 if (isRootReset) {
                     this.trieRootNode = this.sourceRoot;
                     this.isRootReset = false;
                 }
-                node = this.trieRootNode; // 找不到，则从头开始探测
+                // 找不到，则从头开始探测
+                node = this.trieRootNode;
 
-
+                //是否回退
                 if (this.isBack) {
                     this.offset = this.curIndex;
                     String str = new String(this.content.toIntArray(),
                             this.curIndex, this.iTemp - this.curIndex + 1);
+
+                    //如果字符长度大于0
                     if (str.length() > 0) {
                         if (enableTrieAllSearch) {
                             this.i = this.curIndex + 1;
                         } else {
-                            this.i = this.iTemp + 1;//原有会从匹配的尾部的下一个位置开始扫描
+                            //原有会从匹配的尾部的下一个位置开始扫描
+                            this.i = this.iTemp + 1;
                         }
                         this.curIndex = this.i;
                         result = new TrieQueryResult(str, this.offset,
                                 nodeTemp.getCodes());
                     }
+                    //不需要回退
                     this.isBack = false;
                     this.nodeTemp = null;
                     return result;
                 }
                 if (this.beginOnly) {
-                    return null; // 如果只进行开头匹配，则无需再往下探测
+                    // 如果只进行开头匹配，则无需再往下探测
+                    return null;
                 }
                 this.i = this.curIndex;
-                this.curIndex += 1; // 向前移动已探测到的字符串位置
+                // 向前移动已探测到的字符串位置
+                this.curIndex += 1;
             } else {
                 switch (node.getStatus()) {
                     case 2:
@@ -362,7 +384,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * 通过反射获取Unsafe实例
      * 提供了一组底层的原子操作，包括对内存的直接访问和CAS（Compare and Swap）操作。
      */
-    private static final sun.misc.Unsafe U;
+    private static final Unsafe U;
     //控制表的大小，用于并发控制。
     private static final long SIZECTL;
     //控制调整大小的操作，用于并发控制（扩容）
@@ -374,16 +396,14 @@ public class Trie implements Serializable, Iterable<TrieNode>,
 
     static {
         try {
-            U = sun.misc.Unsafe.getUnsafe();
+            Field theUnsafeField = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafeField.setAccessible(true);
+            U = (Unsafe) theUnsafeField.get(null);
             Class<?> k = ConcurrentHashMap.class;
-            SIZECTL = U.objectFieldOffset
-                    (k.getDeclaredField("sizeCtl"));
-            TRANSFERINDEX = U.objectFieldOffset
-                    (k.getDeclaredField("transferIndex"));
-            BASECOUNT = U.objectFieldOffset
-                    (k.getDeclaredField("baseCount"));
-            CELLSBUSY = U.objectFieldOffset
-                    (k.getDeclaredField("cellsBusy"));
+            SIZECTL = U.objectFieldOffset(k.getDeclaredField("sizeCtl"));
+            TRANSFERINDEX = U.objectFieldOffset(k.getDeclaredField("transferIndex"));
+            BASECOUNT = U.objectFieldOffset(k.getDeclaredField("baseCount"));
+            CELLSBUSY = U.objectFieldOffset(k.getDeclaredField("cellsBusy"));
         } catch (Exception e) {
             throw new Error(e);
         }
