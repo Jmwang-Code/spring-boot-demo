@@ -11,7 +11,14 @@ public class TrieCode implements Serializable {
     @Serial
     private static final long serialVersionUID = 3881643557612826255L;
 
+    /**
+     * 编码 比如 161651315
+     */
     private int code;
+
+    /**
+     * 限定编码的类型  -128 到 127 比如 1 是某个业务类的编码
+     */
     private byte type;
 
     public TrieCode() {

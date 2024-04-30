@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -59,8 +60,8 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     private TrieNode mainTree;
 
     //实体数量,是瞬间值，可能是过去某一时刻的值
-    private transient volatile int size = 0;
-    private transient volatile int deep = 0;
+    private transient volatile AtomicInteger size = new AtomicInteger(0);
+    private transient volatile AtomicInteger deep = new AtomicInteger(0);
 
     /**
      * 无参构造函数 (初始化)
@@ -86,14 +87,14 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * size
      */
     public int size() {
-        return size;
+        return size.get();
     }
 
     /**
      * deep
      */
     public int deep() {
-        return deep;
+        return deep.get();
     }
 
     /**
@@ -137,13 +138,21 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      */
     public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
         boolean add = this.mainTree.add(word, mode, code, type);
-        if (add) size++;
+        if (add) size.incrementAndGet();
         return add;
+    }
+
+    public boolean add(String word, MultiCodeMode mode, int code) {
+        return add(TokenizerUtil.codePoints(word), mode, code, -1);
+    }
+
+    public boolean add(String word, MultiCodeMode mode) {
+        return add(TokenizerUtil.codePoints(word), mode, -1, -1);
     }
 
     public boolean add(String word, MultiCodeMode mode, int code, int type) {
         boolean add = mainTree.add(TokenizerUtil.codePoints(word), mode, code, type);
-        if (add) size++;
+        if (add) size.incrementAndGet();
         return add;
     }
 
