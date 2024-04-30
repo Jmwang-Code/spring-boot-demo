@@ -1,7 +1,4 @@
 import newTrie.Trie;
-import newTrie.inner.CodeTypes;
-import newTrie.inner.MultiCodeMode;
-import newTrie.inner.TrieQueryResult;
 import org.junit.Test;
 
 public class TrieTest {
@@ -12,8 +9,19 @@ public class TrieTest {
         String str = "hello";
         //String转换成int[]数组,每个字符的Unicode代码点
         int[] intArray = str.codePoints().toArray();
-        trie.add(intArray, MultiCodeMode.Append,123, CodeTypes.MULTI_CODE);
+        System.out.println(trie.add("AB"));
+        System.out.println(trie.add("ABC"));
+        System.out.println(trie.add("ABCD"));
+        System.out.println(trie.add("ABCDE"));
 
+        System.out.println(trie.getFirstPrefixWord("adadABC"));
+        System.out.println(trie.getFirstAllWord("adadABC"));
+
+        System.out.println(trie.getFirstPrefixWord("adadABCAB"));
+        System.out.println(trie.getFirstAllWord("adadABCAB"));
+
+        System.out.println(trie.getFirstPrefixWord("adadABdasABC"));
+        System.out.println(trie.getFirstAllWord("adadABdasABC"));
     }
 
 

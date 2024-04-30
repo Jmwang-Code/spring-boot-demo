@@ -19,7 +19,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * <code>一、基本介绍</code>
@@ -211,16 +210,16 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     /**
      * 查询操作 : 获取第一个匹配到的数据
      */
-    public TrieQueryResult get(String text) {
-        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(text), true);
+    public TrieQueryResult getFirstPrefixWord(String text) {
+        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(text), false);
         TrieQueryResult query = trieQuery.query();
         return query;
     }
 
-    //获取所有匹配到的数据
-    public List<TrieQueryResult> getAll(String text) {
-        TrieQuery trieQuerier = new TrieQuery(mainTree, WordStringFactory.create(text), false);
-        List<TrieQueryResult> query = trieQuerier.queryAll();
+    //获取所有匹配到的数据 获取第一个的词
+    public List<TrieQueryResult> getFirstAllWord(String text) {
+        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(text), false);
+        List<TrieQueryResult> query = trieQuery.queryAll();
         return query;
     }
 
