@@ -123,6 +123,15 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         }
     }
 
+
+    public boolean add(int[] word, MultiCodeMode mode) {
+        return add(word, mode, -1, -1);
+    }
+
+    public boolean add(int[] word, MultiCodeMode mode, int code) {
+        return add(word, mode, code, -1);
+    }
+
     /**
      * 增加操作
      */
@@ -132,6 +141,14 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         if (add) size++;
         return add;
     }
+
+    public boolean add(String word, MultiCodeMode mode, int code, int type) {
+        if (!lengthLimit(word)) return false;
+        boolean add = mainTree.add(TokenizerUtil.codePoints(word), mode, code, type);
+        if (add) size++;
+        return add;
+    }
+
 
     /**
      * 删除操作
@@ -183,7 +200,10 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * @return
      */
     public boolean lengthLimit(int[] word) {
-        return word.length <= 50;
+        return word.length<=50;
+    }
+    public boolean lengthLimit(String word) {
+        return word.length()<=50;
     }
 
     /**
