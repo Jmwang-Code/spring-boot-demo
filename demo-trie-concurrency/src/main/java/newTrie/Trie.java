@@ -112,7 +112,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     @Override
     public <U> void forEachParallel(int parallelismThreshold, Function<TrieNode, U> transformer, Consumer<U> action) {
         if (size() > parallelismThreshold) {
-            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(getRoot(), transformer, action, new Semaphore(parallelismThreshold)));
+            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(this.mainTree, transformer, action, new Semaphore(parallelismThreshold)));
         } else {
             forEach(node -> action.accept(transformer.apply(node)));
         }
