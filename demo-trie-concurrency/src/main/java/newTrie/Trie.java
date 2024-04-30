@@ -58,11 +58,6 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     //前缀树根节点
     private TrieNode mainTree;
 
-    /**
-     * 辅助树查询器，辅助树本身应该是一个只读的树，不应该被修改。并且和主树没有任何关联。（除非你分离主树分支进行查询）
-     */
-    private Trie assistedQuery;
-
     //实体数量,是瞬间值，可能是过去某一时刻的值
     private transient volatile int size = 0;
     private transient volatile int deep = 0;
