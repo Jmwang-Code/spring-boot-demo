@@ -136,14 +136,12 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * 增加操作
      */
     public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
-        if (!lengthLimit(word)) return false;
         boolean add = this.mainTree.add(word, mode, code, type);
         if (add) size++;
         return add;
     }
 
     public boolean add(String word, MultiCodeMode mode, int code, int type) {
-        if (!lengthLimit(word)) return false;
         boolean add = mainTree.add(TokenizerUtil.codePoints(word), mode, code, type);
         if (add) size++;
         return add;
