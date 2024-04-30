@@ -846,6 +846,15 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
     }
 
     /**
+     * 是否有下一层
+     *
+     * @return
+     */
+    public boolean hasNext() {
+        return branches != null && branches.length > 0 ? true : false;
+    }
+
+    /**
      * <p>在前缀树中，每个节点都有一个分支数组，这个数组包含了指向该节点的所有子节点的引用。这个数组的索引通常是根据子节点的字符值来确定的。因此，即使两个节点的哈希码相同，只要它们在树中的位置不同（即它们的父节点不同或者它们在分支数组中的索引不同），我们仍然可以区分它们。
      * <p>根据c，status和code这三个字段来生成哈希码的。这意味着，如果两个TrieNode对象的这三个字段都相等，那么它们的哈希码也会相等。
      * <br>

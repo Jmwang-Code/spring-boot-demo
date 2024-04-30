@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Semaphore;
@@ -210,11 +211,25 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     /**
      * 查询操作 : 获取第一个匹配到的数据
      */
-    public TrieQueryResult get(String word) {
-        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(word), true);
+    public TrieQueryResult get(String text) {
+        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(text), true);
         TrieQueryResult query = trieQuery.query();
         return query;
     }
+
+    //获取所有匹配到的数据
+    public List<TrieQueryResult> getAll(String text) {
+        TrieQuery trieQuerier = new TrieQuery(mainTree, WordStringFactory.create(text), false);
+        List<TrieQueryResult> query = trieQuerier.queryAll();
+        return query;
+    }
+
+    //获取所有匹配到前缀的数据
+//    public TriePrefixQueryResult getPrefix(String word) {
+//        TirePrefixQuerier tirePrefixQuerier = new TirePrefixQuerier(mainTree, new TokenizerObject(word));
+//        TriePrefixQueryResult triePrefixQueryResult = tirePrefixQuerier.queryAllPrefix();
+//        return triePrefixQueryResult;
+//    }
 
     /**
      * 清除
@@ -262,11 +277,11 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * @param word
      * @return
      */
-    public boolean lengthLimit(int[] word) {
+    private boolean lengthLimit(int[] word) {
         return word.length <= 50;
     }
 
-    public boolean lengthLimit(String word) {
+    private boolean lengthLimit(String word) {
         return word.length() <= 50;
     }
 
@@ -488,12 +503,149 @@ public class Trie implements Serializable, Iterable<TrieNode>,
             return null;
         }
 
+        /**
+         * @return com.cn.jmw.trie.entity.TrieQueryResult
+         * @Param []
+         * @Date 2023/5/8 11:19
+         * 查询allCode
+         */
+        public List<TrieQueryResult> queryAll() {
+            //当前查询字符长度
+            int length = this.content.length();
+            //根节点探测
+            TrieNode trieNode = this.trieRootNode;
+            //返回结果
+            List<TrieQueryResult> trieQueryResults = new ArrayList<>();
+            TrieQueryResult trieQueryResult = null;
+
+            for (; this.i < length + 1; this.i++) {
+                /**
+                 * 1.如果到达终点，则将当前节点置空。
+                 * 2.如果未到达终点，则将将当前子树的引用指向
+                 */
+                if (i == length) {
+                    //如果探测位置以及等于字符长度，说明到达终点
+                    trieNode = null;
+                } else {
+                    //获取当前位置字符
+                    int c = this.content.charAt(this.i);
+                    //当前前缀子树返回
+                    trieNode = trieNode.getBranch(c);
+                }
+                /**
+                 * 1.当前节点等于null,说明已经到底，可以考虑回退的问题了。
+                 * 2.如果当前节点不为null，说明可以继续探查。
+                 */
+                if (trieNode == null) {
+                    //根节点是否重置
+                    if (this.isRootReset) {
+                        this.trieRootNode = this.sourceRoot;
+                        this.isRootReset = false;
+                    }
+                    // 找不到，则从头开始探测
+                    trieNode = this.trieRootNode;
+
+                    //是否回退
+                    if (this.isBack) {
+                        this.offset = this.root;
+                        String str = new String(this.content.toIntArray(),
+                                this.root, this.iTemp - this.root + 1);
+
+                        //如果字符长度大于0
+                        if (str.length() > 0) {
+                            if (enableTrieAllSearch) {
+                                this.i = this.root + 1;
+                            } else {
+                                //原有会从匹配的尾部的下一个位置开始扫描
+                                this.i = this.iTemp + 1;
+                            }
+                            this.root = this.i;
+                            trieQueryResult = new TrieQueryResult(str, this.offset,
+                                    nodeTemp.getCodes());
+                        }
+                        //不需要回退
+                        this.isBack = false;
+                        this.nodeTemp = null;
+                        trieQueryResults.add(trieQueryResult);
+                    }
+                    this.i = this.root;
+                    // 向前移动已探测到的字符串位置
+                    this.root += 1;
+                } else {
+                    switch (trieNode.getStatus()) {
+                        //是词段，但是还可以继续探查，如果没有属性则可以回退。
+                        case 2: {
+                            this.iTemp = this.i;
+                            this.nodeTemp = trieNode;
+                            //如果允许全查询
+                            if (enableTrieAllSearch) {
+                                //返回
+                                String str1 = new String(this.content.toIntArray(),
+                                        this.root, this.iTemp - this.root + 1);
+                                if (str1.length() > 0) {
+                                    trieQueryResult = new TrieQueryResult(str1, this.root,
+                                            nodeTemp.getCodes());
+                                    this.i += 1;
+                                    this.trieRootNode = trieNode;
+                                    this.isRootReset = true;
+                                    trieQueryResults.add(trieQueryResult);
+                                }
+                            } else {
+                                this.isBack = true;
+                            }
+                            break;
+                        }
+                        case 3:
+                            this.offset = this.root;
+                            String str = new String(this.content.toIntArray(),
+                                    this.root, this.i - this.root + 1);
+                            this.isBack = false;
+                            if (str.length() > 0) {
+                                if (enableTrieAllSearch) {
+                                    this.i = this.offset + 1; // 移动
+                                    this.isRootReset = false;
+                                } else {
+                                    this.i = this.i + 1; // 移动已探测到的字符串位置
+                                }
+                                this.root = this.i;
+                                trieQueryResult = new TrieQueryResult(str, this.offset,
+                                        trieNode.getCodes());
+                                this.trieRootNode = this.sourceRoot;
+                            }
+                            trieQueryResults.add(trieQueryResult);
+                    }
+                }
+            }
+            return trieQueryResults;
+        }
+
         public void reset(int root) {
             this.offset = 0;
             this.root = root;
             this.i = root;
             this.isBack = false;
             this.iTemp = 0;
+        }
+
+        public int getDeep() {
+            int deep = 0;
+            if (trieRootNode.hasNext()) {
+                dfs(trieRootNode,deep);
+            }
+            return deep;
+        }
+
+        public void dfs(TrieNode nextTireNodes,int deep) {
+            if (!nextTireNodes.hasNext()) {
+                deep = Math.max(deep,deep);
+                return;
+            }
+            TrieNode[] trieNodes = nextTireNodes.branches;
+            for (int j = 0; j < trieNodes.length; j++) {
+                TrieNode x = trieNodes[j];
+                dfs(x,deep+1);
+            }
+
         }
 
     }
