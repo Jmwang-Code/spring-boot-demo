@@ -124,17 +124,29 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         }
     }
 
-
-    public boolean add(int[] word, MultiCodeMode mode) {
-        return add(word, mode, -1, -1);
+    /**
+     * 增加 word
+     */
+    public boolean add(int[] word) {
+        return add(word, MultiCodeMode.Append, -1, -1);
     }
 
+    /**
+     * 增加 word code
+     */
+    public boolean add(int[] word, int code) {
+        return add(word, MultiCodeMode.Append, code, -1);
+    }
+
+    /**
+     * 增加 word 选定mode code
+     */
     public boolean add(int[] word, MultiCodeMode mode, int code) {
         return add(word, mode, code, -1);
     }
 
     /**
-     * 增加操作
+     * 增加 word 选定mode code type
      */
     public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
         boolean add = this.mainTree.add(word, mode, code, type);
@@ -142,14 +154,30 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         return add;
     }
 
+    /**
+     * 增加 word
+     */
+    public boolean add(String word) {
+        return add(TokenizerUtil.codePoints(word), MultiCodeMode.Append, -1, -1);
+    }
+
+    /**
+     * 增加 word code
+     */
+    public boolean add(String word, int code) {
+        return add(TokenizerUtil.codePoints(word), MultiCodeMode.Append, code, -1);
+    }
+
+    /**
+     * 增加 word 选定mode code
+     */
     public boolean add(String word, MultiCodeMode mode, int code) {
         return add(TokenizerUtil.codePoints(word), mode, code, -1);
     }
 
-    public boolean add(String word, MultiCodeMode mode) {
-        return add(TokenizerUtil.codePoints(word), mode, -1, -1);
-    }
-
+    /**
+     * 增加 word 选定mode code type
+     */
     public boolean add(String word, MultiCodeMode mode, int code, int type) {
         boolean add = mainTree.add(TokenizerUtil.codePoints(word), mode, code, type);
         if (add) size.incrementAndGet();
