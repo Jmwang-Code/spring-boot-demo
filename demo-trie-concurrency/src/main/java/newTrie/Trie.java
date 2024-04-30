@@ -102,13 +102,6 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     }
 
     /**
-     * getRoot
-     */
-    private TrieNode getRoot() {
-        return trieRootNode;
-    }
-
-    /**
      * 并行遍历前缀树的任务。
      *
      * @param parallelismThreshold 并行阈值
@@ -129,7 +122,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     public TrieNode searchParallel(int parallelismThreshold) {
         ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
         try {
-            return pool.invoke(new SearchTask(getRoot(), new ArrayList<>()));
+            return pool.invoke(new SearchTask(this.mainTree, new ArrayList<>()));
         } finally {
             pool.shutdown();  // 关闭ForkJoinPool
         }
@@ -140,7 +133,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      */
     public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
         if (!lengthLimit(word)) return false;
-        boolean add = trieRootNode.add(word, mode, code, type);
+        boolean add = this.mainTree.add(word, mode, code, type);
         if (add) size++;
         return add;
     }
@@ -185,6 +178,9 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         return word.length <= 50;
     }
 
+    /**
+     * 查询器
+     */
     public static class TrieQuery {
 
         /**
