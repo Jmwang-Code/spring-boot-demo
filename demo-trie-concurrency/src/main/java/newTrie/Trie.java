@@ -4,6 +4,7 @@ import newTrie.inner.*;
 import newTrie.inter.ForEachForkJoinInterface;
 import newTrie.inter.SearchForkJoinInterface;
 import newTrie.lang.WordString;
+import newTrie.lang.WordStringFactory;
 import sun.misc.Unsafe;
 
 import java.io.Serial;
@@ -54,93 +55,23 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     @Serial
     private static final long serialVersionUID = 7249069246763182397L;
 
-    /**
-     * 前缀树根节点，搜索、插入和删除操作的起点
-     */
-    private volatile TrieNode trieRootNode;
-    /**
-     * 存储前缀树的根节点，TrieQuery 类中的作用是作为一个备份或原始的根节点。
-     * next() 方法中，trieRootNode 可能会被修改为其他节点，而 sourceRoot 则始终保持为原始的根节点。这样做的目的是为了在需要时能够重置 trieRootNode 到原始的根节点，例如在 next() 方法中，当找到一个匹配的词语后，trieRootNode 会被重置为 sourceRoot。
-     */
-    private volatile TrieNode sourceRoot;
+    //前缀树根节点
+    private TrieNode mainTree;
+
     /**
      * 辅助树查询器，辅助树本身应该是一个只读的树，不应该被修改。并且和主树没有任何关联。（除非你分离主树分支进行查询）
      */
     private Trie assistedQuery;
-
-    /**
-     * 用于查询的字符串内容
-     */
-    private WordString content;
 
     //实体数量,是瞬间值，可能是过去某一时刻的值
     private transient volatile int size = 0;
     private transient volatile int deep = 0;
 
     /**
-     * 是否开启全量搜索
-     * <p>
-     * 不开启全量搜索，只搜索第一个匹配的词语
-     * 开启全量搜索，搜索所有匹配的词语
-     *
-     * <br>
-     * <p><code>举个例子，假设我们有一个字符串 "abcabc"，并且我们的 Trie 树中有 "abc","bca","cab"</code>
-     * <br>
-     * <p><code>enableTrieAllSearch = false</code>
-     * <p>如果我们搜索 "abcabc"，我们会找到第一个 "abc"，然后从第二个 "a" 开始继续搜索，这样我们就只能找到两个 "abc"。</p>
-     *
-     *
-     * <br>
-     * <p><code>enableTrieAllSearch = true</code>
-     * <p>我们搜索 "abcabc"，我们会找到第一个 "abc"，然后从第一个 "b" 开始继续搜索，这样我们就可以找到 "bca"，然后从第二个 "a" 开始继续搜索，找到第二个 "abc"，然后从第二个 "b" 开始继续搜索，找到第二个 "bca"，然后从第二个 "c" 开始继续搜索，找到 "cab"。所以，我们可以找到两个 "abc"，两个 "bca" 和一个 "cab"。
-     */
-    private boolean enableTrieAllSearch;
-
-    /**
-     * 只查询文本开头匹配的，如果匹配不到会直接返回
-     */
-    private boolean beginOnly;
-
-    /**
-     * 下一个探测的字符串位置
-     */
-    private int i;
-
-    /**
-     * 根节点是否回退
-     */
-    private boolean isRootReset;
-
-    /**
-     * 标记是否可能需要回退
-     */
-    private boolean isBack;
-
-    /**
-     * 当前探测到的词，在查询字符串中的开始位置
-     */
-    private int offset;
-
-    /**
-     * 已探测到的字符串位置
-     */
-    private int curIndex;
-
-    /**
-     * 临时的位置用于回退的场合
-     */
-    private int iTemp;
-
-    /**
-     * 临时的节点用于回退的场合
-     */
-    private TrieNode nodeTemp;
-
-    /**
      * 无参构造函数 (初始化)
      */
     public Trie() {
-        this.trieRootNode = new TrieNode();
+        this.mainTree = new TrieNode();
     }
 
     /**
@@ -148,33 +79,12 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * 深拷贝
      */
     public Trie(TrieNode otherRoot) {
-        this.trieRootNode = new TrieNode(otherRoot);
-    }
-
-    public Trie(TrieNode sourceRoot, WordString content, boolean enableTrieAllSearch) {
-        this.content = content;
-        this.trieRootNode = sourceRoot;
-        this.sourceRoot = sourceRoot;
-        this.enableTrieAllSearch = enableTrieAllSearch;
-    }
-
-    public void setBeginOnly(boolean beginOnly) {
-        this.beginOnly = beginOnly;
-    }
-
-    /**
-     * 设置辅助树
-     *
-     * @param assistedTrie
-     */
-    public void setAssistedTrie(TrieNode assistedTrie) {
-        this.assistedQuery = new Trie(assistedTrie, this.content, false);
-        this.assistedQuery.setBeginOnly(true);
+        this.mainTree = new TrieNode(otherRoot);
     }
 
     @Override
     public Iterator<TrieNode> iterator() {
-        return new TrieIterator(trieRootNode);
+        return new TrieIterator(mainTree);
     }
 
     /**
@@ -235,150 +145,6 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         return add;
     }
 
-    /**
-     * 查询操作
-     * 获取第一个匹配到的数据
-     */
-    public TrieQueryResult get(String word) {
-        return next();
-    }
-
-    /**
-     * 查询操作
-     *
-     * @return
-     */
-    public TrieQueryResult next(WordString content,TrieNode trieRootNode,
-                                TrieNode assistedQuery,boolean isRootReset) {
-        //当前查询字符长度
-        int len = this.content.length();
-        //根节点探测
-        TrieNode node = this.trieRootNode;
-        //返回结果
-        TrieQueryResult result = null;
-        for (; this.i < len + 1; this.i++) {
-            /**
-             * 1.如果到达终点，则将当前节点置空。
-             * 2.如果未到达终点，则将将当前子树的引用指向
-             */
-            if (i == len) {
-                //如果探测位置以及等于字符长度，说明到达终点
-                node = null;
-            } else {
-                //获取当前位置字符
-                int c = this.content.charAt(this.i);
-                //当前前缀子树返回
-                if (this.assistedQuery != null) {
-                    // 查询压缩后的字符编码
-                    this.assistedQuery.reset(this.i);
-                    TrieQueryResult res = this.assistedQuery.next();
-                    if (res != null && res.getCodes() != null
-                            && res.getCodes().length > 0) {
-                        c = res.getCodes()[0].getCode();
-                        this.i += res.getWord().length() - 1;
-                    }
-                }
-                // 查找下一个节点
-                node = node.getBranch(c);
-            }
-            /**
-             * 1.当前节点等于null,说明已经到底，可以考虑回退的问题了。
-             * 2.如果当前节点不为null，说明可以继续探查。
-             */
-            if (node == null) {
-                //根节点是否重置
-                if (isRootReset) {
-                    this.trieRootNode = this.sourceRoot;
-                    this.isRootReset = false;
-                }
-                // 找不到，则从头开始探测
-                node = this.trieRootNode;
-
-                //是否回退
-                if (this.isBack) {
-                    this.offset = this.curIndex;
-                    String str = new String(this.content.toIntArray(),
-                            this.curIndex, this.iTemp - this.curIndex + 1);
-
-                    //如果字符长度大于0
-                    if (str.length() > 0) {
-                        if (enableTrieAllSearch) {
-                            this.i = this.curIndex + 1;
-                        } else {
-                            //原有会从匹配的尾部的下一个位置开始扫描
-                            this.i = this.iTemp + 1;
-                        }
-                        this.curIndex = this.i;
-                        result = new TrieQueryResult(str, this.offset,
-                                nodeTemp.getCodes());
-                    }
-                    //不需要回退
-                    this.isBack = false;
-                    this.nodeTemp = null;
-                    return result;
-                }
-                if (this.beginOnly) {
-                    // 如果只进行开头匹配，则无需再往下探测
-                    return null;
-                }
-                this.i = this.curIndex;
-                // 向前移动已探测到的字符串位置
-                this.curIndex += 1;
-            } else {
-                switch (node.getStatus()) {
-                    case 2:
-                        // 2状态（是个词语但是还可以继续），继续往下探测，如没有则可能进行回退，因此这里进行一下记录
-                        this.iTemp = this.i;
-                        this.nodeTemp = node;
-                        if (enableTrieAllSearch) {
-                            //返回
-                            String str1 = new String(this.content.toIntArray(),
-                                    this.curIndex, this.iTemp - this.curIndex + 1);
-                            if (str1.length() > 0) {
-//							result = new TrieQueryResult(str1, this.offset,
-//									nodeTemp.getCodes());
-                                result = new TrieQueryResult(str1, this.curIndex,
-                                        nodeTemp.getCodes());
-                                this.i += 1;
-                                this.trieRootNode = node;
-                                this.isRootReset = true;
-                                return result;
-                            }
-                        } else {
-                            this.isBack = true;
-                        }
-                        break;
-                    case 3:
-                        this.offset = this.curIndex;
-                        String str = new String(this.content.toIntArray(),
-                                this.curIndex, this.i - this.curIndex + 1);
-                        this.isBack = false;
-                        if (str.length() > 0) {
-                            if (enableTrieAllSearch) {
-                                this.i = this.offset + 1; // 移动
-                                this.isRootReset = false;
-                            } else {
-                                this.i = this.i + 1; // 移动已探测到的字符串位置
-                            }
-                            this.curIndex = this.i;
-                            result = new TrieQueryResult(str, this.offset,
-                                    node.getCodes());
-                            this.trieRootNode = this.sourceRoot;
-                        }
-                        return result;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void reset(int curIndex) {
-        this.offset = 0;
-        this.curIndex = curIndex;
-        this.i = curIndex;
-        this.isBack = false;
-        this.iTemp = 0;
-    }
 
     /**
      * 通过反射获取Unsafe实例
@@ -417,6 +183,221 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      */
     public boolean lengthLimit(int[] word) {
         return word.length <= 50;
+    }
+
+    public static class TrieQuery {
+
+        /**
+         * 前缀树根节点，搜索、插入和删除操作的起点
+         */
+        private TrieNode trieRootNode;
+        /**
+         * 存储前缀树的根节点，TrieQuery 类中的作用是作为一个备份或原始的根节点。
+         * next() 方法中，trieRootNode 可能会被修改为其他节点，而 sourceRoot 则始终保持为原始的根节点。这样做的目的是为了在需要时能够重置 trieRootNode 到原始的根节点，例如在 next() 方法中，当找到一个匹配的词语后，trieRootNode 会被重置为 sourceRoot。
+         */
+        private TrieNode sourceRoot;
+
+        /**
+         * 用于查询的字符串内容
+         */
+        private WordString content;
+
+        /**
+         * 已探测到的字符串位置
+         */
+        private int root;
+
+        /**
+         * 下一个探测的字符串位置
+         */
+        private int i;
+
+        /**
+         * 当前探测到的词，在查询字符串中的开始位置
+         */
+        private int offset;
+
+        /**
+         * 标记是否可能需要回退
+         */
+        private boolean isBack;
+
+        /**
+         * 临时的位置用于回退的场合
+         */
+        private int iTemp;
+
+        /**
+         * 临时的节点用于回退的场合
+         */
+        private TrieNode nodeTemp;
+
+        /**
+         * 只查询开头匹配的
+         */
+        private boolean beginOnly;
+
+        /**
+         * 根节点是否回退
+         */
+        private boolean isRootReset;
+        /**
+         * 辅助树查询器
+         */
+        private TrieQuery assistedQuery;
+
+        /**
+         * 是否开启全量搜索
+         * <p>
+         * 不开启全量搜索，只搜索第一个匹配的词语
+         * 开启全量搜索，搜索所有匹配的词语
+         *
+         * <br>
+         * <p><code>举个例子，假设我们有一个字符串 "abcabc"，并且我们的 Trie 树中有 "abc","bca","cab"</code>
+         * <br>
+         * <p><code>enableTrieAllSearch = false</code>
+         * <p>如果我们搜索 "abcabc"，我们会找到第一个 "abc"，然后从第二个 "a" 开始继续搜索，这样我们就只能找到两个 "abc"。</p>
+         *
+         *
+         * <br>
+         * <p><code>enableTrieAllSearch = true</code>
+         * <p>我们搜索 "abcabc"，我们会找到第一个 "abc"，然后从第一个 "b" 开始继续搜索，这样我们就可以找到 "bca"，然后从第二个 "a" 开始继续搜索，找到第二个 "abc"，然后从第二个 "b" 开始继续搜索，找到第二个 "bca"，然后从第二个 "c" 开始继续搜索，找到 "cab"。所以，我们可以找到两个 "abc"，两个 "bca" 和一个 "cab"。
+         */
+        private boolean enableTrieAllSearch;
+
+        public TrieQuery(TrieNode trieRootNode, WordString content, boolean enableTrieAllSearch) {
+            this.content = content;
+            this.trieRootNode = trieRootNode;
+            this.sourceRoot = trieRootNode;
+            this.enableTrieAllSearch = enableTrieAllSearch;
+        }
+
+        public void setBeginOnly(boolean beginOnly) {
+            this.beginOnly = beginOnly;
+        }
+
+        public void setAssistedTrie(TrieNode assistedTrie) {
+            this.assistedQuery = new TrieQuery(assistedTrie, this.content,false);
+            this.assistedQuery.setBeginOnly(true);
+        }
+
+        /**
+         * 查询操作
+         * @return
+         */
+        public TrieQueryResult next() {
+            int len = this.content.length();
+            TrieNode node = this.trieRootNode; // 从前缀树根节点开始探测
+            TrieQueryResult result = null;
+            for (; this.i < len + 1; this.i++) {
+                if (i == len) {
+                    node = null;
+                } else {
+                    int c = this.content.charAt(this.i);
+                    if (this.assistedQuery != null) {
+                        // 查询压缩后的字符编码
+                        this.assistedQuery.reset(this.i);
+                        TrieQueryResult res = this.assistedQuery.next();
+                        if (res != null && res.getCodes() != null
+                                && res.getCodes().length > 0) {
+                            c = res.getCodes()[0].getCode();
+//						if(enableTrieAllSearch) {
+//							this.i += 1;
+//						}else {
+//							this.i += res.getWord().length() - 1;
+//						}
+                            this.i += res.getWord().length() - 1;
+                        }
+                    }
+                    node = node.getBranch(c); // 查找下一个节点
+                }
+                if (node == null) {
+                    if(isRootReset) {
+                        this.trieRootNode = this.sourceRoot;
+                        this.isRootReset = false;
+                    }
+                    node = this.trieRootNode; // 找不到，则从头开始探测
+
+
+                    if (this.isBack) {
+                        this.offset = this.root;
+                        String str = new String(this.content.toIntArray(),
+                                this.root, this.iTemp - this.root + 1);
+                        if (str.length() > 0) {
+                            if(enableTrieAllSearch) {
+                                this.i = this.root+1;
+                            }else {
+                                this.i = this.iTemp+1;//原有会从匹配的尾部的下一个位置开始扫描
+                            }
+                            this.root = this.i;
+                            result = new TrieQueryResult(str, this.offset,
+                                    nodeTemp.getCodes());
+                        }
+                        this.isBack = false;
+                        this.nodeTemp = null;
+                        return result;
+                    }
+                    if (this.beginOnly) {
+                        return null; // 如果只进行开头匹配，则无需再往下探测
+                    }
+                    this.i = this.root;
+                    this.root += 1; // 向前移动已探测到的字符串位置
+                } else {
+                    switch (node.getStatus()) {
+                        case 2:
+                            // 2状态（是个词语但是还可以继续），继续往下探测，如没有则可能进行回退，因此这里进行一下记录
+                            this.iTemp = this.i;
+                            this.nodeTemp = node;
+                            if(enableTrieAllSearch) {
+                                //返回
+                                String str1 = new String(this.content.toIntArray(),
+                                        this.root, this.iTemp - this.root + 1);
+                                if (str1.length() > 0) {
+//							result = new TrieQueryResult(str1, this.offset,
+//									nodeTemp.getCodes());
+                                    result = new TrieQueryResult(str1, this.root,
+                                            nodeTemp.getCodes());
+                                    this.i += 1;
+                                    this.trieRootNode = node;
+                                    this.isRootReset = true;
+                                    return result;
+                                }
+                            }else {
+                                this.isBack = true;
+                            }
+                            break;
+                        case 3:
+                            this.offset = this.root;
+                            String str = new String(this.content.toIntArray(),
+                                    this.root, this.i - this.root + 1);
+                            this.isBack = false;
+                            if (str.length() > 0) {
+                                if(enableTrieAllSearch) {
+                                    this.i = this.offset + 1; // 移动
+                                    this.isRootReset = false;
+                                }else {
+                                    this.i = this.i + 1; // 移动已探测到的字符串位置
+                                }
+                                this.root = this.i;
+                                result = new TrieQueryResult(str, this.offset,
+                                        node.getCodes());
+                                this.trieRootNode = this.sourceRoot;
+                            }
+                            return result;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void reset(int root) {
+            this.offset = 0;
+            this.root = root;
+            this.i = root;
+            this.isBack = false;
+            this.iTemp = 0;
+        }
+
     }
 
 }

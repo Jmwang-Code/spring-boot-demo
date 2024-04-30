@@ -297,8 +297,8 @@ public class TrieNode implements Serializable, Comparable<TrieNode> {
      * @param enableTrieAllSearch
      * @return
      */
-    public Trie getWord(WordString str, boolean enableTrieAllSearch) {
-        return new Trie(this, str,enableTrieAllSearch);
+    public Trie.TrieQuery getWord(WordString str, boolean enableTrieAllSearch) {
+        return new Trie.TrieQuery(this, str,enableTrieAllSearch);
     }
 
     /**
