@@ -138,6 +138,14 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         return add;
     }
 
+    /**
+     * 删除操作
+     */
+
+    /**
+     * 查询操作
+     */
+
 
     /**
      * 通过反射获取Unsafe实例
