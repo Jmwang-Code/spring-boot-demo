@@ -15,13 +15,20 @@ public class TrieTest {
         System.out.println(trie.add("ABCDE"));
 
         System.out.println(trie.getFirstPrefixWord("adadABC"));
-        System.out.println(trie.getFirstAllWord("adadABC"));
+        System.out.println(trie.getAllWordsWithoutPrefixes("adadABC"));
+        System.out.println(trie.getAllWordsWithPrefixes("adadABC"));
+
+        System.out.println();
 
         System.out.println(trie.getFirstPrefixWord("addABCAB"));
-        System.out.println(trie.getFirstAllWord("addABCAB"));
+        System.out.println(trie.getAllWordsWithoutPrefixes("addABCAB"));
+        System.out.println(trie.getAllWordsWithPrefixes("addABCAB"));
+
+        System.out.println();
 
         System.out.println(trie.getFirstPrefixWord("adadABAABC"));
-        System.out.println(trie.getFirstAllWord("adadABAABC"));
+        System.out.println(trie.getAllWordsWithoutPrefixes("adadABAABC"));
+        System.out.println(trie.getAllWordsWithPrefixes("adadABAABC"));
     }
 
 
