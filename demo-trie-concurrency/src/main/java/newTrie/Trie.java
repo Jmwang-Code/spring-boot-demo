@@ -188,6 +188,24 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     /**
      * 删除操作
      */
+    /**
+     * 必须是具体的字符串，不能模糊
+     */
+    public boolean remove(String word, int code, int type) {
+        boolean remove = mainTree.remove(TokenizerUtil.codePoints(word), code, type);
+        size.decrementAndGet();
+        return remove;
+    }
+
+    /**
+     * 必须是具体的字符串，不能模糊
+     */
+    public boolean remove(int[] word, int code, int type) {
+        boolean remove = mainTree.remove(word, code, type);
+        size.decrementAndGet();
+        return remove;
+    }
+
 
     /**
      * 查询操作 : 获取第一个匹配到的数据
@@ -196,6 +214,16 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(word), true);
         TrieQueryResult query = trieQuery.query();
         return query;
+    }
+
+    /**
+     * 清除
+     */
+    @Deprecated
+    public void clear() {
+        mainTree = null;
+        size.set(0);
+        deep.set(0);
     }
 
 
@@ -235,10 +263,11 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      * @return
      */
     public boolean lengthLimit(int[] word) {
-        return word.length<=50;
+        return word.length <= 50;
     }
+
     public boolean lengthLimit(String word) {
-        return word.length()<=50;
+        return word.length() <= 50;
     }
 
     /**
