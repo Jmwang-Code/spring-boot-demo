@@ -138,8 +138,13 @@ public class Trie implements Serializable, Iterable<TrieNode>,
      */
 
     /**
-     * 查询操作
+     * 查询操作 : 获取第一个匹配到的数据
      */
+    public TrieQueryResult get(String word) {
+        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(word), true);
+        TrieQueryResult query = trieQuery.query();
+        return query;
+    }
 
 
     /**
@@ -276,12 +281,22 @@ public class Trie implements Serializable, Iterable<TrieNode>,
         }
 
         public void setAssistedTrie(TrieNode assistedTrie) {
-            this.assistedQuery = new TrieQuery(assistedTrie, this.content,false);
+            this.assistedQuery = new TrieQuery(assistedTrie, this.content, false);
             this.assistedQuery.setBeginOnly(true);
         }
 
         /**
+         * 查询
+         *
+         * @return
+         */
+        public TrieQueryResult query() {
+            return next();
+        }
+
+        /**
          * 查询操作
+         *
          * @return
          */
         public TrieQueryResult next() {
@@ -311,7 +326,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                     node = node.getBranch(c); // 查找下一个节点
                 }
                 if (node == null) {
-                    if(isRootReset) {
+                    if (isRootReset) {
                         this.trieRootNode = this.sourceRoot;
                         this.isRootReset = false;
                     }
@@ -323,10 +338,10 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                         String str = new String(this.content.toIntArray(),
                                 this.root, this.iTemp - this.root + 1);
                         if (str.length() > 0) {
-                            if(enableTrieAllSearch) {
-                                this.i = this.root+1;
-                            }else {
-                                this.i = this.iTemp+1;//原有会从匹配的尾部的下一个位置开始扫描
+                            if (enableTrieAllSearch) {
+                                this.i = this.root + 1;
+                            } else {
+                                this.i = this.iTemp + 1;//原有会从匹配的尾部的下一个位置开始扫描
                             }
                             this.root = this.i;
                             result = new TrieQueryResult(str, this.offset,
@@ -347,7 +362,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                             // 2状态（是个词语但是还可以继续），继续往下探测，如没有则可能进行回退，因此这里进行一下记录
                             this.iTemp = this.i;
                             this.nodeTemp = node;
-                            if(enableTrieAllSearch) {
+                            if (enableTrieAllSearch) {
                                 //返回
                                 String str1 = new String(this.content.toIntArray(),
                                         this.root, this.iTemp - this.root + 1);
@@ -361,7 +376,7 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                                     this.isRootReset = true;
                                     return result;
                                 }
-                            }else {
+                            } else {
                                 this.isBack = true;
                             }
                             break;
@@ -371,10 +386,10 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                                     this.root, this.i - this.root + 1);
                             this.isBack = false;
                             if (str.length() > 0) {
-                                if(enableTrieAllSearch) {
+                                if (enableTrieAllSearch) {
                                     this.i = this.offset + 1; // 移动
                                     this.isRootReset = false;
-                                }else {
+                                } else {
                                     this.i = this.i + 1; // 移动已探测到的字符串位置
                                 }
                                 this.root = this.i;
