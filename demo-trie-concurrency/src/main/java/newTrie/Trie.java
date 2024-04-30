@@ -552,12 +552,8 @@ public class Trie implements Serializable, Iterable<TrieNode>,
 
                         //如果字符长度大于0
                         if (str.length() > 0) {
-                            if (enableTrieAllSearch) {
-                                this.i = this.root + 1;
-                            } else {
-                                //原有会从匹配的尾部的下一个位置开始扫描
-                                this.i = this.iTemp + 1;
-                            }
+                            // 修改这里，无论 enableTrieAllSearch 的值是什么，都将搜索的起点设置为 this.root + 1
+                            this.i = this.root + 1;
                             this.root = this.i;
                             trieQueryResult = new TrieQueryResult(str, this.offset,
                                     nodeTemp.getCodes());
@@ -600,12 +596,8 @@ public class Trie implements Serializable, Iterable<TrieNode>,
                                     this.root, this.i - this.root + 1);
                             this.isBack = false;
                             if (str.length() > 0) {
-                                if (enableTrieAllSearch) {
-                                    this.i = this.offset + 1; // 移动
-                                    this.isRootReset = false;
-                                } else {
-                                    this.i = this.i + 1; // 移动已探测到的字符串位置
-                                }
+                                // 修改这里，无论 enableTrieAllSearch 的值是什么，都将搜索的起点设置为 this.offset + 1
+                                this.i = this.offset + 1;
                                 this.root = this.i;
                                 trieQueryResult = new TrieQueryResult(str, this.offset,
                                         trieNode.getCodes());

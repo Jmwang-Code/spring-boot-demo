@@ -17,11 +17,11 @@ public class TrieTest {
         System.out.println(trie.getFirstPrefixWord("adadABC"));
         System.out.println(trie.getFirstAllWord("adadABC"));
 
-        System.out.println(trie.getFirstPrefixWord("adadABCAB"));
-        System.out.println(trie.getFirstAllWord("adadABCAB"));
+        System.out.println(trie.getFirstPrefixWord("addABCAB"));
+        System.out.println(trie.getFirstAllWord("addABCAB"));
 
-        System.out.println(trie.getFirstPrefixWord("adadABdasABC"));
-        System.out.println(trie.getFirstAllWord("adadABdasABC"));
+        System.out.println(trie.getFirstPrefixWord("adadABAABC"));
+        System.out.println(trie.getFirstAllWord("adadABAABC"));
     }
 
 
