@@ -98,6 +98,13 @@ public class Trie implements Serializable, Iterable<TrieNode>,
     }
 
     /**
+     * 获取root
+     */
+    public TrieNode getRoot() {
+        return mainTree;
+    }
+
+    /**
      * 并行遍历前缀树的任务。
      *
      * @param parallelismThreshold 并行阈值

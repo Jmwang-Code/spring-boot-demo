@@ -24,6 +24,10 @@ public abstract class CodePointUtil {
 	}
 	
 	public static String toString(int c) {
+		if (c < 0 || c > 65535) {
+			// 返回一个默认的字符串，或者抛出一个异常
+			return "Invalid character";
+		}
 		return new String(new int[] { c }, 0, 1);
 	}
 
