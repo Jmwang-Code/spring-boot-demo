@@ -152,6 +152,13 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
     /**
      * 增加 word 选定mode code type
      */
+    public boolean add(int[] word, int code, int type) {
+        return add(word, MultiCodeMode.Append, code, type);
+    }
+
+    /**
+     * 增加 word 选定mode code type
+     */
     public boolean add(int[] word, MultiCodeMode mode, int code, int type) {
         boolean add = this.mainTree.add(word, mode, code, type);
         if (add) size.incrementAndGet();
@@ -177,6 +184,10 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
      */
     public boolean add(String word, MultiCodeMode mode, int code) {
         return add(TokenizerUtil.codePoints(word), mode, code, -1);
+    }
+
+    public boolean add(String word,  int code, int type) {
+        return add(TokenizerUtil.codePoints(word), MultiCodeMode.Append, code, type);
     }
 
     /**
