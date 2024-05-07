@@ -5,6 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 
+import java.util.Iterator;
+
 public class TrieTest {
 
     private static Trie trie;
@@ -23,7 +25,8 @@ public class TrieTest {
 
     @Test
     public void iterator() {
-
+        trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
+        System.out.println();
     }
 
     @Test

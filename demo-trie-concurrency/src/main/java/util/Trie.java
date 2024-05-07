@@ -46,7 +46,7 @@ import java.util.function.Function;
  * 并行阈值（parallelismThreshold）：批量操作接受一个名为parallelismThreshold的参数。如果当前映射的大小预计小于给定的阈值，方法将顺序执行。
  * 通过划分足够的子任务来充分利用ForkJoinPool.commonPool()，这个池用于所有并行计算。通常，你会首先选择这些极端值中的一个，然后测量使用介于两者之间的值（在开销和吞吐量之间进行权衡）的性能。
  */
-public class Trie implements Serializable, Iterable<Trie.TrieNode>,
+public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         ForEachForkJoinInterface, SearchForkJoinInterface {
 
     //序列号
@@ -76,7 +76,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
     }
 
     @Override
-    public Iterator<TrieNode> iterator() {
+    public Iterator<TrieNodeWrapper> iterator() {
         return new TrieIterator(mainTree);
     }
 
@@ -110,16 +110,17 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
      * @param <U>
      */
     @Override
-    public <U> void forEachParallel(int parallelismThreshold, Function<TrieNode, U> transformer, Consumer<U> action) {
+    public <U> void forEachParallel(int parallelismThreshold, Function<TrieNodeWrapper, U> transformer, Consumer<U> action) {
         if (size() > parallelismThreshold) {
-            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(this.mainTree, transformer, action, new Semaphore(parallelismThreshold)));
+            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(new TrieNodeWrapper(this.mainTree,"",0), transformer, action, new Semaphore(parallelismThreshold)));
         } else {
             forEach(node -> action.accept(transformer.apply(node)));
         }
     }
 
+
     @Override
-    public TrieNode searchParallel(int parallelismThreshold) {
+    public TrieNodeWrapper searchParallel(int parallelismThreshold) {
         ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
         try {
             return pool.invoke(new SearchTask(this.mainTree, new ArrayList<>()));
@@ -618,13 +619,39 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
         }
     }
 
-    private class TrieIterator implements Iterator<TrieNode> {
-        private Stack<TrieNode> stack;
+    class TrieNodeWrapper{
+        private TrieNode node;
+        private String value;
+        private int length; // Add this field to store the length of the current word
+
+        public TrieNodeWrapper(TrieNode node, String value, int length){
+            this.node = node;
+            this.value = value;
+            this.length = length;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public TrieNode getNode() {
+            return node;
+        }
+
+        public int getLength() {
+            return length;
+        }
+    }
+
+    private class TrieIterator implements Iterator<TrieNodeWrapper> {
+        private Stack<TrieNodeWrapper> stack;
+        private StringBuilder currentWord;
 
         public TrieIterator(TrieNode root) {
             stack = new Stack<>();
+            currentWord = new StringBuilder();
             if (root != null) {
-                stack.push(root);
+                stack.push(new TrieNodeWrapper(root, "",0));
             }
         }
 
@@ -634,17 +661,28 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
         }
 
         @Override
-        public TrieNode next() {
-            TrieNode node = stack.pop();
-            //通过数组
-            if (node.branches != null) {
-                for (TrieNode child : node.branches) {
-                    if (child != null) {
-                        stack.push(child);
+        public TrieNodeWrapper next() {
+            while (!stack.isEmpty()) {
+                TrieNodeWrapper nodeWrapper = stack.pop();
+                TrieNode node = nodeWrapper.node;
+                currentWord.setLength(nodeWrapper.getLength()); // Reset the length of currentWord
+                currentWord.append(nodeWrapper.value);
+
+                if (node.status == 3) { // Assuming 'status' indicates whether it's a complete word
+                    String word = currentWord.toString();
+                    return new TrieNodeWrapper(node, word, currentWord.length());
+                }
+
+                if (node.branches != null) {
+                    for (TrieNode child : node.branches) {
+                        if (child != null) {
+                            String childWord = (char) child.c + "";
+                            stack.push(new TrieNodeWrapper(child, childWord, currentWord.length()));
+                        }
                     }
                 }
             }
-            return node;
+            return null; // No more words
         }
     }
 
@@ -713,7 +751,6 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
          * TODO 暂时使用public后面改private
          */
         public byte status = 1;
-
 
         /**
          * 无参构造器
@@ -1889,7 +1926,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
         }
     }
 
-    private class SearchTask extends RecursiveTask<TrieNode> {
+    private class SearchTask extends RecursiveTask<TrieNodeWrapper> {
         private final TrieNode node;
         private final List<Integer> path;  // The path from the root to the current node
 
@@ -1899,10 +1936,10 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
         }
 
         @Override
-        protected TrieNode compute() {
+        protected TrieNodeWrapper compute() {
             if (node.status == 1 || node.status == 2) {
                 // If the current node satisfies the condition, return it
-                return node;
+                return new TrieNodeWrapper(node, "",0); // Assuming the value is null, adjust as needed
             } else {
                 // Otherwise, create new tasks for all children
                 List<SearchTask> tasks = new ArrayList<>();
@@ -1918,7 +1955,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
                 }
                 // Wait for all tasks to finish and check their results
                 for (SearchTask task : tasks) {
-                    TrieNode result = task.join();  // Wait for the task to finish and get its result
+                    TrieNodeWrapper result = task.join();  // Wait for the task to finish and get its result
                     if (result != null) {
                         // If a task found a node that satisfies the condition, return it
                         return result;
@@ -1934,14 +1971,13 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
      * 用于并行遍历前缀树的任务。
      */
     private final class ForEachTrieTask<U> extends RecursiveAction {
-        private final TrieNode node; // 节点
-        private final Function<TrieNode, U> transformer; // 转换器
+        private final TrieNodeWrapper nodeWrapper; // 节点
+        private final Function<TrieNodeWrapper, U> transformer; // 转换器
         private final Consumer<U> action; // 操作
         private final Semaphore semaphore; // 信号量
 
-
-        public ForEachTrieTask(TrieNode node, Function<TrieNode, U> transformer, Consumer<U> action, Semaphore semaphore) {
-            this.node = node;
+        public ForEachTrieTask(TrieNodeWrapper nodeWrapper, Function<TrieNodeWrapper, U> transformer, Consumer<U> action, Semaphore semaphore) {
+            this.nodeWrapper = nodeWrapper;
             this.action = action;
             this.semaphore = semaphore;
             this.transformer = transformer;
@@ -1954,18 +1990,22 @@ public class Trie implements Serializable, Iterable<Trie.TrieNode>,
                 semaphore.acquire();
 
                 // 对当前节点应用操作
-                action.accept(transformer.apply(node));
+                TrieNode node = nodeWrapper.node;
+                if (node.status == 3) { // Assuming 'status' indicates whether it's a complete word
+                    action.accept(transformer.apply(nodeWrapper));
+                }
 
                 // 对每个子节点创建并执行新的任务
-                for (TrieNode child : node.branches) {
-                    if (child != null) {
-                        new ForEachTrieTask<>(child, transformer, action, semaphore).fork();
+                if (node.branches != null) {
+                    for (TrieNode child : node.branches) {
+                        if (child != null) {
+                            new ForEachTrieTask<>(new TrieNodeWrapper(child, "",0), transformer, action, semaphore).fork();
+                        }
                     }
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             } finally {
-                // 释放许可
                 semaphore.release();
             }
         }
@@ -2030,7 +2070,8 @@ interface ForEachForkJoinInterface extends ForkJoinInterface {
      * @param action               操作
      * @param <U>                  泛型
      */
-    public <U> void forEachParallel(int parallelismThreshold, Function<Trie.TrieNode, U> transformer, Consumer<U> action);
+    public <U> void forEachParallel(int parallelismThreshold, Function<Trie.TrieNodeWrapper, U> transformer, Consumer<U> action);
+
 
 }
 
@@ -2044,5 +2085,5 @@ interface SearchForkJoinInterface extends ForkJoinInterface {
 
     //SearchTrieTask
 
-    public Trie.TrieNode searchParallel(int parallelismThreshold);
+    public Trie.TrieNodeWrapper searchParallel(int parallelismThreshold);
 }
