@@ -25,8 +25,15 @@ public class TrieTest {
 
     @Test
     public void iterator() {
-        trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
-        System.out.println();
+        Thread.startVirtualThread(() -> {
+            System.out.println(2);
+            trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
+        });
+
+        Thread.startVirtualThread(() -> {
+            System.out.println(1);
+            trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
+        });
     }
 
     @Test
