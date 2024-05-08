@@ -20,6 +20,12 @@ public class TrieTest extends TestCase {
     }
 
     public void testSize() {
+        //测试
+        Trie trie = new Trie();
+        trie.add("hello");
+        trie.add("world");
+
+        System.out.println(trie.size());
     }
 
     public void testDeep() {
