@@ -91,7 +91,16 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
      * deep
      */
     public int deep() {
-        return deep.get();
+        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(""), true);
+        return trieQuery.getDeep();
+    }
+
+    /**
+     * 获取辅助子树深度
+     */
+    public int getDeep(String word) {
+        TrieQuery trieQuery = new TrieQuery(mainTree,  WordStringFactory.create(word), true);
+        return trieQuery.getDeep();
     }
 
     /**
@@ -521,22 +530,23 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         public int getDeep() {
             int deep = 0;
             if (trieRootNode.hasNext()) {
-                dfs(trieRootNode, deep);
+                deep = dfs(trieRootNode, deep);
             }
             return deep;
         }
 
-        public void dfs(TrieNode nextTireNodes, int deep) {
+        public int dfs(TrieNode nextTireNodes, int deep) {
             if (!nextTireNodes.hasNext()) {
-                deep = Math.max(deep, deep);
-                return;
+                return deep;
             }
+            int maxDepth = deep;
             TrieNode[] trieNodes = nextTireNodes.branches;
             for (int j = 0; j < trieNodes.length; j++) {
                 TrieNode x = trieNodes[j];
-                dfs(x, deep + 1);
+                int childDepth = dfs(x, deep + 1);
+                maxDepth = Math.max(maxDepth, childDepth);
             }
-
+            return maxDepth;
         }
 
     }

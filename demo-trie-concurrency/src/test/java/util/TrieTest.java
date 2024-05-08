@@ -25,24 +25,27 @@ public class TrieTest {
 
     @Test
     public void iterator() {
-        Thread.startVirtualThread(() -> {
+//        Thread.startVirtualThread(() -> {
             System.out.println(2);
             trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
-        });
+//        });
 
-        Thread.startVirtualThread(() -> {
-            System.out.println(1);
-            trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
-        });
+//        Thread.startVirtualThread(() -> {
+//            System.out.println(1);
+//            trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
+//        });
     }
 
     @Test
     public void size() {
-        
+        System.out.println(trie.size());
     }
 
     @Test
     public void deep() {
+        System.out.println(trie.deep());
+        //TODO 得重写 方法getDeep 不对
+        System.out.println(trie.getDeep("hel"));
     }
 
     @Test
