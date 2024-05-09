@@ -59,7 +59,6 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
 
     //实体数量,是瞬间值，可能是过去某一时刻的值
     private transient volatile AtomicInteger size = new AtomicInteger(0);
-    private transient volatile AtomicInteger deep = new AtomicInteger(0);
 
     /**
      * 无参构造函数 (初始化)
@@ -274,7 +273,6 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
     public void clear() {
         mainTree = null;
         size.set(0);
-        deep.set(0);
     }
 
 
