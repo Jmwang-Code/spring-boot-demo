@@ -46,6 +46,8 @@ public class TrieTest {
         System.out.println(trie.deep());
         //TODO 得重写 方法getDeep 不对
         System.out.println(trie.getDeep("hel"));
+
+        System.out.println(trie.getDeep("e"));
     }
 
     @Test

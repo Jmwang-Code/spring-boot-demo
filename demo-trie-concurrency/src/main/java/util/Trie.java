@@ -1,5 +1,6 @@
 package util;
 
+import newTrie.inner.TrieNode;
 import newTrie.lang.Result;
 import newTrie.lang.WordString;
 import newTrie.lang.WordStringFactory;
@@ -100,7 +101,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
      */
     public int getDeep(String word) {
         TrieQuery trieQuery = new TrieQuery(mainTree,  WordStringFactory.create(word), true);
-        return trieQuery.getDeep();
+        return trieQuery.probe();
     }
 
     /**
@@ -533,6 +534,25 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                 deep = dfs(trieRootNode, deep);
             }
             return deep;
+        }
+
+        public int probe(){
+            int length = this.content.length();
+            int[] intArray = content.toIntArray();
+            TrieNode trieNode = this.trieRootNode;
+
+            while (this.i < length) {
+                int c = intArray[this.i];
+                trieNode = trieNode.getBranch(c);
+                if (trieNode == null) {
+                    return this.i;
+                }
+                this.i++;
+            }
+
+            int dfs = dfs(trieNode, 0);
+
+            return dfs;
         }
 
         public int dfs(TrieNode nextTireNodes, int deep) {
