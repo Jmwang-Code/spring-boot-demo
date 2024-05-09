@@ -44,7 +44,7 @@ public class TrieTest {
     @Test
     public void deep() {
         System.out.println(trie.deep());
-        //TODO 得重写 方法getDeep 不对
+        //getDeep获取子树深度
         System.out.println(trie.getDeep("hel"));
 
         System.out.println(trie.getDeep("e"));
