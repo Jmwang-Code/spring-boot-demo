@@ -1,6 +1,5 @@
 package util;
 
-import newTrie.inner.TrieNode;
 import newTrie.lang.Result;
 import newTrie.lang.WordString;
 import newTrie.lang.WordStringFactory;
@@ -127,12 +126,11 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         }
     }
 
-
     @Override
-    public TrieNodeWrapper searchParallel(int parallelismThreshold) {
+    public <T> T searchParallel(int parallelismThreshold, Function<TrieNodeWrapper, T> function) {
         ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
         try {
-            return pool.invoke(new SearchTask(this.mainTree, new ArrayList<>()));
+            return (T) pool.invoke(new SearchTask(new TrieNodeWrapper(this.mainTree,"",0),new ArrayList<Integer>(), function));
         } finally {
             pool.shutdown();  // 关闭ForkJoinPool
         }
@@ -886,7 +884,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         }
 
         public int getCode() {
-            return this.c;
+            return this.code;
         }
 
         public byte getStatus() {
@@ -1954,44 +1952,44 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         }
     }
 
-    private class SearchTask extends RecursiveTask<TrieNodeWrapper> {
-        private final TrieNode node;
+    private class SearchTask<T> extends RecursiveTask<T> {
+        private final Trie.TrieNodeWrapper nodeWrapper;
+        //ASCII值或Unicode
         private final List<Integer> path;  // The path from the root to the current node
+        private final Function<Trie.TrieNodeWrapper, T> function;
 
-        public SearchTask(TrieNode node, List<Integer> path) {
-            this.node = node;
+        public SearchTask(Trie.TrieNodeWrapper nodeWrapper, List<Integer> path, Function<Trie.TrieNodeWrapper, T> function) {
+            this.nodeWrapper = nodeWrapper;
             this.path = new ArrayList<>(path);  // Create a copy of the path
+            this.function = function;
         }
 
         @Override
-        protected TrieNodeWrapper compute() {
-            if (node.status == 1 || node.status == 2) {
-                // If the current node satisfies the condition, return it
-                return new TrieNodeWrapper(node, "", 0); // Assuming the value is null, adjust as needed
-            } else {
-                // Otherwise, create new tasks for all children
-                List<SearchTask> tasks = new ArrayList<>();
-                for (int i = 0; i < node.branches.length; i++) {
-                    TrieNode child = node.branches[i];
-                    if (child != null) {
-                        List<Integer> childPath = new ArrayList<>(path);
-                        childPath.add(i);  // Add the character of the child to the path
-                        SearchTask task = new SearchTask(child, childPath);
-                        task.fork();  // Start the task in a separate thread
-                        tasks.add(task);
-                    }
+        protected T compute() {
+            //满足条件我们就进行比较
+            if (nodeWrapper.getNode().status == 2 || nodeWrapper.getNode().status == 3) {
+                T result = function.apply(nodeWrapper);
+                if (result != null) {
+                    nodeWrapper.value = CodePointUtil.toString(path.stream().mapToInt(i->i).toArray());
+                    nodeWrapper.length = path.size();
+                    return result;
                 }
-                // Wait for all tasks to finish and check their results
-                for (SearchTask task : tasks) {
-                    TrieNodeWrapper result = task.join();  // Wait for the task to finish and get its result
+            }
+            // If the current node is not the target, continue to search in its children
+            if (nodeWrapper.getNode().branches != null) {
+                for (Trie.TrieNode child : nodeWrapper.getNode().branches) {
+                    path.add(child.c);
+                    SearchTask<T> task = new SearchTask<>(new Trie.TrieNodeWrapper(child, nodeWrapper.getValue(), nodeWrapper.getLength()), path, function);
+                    task.fork();
+                    T result = task.join();
                     if (result != null) {
-                        // If a task found a node that satisfies the condition, return it
                         return result;
                     }
+                    // Remove the character value of the child node from the path
+                    path.remove(path.size() - 1);
                 }
-                // If no tasks found a node that satisfies the condition, return null
-                return null;
             }
+            return null;
         }
     }
 
@@ -2113,5 +2111,5 @@ interface SearchForkJoinInterface extends ForkJoinInterface {
 
     //SearchTrieTask
 
-    public Trie.TrieNodeWrapper searchParallel(int parallelismThreshold);
+    public <T> T  searchParallel(int parallelismThreshold, Function<Trie.TrieNodeWrapper, T> function);
 }

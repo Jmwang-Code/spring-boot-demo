@@ -2,10 +2,12 @@ package util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+
 import org.junit.BeforeClass;
 
-import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TrieTest {
 
@@ -29,8 +31,8 @@ public class TrieTest {
     @Test
     public void iterator() {
 //        Thread.startVirtualThread(() -> {
-            System.out.println(2);
-            trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
+        System.out.println(2);
+        trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
 //        });
 
 //        Thread.startVirtualThread(() -> {
@@ -53,25 +55,48 @@ public class TrieTest {
         System.out.println(trie.getDeep("e"));
     }
 
+    /**
+     * 假设一种使用场景
+     * <p>
+     * 比如这里使用 分支合并的方式，将所有的 code 累加起来，同时记录重复的 code。加入存在不同实体相同的编码的情况。这样是需要进行业务操作的。
+     */
     @Test
-    public void forEachParallel() {
+    public void forEachParallel() throws InterruptedException {
+        //存储已经遇到的 code
+        Set<Integer> seenCodes = ConcurrentHashMap.newKeySet();
+        //存储 code 的累加值
+        AtomicInteger total = new AtomicInteger(0);
+        //存储存在重复code 集合
+        Set<Integer> repeatCodes = ConcurrentHashMap.newKeySet();
+
         trie.forEachParallel(2,
-                nodeWrapper -> {
-                    // 在这里，你可以定义如何从 TrieNodeWrapper 转换到你需要的类型 U
-                    // 例如，如果 U 是 String 类型，你可以返回 nodeWrapper 的某个字段
-                    return nodeWrapper.getNode().c;
-                },
-                u -> {
-                    // 在这里，u 是上面转换器函数返回的类型 U
-                    // 你可以在这个 lambda 函数中编写你需要执行的操作
-                    // 例如，打印 u
-                    System.out.println(u);
+                nodeWrapper -> nodeWrapper.getNode().code,
+                code -> {
+                    //如果 code 是新的（即未出现过），则将其添加到 sum 中。
+                    if (seenCodes.add(code)) {
+                        total.incrementAndGet();
+                    } else {
+                        repeatCodes.add(code);
+                    }
                 }
         );
+
+        Thread.sleep(1000);
+        System.out.println("Sum of unique codes: " + total.get());
+        System.out.println("Repeat codes: " + repeatCodes);
     }
 
     @Test
-    public void searchParallel() {
+    public void searchParallel() throws InterruptedException {
+        Trie.TrieNodeWrapper trieNode = trie.searchParallel(2, node -> {
+            if (node.getNode().getCode() == 6) {
+                return node;
+            }
+            return null;
+        });
+        Thread.sleep(1000);
+        System.out.println(trieNode.getValue());
+        System.out.println(trieNode.getLength());
     }
 
     @Test
