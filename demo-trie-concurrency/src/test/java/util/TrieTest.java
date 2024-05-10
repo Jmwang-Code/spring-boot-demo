@@ -25,6 +25,7 @@ public class TrieTest {
         trie.add("he".codePoints().toArray(), 4, 1);
         trie.add("wor".codePoints().toArray(), 5, 1);
         trie.add("ja".codePoints().toArray(), 6, 1);
+        trie.add("ja".codePoints().toArray(), 6, 1);
     }
 
 
@@ -150,17 +151,23 @@ public class TrieTest {
 
     @Test
     public void getFirstPrefixWord() {
+        System.out.println(trie.getFirstPrefixWord("java"));
     }
 
     @Test
     public void getAllWordsWithoutPrefixes() {
+        System.out.println(trie.getAllWordsWithoutPrefixes("java"));
     }
 
     @Test
     public void getAllWordsWithPrefixes() {
+        System.out.println(trie.getAllWordsWithPrefixes("java"));
     }
 
     @Test
     public void clear() {
+        System.out.println(trie.size());
+        trie.clear();
+        System.out.println(trie.size());
     }
 }

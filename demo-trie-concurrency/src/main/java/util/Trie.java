@@ -1114,6 +1114,8 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                         }
                         break;
                     case 3:
+                        // 如果当前节点的状态是确定的词语，并且原来这个位置的节点也是确定的词语
+                        // 就考虑多码的问题
                         if (branch.status == 2 || branch.status == 3) {
                             // 多Code情况
                             if (MultiCodeMode.Drop == mode) {
@@ -1132,6 +1134,11 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                                 throw new UnsupportedOperationException("不支持的多码处理模式");
                             }
                         } else {
+                            //先确定之前的branch位置是否是确定的词语
+                            if (branch.status == 1){
+                                added.setValue(true);
+                            }
+                            //否则就是将status == 1 转换为 status == 2
                             branch.type = newBranch.type;
                             branch.code = newBranch.code;
                             branch.status = 2;
@@ -1336,9 +1343,9 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                     branch.type = CodeTypes.MULTI_CODE;
                     return true;
                 } else {
-                    branch.type = newBranch.type;
-                    branch.code = newBranch.code;
-                    return true;
+//                    branch.type = newBranch.type;
+//                    branch.code = newBranch.code;
+                    return false;
                 }
             } else {
                 return multiCodeLookupTable.addCode(branch.code, newValue);
