@@ -120,39 +120,25 @@ public class TrieTest {
     }
 
     @Test
-    public void add() {
-    }
-
-    @Test
     public void testAdd() {
+        boolean maga = trie.add("MAGA", 7, 2);
+        System.out.println(maga);
+        //获取第一个匹配到的数据
+        System.out.println(trie.getFirstPrefixWord("的MAGA阿萨斯"));
+        //获取所有匹配到的数据 (如果前缀是词也包含前缀)
+        System.out.println(trie.getAllWordsWithPrefixes("阿达java大圣"));
+        //获取所有匹配到的数据 (如果前缀是词也不包含前缀)
+        System.out.println(trie.getAllWordsWithoutPrefixes("阿达java大圣"));
     }
 
-    @Test
-    public void testAdd1() {
-    }
-
-    @Test
-    public void testAdd2() {
-    }
-
-    @Test
-    public void testAdd3() {
-    }
-
-    @Test
-    public void testAdd4() {
-    }
-
-    @Test
-    public void testAdd5() {
-    }
-
-    @Test
-    public void testAdd6() {
-    }
-
+    /**
+     * 通过word删除
+     */
     @Test
     public void remove() {
+        boolean java = trie.remove("java");
+        System.out.println(java);
+        System.out.println(trie.getFirstPrefixWord("java"));
     }
 
     @Test

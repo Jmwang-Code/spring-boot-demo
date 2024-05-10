@@ -222,11 +222,23 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         return remove;
     }
 
+    public boolean remove(String word) {
+        boolean remove = mainTree.remove(TokenizerUtil.codePoints(word));
+        size.decrementAndGet();
+        return remove;
+    }
+
     /**
      * 必须是具体的字符串，不能模糊
      */
     public boolean remove(int[] word, int code, int type) {
         boolean remove = mainTree.remove(word, code, type);
+        size.decrementAndGet();
+        return remove;
+    }
+
+    public boolean remove(int[] word){
+        boolean remove = mainTree.remove(word);
         size.decrementAndGet();
         return remove;
     }
@@ -1352,6 +1364,41 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
             } finally {
                 w.unlock();
             }
+        }
+
+        /**
+         * 移除一个词，不参考编码。如果存在编码就一并移除
+         *
+         * @param word
+         * @return
+         */
+        public boolean remove(int[] word) {
+            w.lock();
+            try {
+                TrieNodePath path = getBranchPath(word);
+                if (path != null) {
+                    return removeEndNode(path);
+                }
+                return false;
+            } finally {
+                w.unlock();
+            }
+        }
+
+        private boolean removeEndNode(TrieNodePath path) {
+            TrieNode branch = path.getNode();
+            if (branch.getStatus() == 2 || branch.getStatus() == 3) {
+                // 从父节点移除该节点
+                TrieNodePath parentPath = path.getParent();
+                TrieNode parent = parentPath.getNode();
+                removeFromParent(branch, parent);
+                if (branch.getStatus() == 3) {
+                    // 如果移除的节点为终节点，还可能需要移除路径上的无用中间节点
+                    removeOrphanNode(parentPath);
+                }
+                return true;
+            }
+            return false;
         }
 
         /**
