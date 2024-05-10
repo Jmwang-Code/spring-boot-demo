@@ -459,6 +459,13 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                 } else {
                     int c = this.content.charAt(this.i);
                     trieNode = trieNode.getBranch(c);
+//                    if (trieNode != null) {
+//                        trieNode = trieNode.getBranch(c);
+//                    } else {
+//                        // Handle the case when trieNode is null
+//                        // You can either skip this iteration or return a default value
+//                        continue; // Skip this iteration
+//                    }
                 }
 
                 if (trieNode == null) {
