@@ -143,6 +143,9 @@ public class TrieTest {
 
     @Test
     public void testRemove() {
+        boolean java = trie.remove("java",3,1);
+        System.out.println(java);
+        System.out.println(trie.getFirstPrefixWord("java"));
     }
 
     @Test
