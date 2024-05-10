@@ -18,13 +18,13 @@ public class TrieComplexRandomTest {
         Random random = new Random();
 
         for (int i = 0; i < 1000000; i++) {
-            trie.add("ADC",1,1);
+            trie.add("ADC", 1, 1);
         }
         for (int i = 0; i < 1000000; i++) {
-            trie.add("ADC",1,2);
+            trie.add("ADC", 1, 2);
         }
         for (int i = 0; i < 1000000; i++) {
-            trie.add("ADC",2,1);
+            trie.add("ADC", 2, 1);
         }
 
         // Add 10000 random words to the Trie
@@ -50,10 +50,10 @@ public class TrieComplexRandomTest {
         long totalMemory = runtime.totalMemory(); // JVM堆内存总量
         long freeMemory = runtime.freeMemory(); // JVM堆内存中空闲的内存量
         System.out.println("————————————————————————————————————");
-        System.out.println("最大可用内存：" + maxMemory / 1024 + " KB");
-        System.out.println("已分配内存：" + totalMemory / 1024 + " KB");
-        System.out.println("已分配内存中的剩余空间：" + freeMemory / 1024 + " KB");
-        System.out.println("已分配内存中的已使用的空间：" + (totalMemory - freeMemory) / 1024 + " KB");
+        System.out.println("最大可用内存：" + maxMemory / 1024.0 / 1024.0 / 1024.0 + " GB");
+        System.out.println("已分配内存：" + totalMemory / 1024.0 / 1024.0 / 1024.0 + " GB");
+        System.out.println("已分配内存中的剩余空间：" + freeMemory / 1024.0 / 1024.0 / 1024.0 + " GB");
+        System.out.println("已分配内存中的已使用的空间：" + (totalMemory - freeMemory) / 1024.0 / 1024.0 / 1024.0 + " GB");
     }
 
     public static String generateRandomString(int length) {
