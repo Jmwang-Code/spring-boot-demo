@@ -81,15 +81,17 @@ public class TrieTest {
                 }
         );
 
-//        Thread.sleep(1000);
         System.out.println("Sum of unique codes: " + total.get());
         System.out.println("Repeat codes: " + repeatCodes);
     }
 
+    /**
+     * 搜索并行code Or code+codeID
+     */
     @Test
     public void searchParallel() throws InterruptedException {
         Trie.TrieNodeWrapper trieNode = trie.searchParallel(2, node -> {
-            if (node.getNode().getCode() == 6) {
+            if (node.getNode().getCode() == 6 && node.getNode().getType() == 1) {
                 return node;
             }
             return null;

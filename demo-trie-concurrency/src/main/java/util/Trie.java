@@ -120,7 +120,9 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
     @Override
     public <U> void forEachParallel(int parallelismThreshold, Function<TrieNodeWrapper, U> transformer, Consumer<U> action) {
         if (size() > parallelismThreshold) {
-            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(new TrieNodeWrapper(this.mainTree, "", 0), transformer, action, new Semaphore(parallelismThreshold)));
+            ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
+            ForEachTrieTask<U> task = new ForEachTrieTask<>(new TrieNodeWrapper(mainTree, "", 0), transformer, action);
+            pool.invoke(task);
         } else {
             forEach(node -> action.accept(transformer.apply(node)));
         }
@@ -130,7 +132,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
     public <T> T searchParallel(int parallelismThreshold, Function<TrieNodeWrapper, T> function) {
         ForkJoinPool pool = new ForkJoinPool(parallelismThreshold);
         try {
-            return (T) pool.invoke(new SearchTask(new TrieNodeWrapper(this.mainTree,"",0),new ArrayList<Integer>(), function));
+            return (T) pool.invoke(new SearchTask(new TrieNodeWrapper(this.mainTree, "", 0), new ArrayList<Integer>(), function));
         } finally {
             pool.shutdown();  // 关闭ForkJoinPool
         }
@@ -885,6 +887,10 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
 
         public int getCode() {
             return this.code;
+        }
+
+        public byte getType() {
+            return type;
         }
 
         public byte getStatus() {
@@ -1970,7 +1976,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
             if (nodeWrapper.getNode().status == 2 || nodeWrapper.getNode().status == 3) {
                 T result = function.apply(nodeWrapper);
                 if (result != null) {
-                    nodeWrapper.value = CodePointUtil.toString(path.stream().mapToInt(i->i).toArray());
+                    nodeWrapper.value = CodePointUtil.toString(path.stream().mapToInt(i -> i).toArray());
                     nodeWrapper.length = path.size();
                     return result;
                 }
@@ -1996,44 +2002,40 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
     /**
      * 用于并行遍历前缀树的任务。
      */
-    private final class ForEachTrieTask<U> extends RecursiveAction {
-        private final TrieNodeWrapper nodeWrapper; // 节点
-        private final Function<TrieNodeWrapper, U> transformer; // 转换器
-        private final Consumer<U> action; // 操作
-        private final Semaphore semaphore; // 信号量
+    private final class ForEachTrieTask<U> extends RecursiveTask<Void> {
+        private final Trie.TrieNodeWrapper nodeWrapper;
+        private final Function<Trie.TrieNodeWrapper, U> transformer;
+        private final Consumer<U> action;
 
-        public ForEachTrieTask(TrieNodeWrapper nodeWrapper, Function<TrieNodeWrapper, U> transformer, Consumer<U> action, Semaphore semaphore) {
+        public ForEachTrieTask(Trie.TrieNodeWrapper nodeWrapper, Function<Trie.TrieNodeWrapper, U> transformer, Consumer<U> action) {
             this.nodeWrapper = nodeWrapper;
-            this.action = action;
-            this.semaphore = semaphore;
             this.transformer = transformer;
+            this.action = action;
         }
 
+        /**
+         * 在Fork/Join框架中，如果你在一个任务的compute方法中fork了多个子任务，
+         * 然后在所有子任务都开始执行之前就开始join，确实可能会导致死锁。
+         * 这是因为join操作会阻塞当前线程，直到对应的任务完成。
+         * 如果这个任务还没有开始执行（例如，因为处理器正在执行其他任务），那么join操作将永远阻塞，导致死锁。
+         */
+
         @Override
-        protected void compute() {
-            try {
-                // 获取许可
-                semaphore.acquire();
-
-                // 对当前节点应用操作
-                TrieNode node = nodeWrapper.node;
-                if (node.status == 3 || node.status == 2) { // Assuming 'status' indicates whether it's a complete word
-                    action.accept(transformer.apply(nodeWrapper));
-                }
-
-                // 对每个子节点创建并执行新的任务
-                if (node.branches != null) {
-                    for (TrieNode child : node.branches) {
-                        if (child != null) {
-                            new ForEachTrieTask<>(new TrieNodeWrapper(child, "", 0), transformer, action, semaphore).fork();
-                        }
-                    }
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            } finally {
-                semaphore.release();
+        protected Void compute() {
+            if (nodeWrapper.getNode().status == 2 || nodeWrapper.getNode().status == 3) {
+                action.accept(transformer.apply(nodeWrapper));
             }
+            if (nodeWrapper.getNode().branches != null) {
+                ForEachTrieTask<U>[] tasks = new ForEachTrieTask[nodeWrapper.getNode().branches.length];
+                for (int i = 0; i < nodeWrapper.getNode().branches.length; i++) {
+                    tasks[i] = new ForEachTrieTask<>(new Trie.TrieNodeWrapper(nodeWrapper.getNode().branches[i], "", 0), transformer, action);
+                    tasks[i].fork();
+                }
+                for (ForEachTrieTask<U> task : tasks) {
+                    task.join();
+                }
+            }
+            return null;
         }
     }
 
@@ -2111,5 +2113,5 @@ interface SearchForkJoinInterface extends ForkJoinInterface {
 
     //SearchTrieTask
 
-    public <T> T  searchParallel(int parallelismThreshold, Function<Trie.TrieNodeWrapper, T> function);
+    public <T> T searchParallel(int parallelismThreshold, Function<Trie.TrieNodeWrapper, T> function);
 }
