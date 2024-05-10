@@ -81,7 +81,7 @@ public class TrieTest {
                 }
         );
 
-        Thread.sleep(1000);
+//        Thread.sleep(1000);
         System.out.println("Sum of unique codes: " + total.get());
         System.out.println("Repeat codes: " + repeatCodes);
     }
@@ -94,9 +94,27 @@ public class TrieTest {
             }
             return null;
         });
-        Thread.sleep(1000);
-        System.out.println(trieNode.getValue());
-        System.out.println(trieNode.getLength());
+        if (trieNode != null) {
+            System.out.println(trieNode.getValue());
+            System.out.println(trieNode.getLength());
+        } else {
+            System.out.println("trieNode2 is null");
+        }
+
+        System.out.println("————————————————————");
+
+        Trie.TrieNodeWrapper trieNode2 = trie.searchParallel(2, node -> {
+            if (node.getNode().getCode() == 7) {
+                return node;
+            }
+            return null;
+        });
+        if (trieNode2 != null) {
+            System.out.println(trieNode2.getValue());
+            System.out.println(trieNode2.getLength());
+        } else {
+            System.out.println("trieNode2 is null");
+        }
     }
 
     @Test
