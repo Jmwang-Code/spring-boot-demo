@@ -12,8 +12,14 @@ public class TrieComplexRandomTest {
 
     private static Trie trie;
 
+    //100w数据 0.7G
+    //
     @BeforeClass
     public static void setup() {
+        //初始化 数组
+        int[] arr = new int[65536];
+        generateAllUnicodeString(arr);
+
         trie = new Trie();
         Random random = new Random();
 
@@ -31,8 +37,8 @@ public class TrieComplexRandomTest {
         for (int i = 0; i < 1000000; i++) {
             int randomCode = random.nextInt(100000000); // Generate random code
             int randomType = random.nextInt(127); // Generate random type
-            String randomString = generateRandomString(random.nextInt(30) + 1); // Generate random string of length 1-20
-            trie.add(randomString.codePoints().toArray(), randomCode, randomType);
+            int[] randomString = generateRandomString(random.nextInt(15) + 1,arr); // Generate random string of length 1-20
+            trie.add(randomString, randomCode, randomType);
             if (i % 100000 == 0) {
                 System.out.println(i);
                 TrieComplexRandomTest.printMemoryUsage(Runtime.getRuntime());
@@ -56,14 +62,23 @@ public class TrieComplexRandomTest {
         System.out.println("已分配内存中的已使用的空间：" + (totalMemory - freeMemory) / 1024.0 / 1024.0 / 1024.0 + " GB");
     }
 
-    public static String generateRandomString(int length) {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //随机生成指定字符串
+    public static int[] generateRandomString(int length,int[] arr) {
         Random random = new Random();
-        char[] text = new char[length];
+        int[] text = new int[length];
         for (int i = 0; i < length; i++) {
-            text[i] = characters.charAt(random.nextInt(characters.length()));
+            text[i] = arr[random.nextInt(65534)+1];
         }
-        return new String(text);
+        return text;
+    }
+
+    //随机生成任意字符
+    public static void generateAllUnicodeString(int[] arr) {
+        for (int codePoint = 0; codePoint <= 65535; codePoint++) {
+            if (Character.isValidCodePoint(codePoint)) {
+                arr[codePoint] = codePoint;
+            }
+        }
     }
 
 
