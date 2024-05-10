@@ -17,13 +17,23 @@ public class TrieComplexTest {
         trie = new Trie();
         Random random = new Random();
 
+        for (int i = 0; i < 1000000; i++) {
+            trie.add("ADC",1,1);
+        }
+        for (int i = 0; i < 1000000; i++) {
+            trie.add("ADC",1,2);
+        }
+        for (int i = 0; i < 1000000; i++) {
+            trie.add("ADC",2,1);
+        }
+
         // Add 10000 random words to the Trie
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             int randomCode = random.nextInt(100000000); // Generate random code
             int randomType = random.nextInt(127); // Generate random type
-            String randomString = generateRandomString(random.nextInt(20) + 1); // Generate random string of length 1-20
+            String randomString = generateRandomString(random.nextInt(30) + 1); // Generate random string of length 1-20
             trie.add(randomString.codePoints().toArray(), randomCode, randomType);
-            if (i % 1000000 == 0) {
+            if (i % 100000 == 0) {
                 System.out.println(i);
                 TrieComplexTest.printMemoryUsage(Runtime.getRuntime());
             }
