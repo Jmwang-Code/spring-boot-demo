@@ -99,14 +99,14 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
      * 获取辅助子树深度
      */
     public int getDeep(String word) {
-        TrieQuery trieQuery = new TrieQuery(mainTree,  WordStringFactory.create(word), true);
+        TrieQuery trieQuery = new TrieQuery(mainTree, WordStringFactory.create(word), true);
         return trieQuery.probe();
     }
 
     /**
      * 获取root
      */
-    public TrieNode getRoot() {
+    private TrieNode getRoot() {
         return mainTree;
     }
 
@@ -121,7 +121,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
     @Override
     public <U> void forEachParallel(int parallelismThreshold, Function<TrieNodeWrapper, U> transformer, Consumer<U> action) {
         if (size() > parallelismThreshold) {
-            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(new TrieNodeWrapper(this.mainTree,"",0), transformer, action, new Semaphore(parallelismThreshold)));
+            ForkJoinPool.commonPool().invoke(new ForEachTrieTask<U>(new TrieNodeWrapper(this.mainTree, "", 0), transformer, action, new Semaphore(parallelismThreshold)));
         } else {
             forEach(node -> action.accept(transformer.apply(node)));
         }
@@ -196,7 +196,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         return add(TokenizerUtil.codePoints(word), mode, code, -1);
     }
 
-    public boolean add(String word,  int code, int type) {
+    public boolean add(String word, int code, int type) {
         return add(TokenizerUtil.codePoints(word), MultiCodeMode.Append, code, type);
     }
 
@@ -534,7 +534,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
             return deep;
         }
 
-        public int probe(){
+        public int probe() {
             int length = this.content.length();
             int[] intArray = content.toIntArray();
             TrieNode trieNode = this.trieRootNode;
@@ -647,12 +647,12 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         }
     }
 
-    class TrieNodeWrapper{
+    class TrieNodeWrapper {
         private TrieNode node;
         private String value;
         private int length; // Add this field to store the length of the current word
 
-        public TrieNodeWrapper(TrieNode node, String value, int length){
+        public TrieNodeWrapper(TrieNode node, String value, int length) {
             this.node = node;
             this.value = value;
             this.length = length;
@@ -679,7 +679,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
             stack = new Stack<>();
             currentWord = new StringBuilder();
             if (root != null) {
-                stack.push(new TrieNodeWrapper(root, "",0));
+                stack.push(new TrieNodeWrapper(root, "", 0));
             }
         }
 
@@ -1967,7 +1967,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         protected TrieNodeWrapper compute() {
             if (node.status == 1 || node.status == 2) {
                 // If the current node satisfies the condition, return it
-                return new TrieNodeWrapper(node, "",0); // Assuming the value is null, adjust as needed
+                return new TrieNodeWrapper(node, "", 0); // Assuming the value is null, adjust as needed
             } else {
                 // Otherwise, create new tasks for all children
                 List<SearchTask> tasks = new ArrayList<>();
@@ -2019,7 +2019,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
 
                 // 对当前节点应用操作
                 TrieNode node = nodeWrapper.node;
-                if (node.status == 3) { // Assuming 'status' indicates whether it's a complete word
+                if (node.status == 3 || node.status == 2) { // Assuming 'status' indicates whether it's a complete word
                     action.accept(transformer.apply(nodeWrapper));
                 }
 
@@ -2027,7 +2027,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                 if (node.branches != null) {
                     for (TrieNode child : node.branches) {
                         if (child != null) {
-                            new ForEachTrieTask<>(new TrieNodeWrapper(child, "",0), transformer, action, semaphore).fork();
+                            new ForEachTrieTask<>(new TrieNodeWrapper(child, "", 0), transformer, action, semaphore).fork();
                         }
                     }
                 }

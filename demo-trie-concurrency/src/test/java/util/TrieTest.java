@@ -20,6 +20,9 @@ public class TrieTest {
         trie.add("hello".codePoints().toArray(), 1, 1);
         trie.add("world".codePoints().toArray(), 2, 1);
         trie.add("java".codePoints().toArray(), 3, 1);
+        trie.add("he".codePoints().toArray(), 4, 1);
+        trie.add("wor".codePoints().toArray(), 5, 1);
+        trie.add("ja".codePoints().toArray(), 6, 1);
     }
 
 
@@ -51,11 +54,20 @@ public class TrieTest {
     }
 
     @Test
-    public void getRoot() {
-    }
-
-    @Test
     public void forEachParallel() {
+        trie.forEachParallel(2,
+                nodeWrapper -> {
+                    // 在这里，你可以定义如何从 TrieNodeWrapper 转换到你需要的类型 U
+                    // 例如，如果 U 是 String 类型，你可以返回 nodeWrapper 的某个字段
+                    return nodeWrapper.getNode().c;
+                },
+                u -> {
+                    // 在这里，u 是上面转换器函数返回的类型 U
+                    // 你可以在这个 lambda 函数中编写你需要执行的操作
+                    // 例如，打印 u
+                    System.out.println(u);
+                }
+        );
     }
 
     @Test
