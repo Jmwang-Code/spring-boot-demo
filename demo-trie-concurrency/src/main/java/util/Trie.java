@@ -715,9 +715,22 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                 currentWord.setLength(nodeWrapper.getLength()); // Reset the length of currentWord
                 currentWord.append(nodeWrapper.value);
 
-                if (node.status == 3) { // Assuming 'status' indicates whether it's a complete word
+//                if (node.status == 3) { // Assuming 'status' indicates whether it's a complete word
+//                    String word = currentWord.toString();
+//                    return new TrieNodeWrapper(node, word, currentWord.length());
+//                }
+                if (node.status == 2 || node.status == 3) { // Assuming 'status' indicates whether it's a complete word
                     String word = currentWord.toString();
-                    return new TrieNodeWrapper(node, word, currentWord.length());
+                    TrieNodeWrapper result = new TrieNodeWrapper(node, word, currentWord.length());
+                    if (node.branches != null) {
+                        for (TrieNode child : node.branches) {
+                            if (child != null) {
+                                String childWord = (char) child.c + "";
+                                stack.push(new TrieNodeWrapper(child, childWord, currentWord.length()));
+                            }
+                        }
+                    }
+                    return result;
                 }
 
                 if (node.branches != null) {
@@ -751,7 +764,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
          * 理论上char类型可以表示2的16次方,65536个Unicode码表示所有字符
          * TODO 暂时使用public后面改private
          */
-        public int c;
+        private int c;
 
         /**
          * 节点上绑定的Code值
@@ -760,13 +773,13 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
          * 2.使用long类型的最大值9223372036854775807，实际上不会达到，如果有需求就改成long
          * TODO 暂时使用public后面改private
          */
-        public int code;
+        private int code;
 
         /**
          * Code类型，单码节点还是多码节点
          * TODO 暂时使用public后面改private
          */
-        public byte type;
+        private byte type;
 
         /**
          * 多码查找表，查找节点上绑定的Code值
@@ -791,13 +804,13 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
          * <br>
          * <p><code>一、O(1)索引定位、空间复杂度O(65536)*n,会消耗大量开辟内存并且可能不使用</code>
          */
-        public TrieNode[] branches;
+        private TrieNode[] branches;
 
         /**
          * 状态 (1:继续 2:是个词语但是还可以继续 3:确定)
          * TODO 暂时使用public后面改private
          */
-        public byte status = 1;
+        private byte status = 1;
 
         /**
          * 无参构造器

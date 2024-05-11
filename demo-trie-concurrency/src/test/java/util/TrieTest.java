@@ -71,7 +71,7 @@ public class TrieTest {
         Set<Integer> repeatCodes = ConcurrentHashMap.newKeySet();
 
         trie.forEachParallel(2,
-                nodeWrapper -> nodeWrapper.getNode().code,
+                nodeWrapper -> nodeWrapper.getNode().getCode(),
                 code -> {
                     //如果 code 是新的（即未出现过），则将其添加到 sum 中。
                     if (seenCodes.add(code)) {

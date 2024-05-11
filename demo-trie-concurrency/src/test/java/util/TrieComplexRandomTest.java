@@ -34,12 +34,12 @@ public class TrieComplexRandomTest {
         }
 
         // Add 10000 random words to the Trie
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100000; i++) {
             int randomCode = random.nextInt(100000000); // Generate random code
             int randomType = random.nextInt(127); // Generate random type
-            int[] randomString = generateRandomString(random.nextInt(15) + 1,arr); // Generate random string of length 1-20
+            int[] randomString = generateRandomString(random.nextInt(15) + 1, arr); // Generate random string of length 1-20
             trie.add(randomString, randomCode, randomType);
-            if (i % 100000 == 0) {
+            if (i % 10000 == 0) {
                 System.out.println(i);
                 TrieComplexRandomTest.printMemoryUsage(Runtime.getRuntime());
             }
@@ -63,11 +63,11 @@ public class TrieComplexRandomTest {
     }
 
     //随机生成指定字符串
-    public static int[] generateRandomString(int length,int[] arr) {
+    public static int[] generateRandomString(int length, int[] arr) {
         Random random = new Random();
         int[] text = new int[length];
         for (int i = 0; i < length; i++) {
-            text[i] = arr[random.nextInt(65534)+1];
+            text[i] = arr[random.nextInt(65534) + 1];
         }
         return text;
     }
@@ -84,15 +84,14 @@ public class TrieComplexRandomTest {
 
     @Test
     public void iterator() {
-//        Thread.startVirtualThread(() -> {
-        System.out.println(2);
         trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
-//        });
 
-//        Thread.startVirtualThread(() -> {
-//            System.out.println(1);
-//            trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
-//        });
+        trie.iterator().forEachRemaining(node -> {
+            if (node.getNode().getStatus() == 2) {
+                System.out.println(node.getValue());
+            }
+        });
+
     }
 
     @Test
@@ -124,7 +123,7 @@ public class TrieComplexRandomTest {
         Set<Integer> repeatCodes = ConcurrentHashMap.newKeySet();
 
         trie.forEachParallel(2,
-                nodeWrapper -> nodeWrapper.getNode().code,
+                nodeWrapper -> nodeWrapper.getNode().getCode(),
                 code -> {
                     //如果 code 是新的（即未出现过），则将其添加到 sum 中。
                     if (seenCodes.add(code)) {
