@@ -31,6 +31,7 @@ public class IteratorTest {
             trie.add("ADC", 2, 1);
         }
 
+
         // Add 10000 random words to the Trie
         for (int i = 0; i < 1000000; i++) {
             int randomCode = random.nextInt(100000000); // Generate random code
@@ -80,6 +81,7 @@ public class IteratorTest {
         }
     }
 
+    //遍历所有元素
     @Test
     public void iterator() {
         trie.iterator().forEachRemaining(a -> System.out.println(a.getValue()));
@@ -91,6 +93,7 @@ public class IteratorTest {
         });
     }
 
+    //过滤元素
     @Test
     public void iterator1() {
         AtomicInteger sum = new AtomicInteger();
@@ -101,5 +104,27 @@ public class IteratorTest {
             }
         });
         System.out.println(sum.get());
+    }
+
+    //修改元素
+    @Test
+    public void iterator2() {
+        trie.iterator().forEachRemaining(node -> {
+            if (node.getNode().getStatus() == 2) {
+//                node.getNode().setStatus(3);
+            }
+        });
+    }
+
+    //计算元素数量
+    @Test
+    public void iterator3() {
+        AtomicInteger count = new AtomicInteger(0);
+        trie.iterator().forEachRemaining(node -> {
+            if (node.getNode().getStatus() == 2) {
+                count.incrementAndGet();
+            }
+        });
+        System.out.println("Number of nodes with status 2: " + count.get());
     }
 }
