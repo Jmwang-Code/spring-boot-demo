@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TrieComplexRandomTest {
+public class 主体树TrieComplexRandomTest {
 
     private static Trie trie;
 
@@ -41,11 +41,11 @@ public class TrieComplexRandomTest {
             trie.add(randomString, randomCode, randomType);
             if (i % 10000 == 0) {
                 System.out.println(i);
-                TrieComplexRandomTest.printMemoryUsage(Runtime.getRuntime());
+                主体树TrieComplexRandomTest.printMemoryUsage(Runtime.getRuntime());
             }
         }
         //计算对象内存
-        TrieComplexRandomTest.printMemoryUsage(Runtime.getRuntime());
+        主体树TrieComplexRandomTest.printMemoryUsage(Runtime.getRuntime());
 
         System.out.println();
     }

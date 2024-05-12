@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class IteratorTest {
+public class 函数IteratorTest {
 
     private static Trie trie;
 
@@ -40,11 +40,11 @@ public class IteratorTest {
             trie.add(randomString, randomCode, randomType);
             if (i % 100000 == 0) {
                 System.out.println(i);
-                IteratorTest.printMemoryUsage(Runtime.getRuntime());
+                函数IteratorTest.printMemoryUsage(Runtime.getRuntime());
             }
         }
         //计算对象内存
-        IteratorTest.printMemoryUsage(Runtime.getRuntime());
+        函数IteratorTest.printMemoryUsage(Runtime.getRuntime());
 
         System.out.println();
     }
