@@ -209,7 +209,6 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         return add;
     }
 
-
     /**
      * 删除操作
      */
@@ -304,6 +303,63 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
 //        TriePrefixQueryResult triePrefixQueryResult = tirePrefixQuerier.queryAllPrefix();
 //        return triePrefixQueryResult;
 //    }
+
+    /**
+     * 交集树
+     */
+    public Trie intersection(Trie other) {
+        Trie intersectionTrie = new Trie();
+        intersectionHelper(this.mainTree, other.mainTree, intersectionTrie.mainTree, "");
+        return intersectionTrie;
+    }
+
+    private void intersectionHelper(TrieNode node1, TrieNode node2, TrieNode intersectionNode, String word) {
+        if (node1 == null || node2 == null) {
+            return;
+        }
+
+        if (node1.status == 2 || node1.status == 3) {
+            if (node2.status == 2 || node2.status == 3) {
+                intersectionNode.add(word.codePoints().toArray(), MultiCodeMode.Append, node1.code, node1.type);
+            }
+        }
+
+        if (node1.branches != null && node2.branches != null) {
+            for (int i = 0; i < node1.branches.length; i++) {
+                for (int j = 0; j < node2.branches.length; j++) {
+                    if (node1.branches[i].c == node2.branches[j].c) {
+                        intersectionHelper(node1.branches[i], node2.branches[j], intersectionNode, word + node1.branches[i].getC());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 并集树
+     */
+    public Trie union(Trie other) {
+        Trie unionTrie = new Trie();
+        unionHelper(this.mainTree, unionTrie.mainTree, "");
+        unionHelper(other.mainTree, unionTrie.mainTree, "");
+        return unionTrie;
+    }
+
+    private void unionHelper(TrieNode node, TrieNode unionNode, String word) {
+        if (node == null) {
+            return;
+        }
+
+        if (node.status == 2 || node.status == 3) {
+            unionNode.add(word.codePoints().toArray(), MultiCodeMode.Append,node.code, node.type);
+        }
+
+        if (node.branches != null) {
+            for (TrieNode child : node.branches) {
+                unionHelper(child, unionNode, word + child.getC());
+            }
+        }
+    }
 
     /**
      * 清除
