@@ -237,10 +237,37 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
         return remove;
     }
 
-    public boolean remove(int[] word){
+    public boolean remove(int[] word) {
         boolean remove = mainTree.remove(word);
         size.decrementAndGet();
         return remove;
+    }
+
+    /**
+     * 删除子树
+     */
+    public boolean removeSubTree(String word) {
+        int[] wordArray = TokenizerUtil.codePoints(word);
+        TrieNodePath path = mainTree.getBranchPath(wordArray);
+        if (path != null) {
+            TrieNode node = path.getNode();
+            node.removeAllChildren();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 删除子树
+     */
+    public boolean removeSubTree(int[] word) {
+        TrieNodePath path = mainTree.getBranchPath(word);
+        if (path != null) {
+            TrieNode node = path.getNode();
+            node.removeAllChildren();
+            return true;
+        }
+        return false;
     }
 
 
@@ -1155,7 +1182,7 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
                             }
                         } else {
                             //先确定之前的branch位置是否是确定的词语
-                            if (branch.status == 1){
+                            if (branch.status == 1) {
                                 added.setValue(true);
                             }
                             //否则就是将status == 1 转换为 status == 2
@@ -1645,6 +1672,13 @@ public class Trie implements Serializable, Iterable<Trie.TrieNodeWrapper>,
          */
         public boolean hasNext() {
             return branches != null && branches.length > 0 ? true : false;
+        }
+
+        /**
+         * 移除所有子节点
+         */
+        public void removeAllChildren() {
+            this.branches = null;
         }
 
         /**
