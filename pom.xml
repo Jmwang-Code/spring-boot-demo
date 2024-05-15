@@ -99,7 +99,8 @@
       <module>demo-jvm</module>
       <module>demo-source-code</module>
       <module>demo-trie-concurrency</module>
-      <!--    <module>demo-activiti7</module>-->
+    <module>demo-nginx-conf</module>
+    <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
 
