@@ -16,6 +16,10 @@
     <url>http://maven.apache.org</url>
     <modules>
         <module>demo-ASM</module>
+        <module>demo-Javassist</module>
+        <module>demo-code-generator</module>
+        <module>demo-CGLIB</module>
+        <module>demo-Byte-Buddy</module>
     </modules>
 
     <properties>
@@ -25,4 +29,11 @@
         <java.version>22</java.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.26</version>
+        </dependency>
+    </dependencies>
 </project>

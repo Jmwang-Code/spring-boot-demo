@@ -103,10 +103,7 @@
     <module>demo-Dynamic-Bytecode</module>
       <module>demo-reflex</module>
     <module>demo-bytecode-generation-technology</module>
-    <module>demo-bytecode-generation-technology/demo-CGLIB</module>
-    <module>demo-bytecode-generation-technology/demo-Byte-Buddy</module>
-    <module>demo-bytecode-generation-technology/demo-Javassist</module>
-    <!--    <module>demo-activiti7</module>-->
+      <!--    <module>demo-activiti7</module>-->
   </modules>
   <packaging>pom</packaging>
 

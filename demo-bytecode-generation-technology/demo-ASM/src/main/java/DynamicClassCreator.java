@@ -88,7 +88,7 @@ public class DynamicClassCreator {
             byte[] classBytes = creator.createClass("sys_config", "SysConfig");
 
             // 获取当前 Java 文件的目录
-            String currentDir = new File(DynamicClassCreator.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+            String currentDir = new File(DynamicClassCreator.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
 
             // 将字节写入当前目录中的 .class 文件
             try (FileOutputStream fos = new FileOutputStream(currentDir + File.separator + "SysConfig.class")) {
