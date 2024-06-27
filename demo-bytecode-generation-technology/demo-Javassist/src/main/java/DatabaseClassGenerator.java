@@ -1,17 +1,20 @@
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.TypeSpec;
 import javassist.*;
 
 import java.io.File;
 import java.sql.*;
 
-public class JavassistClassCreator {
+public class DatabaseClassGenerator {
+    public static final int CONSTANT = 42;
+
     private static final String URL = "jdbc:mysql://localhost:3306/sys";
     private static final String USER = "root";
     private static final String PASSWORD = "123456";
+    private static final String OUTPUT_PATH = "C:\\Users\\79283\\IdeaProjects\\spring-boot-demo\\demo-bytecode-generation-technology\\demo-Javassist\\src\\main\\java\\";
 
-    private static final String OUTPUT_PATH = "C:\\Users\\79283\\IdeaProjects\\spring-boot-demo\\demo-bytecode-generation-technology\\demo-Javassist\\src\\main\\java\\type\\";
-
-
-    public void createClass(String tableName, String className) throws Exception {
+    public void createClassFromTable(String tableName, String className) throws Exception {
         // Connect to the database
         Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
@@ -36,15 +39,34 @@ public class JavassistClassCreator {
             field.setModifiers(Modifier.PUBLIC);
             cc.addField(field);
         }
-        String currentDir = new File(JavassistClassCreator.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getPath();
 
-        // Write the class
-        cc.writeFile(currentDir);
+        // Write the class to .java file
+        cc.writeFile(OUTPUT_PATH+"\\type");
 
-//        Runtime.getRuntime().exec("javac -d " + currentDir + " " + currentDir + className + ".java");
+        // Compile .java file to generate .class file
+        // Note: This requires javac to be installed in your environment
+        Runtime.getRuntime().exec("javac -d " + OUTPUT_PATH + " " + OUTPUT_PATH + className + ".java");
 
         // Close the connection
         connection.close();
+
+        // Create a public static final field named "CONSTANT" of type int with a value of 42
+        FieldSpec field = FieldSpec.builder(int.class, "CONSTANT")
+                .initializer("$L", 42)
+                .build();
+
+        // Create a public final class named "FinalClass"
+        TypeSpec finalClass = TypeSpec.classBuilder("FinalClass")
+                .addField(field)
+                .build();
+
+        // Create a Java file containing the class
+        JavaFile javaFile = JavaFile.builder("type", finalClass)
+                .build();
+
+        // Write the file to the console for demonstration purposes
+        File outputDirectory = new File(OUTPUT_PATH);
+        javaFile.writeTo(outputDirectory);
     }
 
     private String sqlTypeToJavaType(String sqlType) {
@@ -87,9 +109,9 @@ public class JavassistClassCreator {
     }
 
     public static void main(String[] args) {
-        JavassistClassCreator creator = new JavassistClassCreator();
+        DatabaseClassGenerator creator = new DatabaseClassGenerator();
         try {
-            creator.createClass("sys_config", "SysConfig");
+            creator.createClassFromTable("sys_config", "SysConfig");
             System.out.println("Class created successfully and written to SysConfig.class");
         } catch (Exception e) {
             e.printStackTrace();
