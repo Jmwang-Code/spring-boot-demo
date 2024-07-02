@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.implementation.FieldAccessor;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -21,12 +23,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.commons.codec.binary.Base64;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -194,32 +197,83 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
             DatabaseMetaData metaData = pool.getConnection(hostname+port+databaseName).getMetaData();
             ResultSet resultSet = metaData.getColumns(null, null, tableName, null);
 
-            // 使用Byte Buddy创建一个新的类
-            Class<?> dynamicType = new ByteBuddy()
-                    .subclass(Object.class)
-                    .name(tableName)
-                    .make()
-                    .load(getClass().getClassLoader())
-                    .getLoaded();
+            // 创建ByteBuddy对象
+            ByteBuddy byteBuddy = new ByteBuddy();
 
-            // 创建一个新的实例
-            Object instance = dynamicType.newInstance();
+            // 开始构建类
+            DynamicType.Builder<?> builder = byteBuddy.subclass(Object.class).name(tableName);
 
             // 使用反射来设置字段的值
             while (resultSet.next()) {
                 String columnName = resultSet.getString("COLUMN_NAME");
                 String columnType = resultSet.getString("TYPE_NAME");
 
-                Field field = dynamicType.getDeclaredField(columnName);
-                field.setAccessible(true);
+                // 将SQL类型转换为Java类型
+                Class<?> javaType = sqlTypeToJavaType(columnType);
 
-                // 这里我们只是简单地将所有的字段设置为null，你可以根据需要来设置字段的值
-                field.set(instance, null);
+                // 将字段添加到类中
+                builder = builder.defineField(columnName, javaType, Modifier.PUBLIC)
+                        .defineMethod("get" + capitalize(columnName), javaType, Modifier.PUBLIC)
+                        .intercept(FieldAccessor.ofBeanProperty())
+                        .defineMethod("set" + capitalize(columnName), void.class, Modifier.PUBLIC)
+                        .withParameter(javaType)
+                        .intercept(FieldAccessor.ofBeanProperty());
             }
 
-            return instance;
+            DynamicType.Unloaded<?> unloadedType = builder.make();
+            unloadedType.saveIn(new File("./demo-bytecode-generation-technology/demo-Byte-Buddy/target/classes")); // Save the .class file in target/classes directory
+            Object o = unloadedType.load(getClass().getClassLoader()).getLoaded().newInstance();
+
+            return o;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    private Class<?> sqlTypeToJavaType(String sqlType) {
+        switch (sqlType) {
+            case "VARCHAR":
+            case "CHAR":
+            case "LONGVARCHAR":
+                return String.class;
+            case "NUMERIC":
+            case "DECIMAL":
+                return java.math.BigDecimal.class;
+            case "BIT":
+                return Boolean.class;
+            case "TINYINT":
+                return Byte.class;
+            case "SMALLINT":
+                return Short.class;
+            case "INTEGER":
+                return Integer.class;
+            case "BIGINT":
+                return Long.class;
+            case "REAL":
+                return Float.class;
+            case "FLOAT":
+            case "DOUBLE":
+                return Double.class;
+            case "BINARY":
+            case "VARBINARY":
+            case "LONGVARBINARY":
+                return byte[].class;
+            case "DATE":
+                return Date.class;
+            case "TIME":
+                return Time.class;
+            case "TIMESTAMP":
+                return Timestamp.class;
+            default:
+                return Object.class;
+        }
+    }
+
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+
 }
