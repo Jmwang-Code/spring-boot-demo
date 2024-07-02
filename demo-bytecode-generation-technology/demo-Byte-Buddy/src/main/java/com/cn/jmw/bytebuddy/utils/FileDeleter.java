@@ -1,4 +1,4 @@
-package com.cn.jmw.bytebuddy;
+package com.cn.jmw.bytebuddy.utils;
 
 import java.io.IOException;
 import java.nio.file.Files;

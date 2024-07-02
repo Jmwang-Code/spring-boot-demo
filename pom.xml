@@ -105,7 +105,31 @@
     <module>demo-bytecode-generation-technology</module>
       <!--    <module>demo-activiti7</module>-->
   </modules>
-  <packaging>pom</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>commons-dbutils</groupId>
+        <artifactId>commons-dbutils</artifactId>
+        <version>1.8.1</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy</artifactId>
+      </dependency>
+    </dependencies>
+    <packaging>pom</packaging>
 
   <name>spring-boot-demo</name>
   <url>https://www.jmwang-code.top/</url>

@@ -1,6 +1,6 @@
 package com.cn.jmw.bytebuddy.demo;
 
-import com.cn.jmw.bytebuddy.Tests;
+import com.cn.jmw.bytebuddy.inter.Tests;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.matcher.ElementMatchers;

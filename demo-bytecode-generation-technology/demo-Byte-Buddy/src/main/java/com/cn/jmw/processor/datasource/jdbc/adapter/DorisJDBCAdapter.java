@@ -2,11 +2,13 @@ package com.cn.jmw.processor.datasource.jdbc.adapter;
 
 import com.cn.jmw.processor.datasource.JDBCAdapter;
 import com.cn.jmw.processor.datasource.enums.DatabaseEnum;
+import com.cn.jmw.processor.datasource.instantiation.Instantiation;
 import com.cn.jmw.processor.datasource.pojo.StreamLoadResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import net.bytebuddy.ByteBuddy;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -20,14 +22,17 @@ import org.apache.http.util.EntityUtils;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
-public class DorisJDBCAdapter extends JDBCAdapter {
+public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
 
     // DORIS HTTP PORT
     private static final int DORIS_HTTP_PORT = 8030;
@@ -182,4 +187,39 @@ public class DorisJDBCAdapter extends JDBCAdapter {
         return results;
     }
 
+    @Override
+    public Object instantiate(String tableName) throws SQLException {
+
+        try {
+            DatabaseMetaData metaData = pool.getConnection(hostname+port+databaseName).getMetaData();
+            ResultSet resultSet = metaData.getColumns(null, null, tableName, null);
+
+            // 使用Byte Buddy创建一个新的类
+            Class<?> dynamicType = new ByteBuddy()
+                    .subclass(Object.class)
+                    .name(tableName)
+                    .make()
+                    .load(getClass().getClassLoader())
+                    .getLoaded();
+
+            // 创建一个新的实例
+            Object instance = dynamicType.newInstance();
+
+            // 使用反射来设置字段的值
+            while (resultSet.next()) {
+                String columnName = resultSet.getString("COLUMN_NAME");
+                String columnType = resultSet.getString("TYPE_NAME");
+
+                Field field = dynamicType.getDeclaredField(columnName);
+                field.setAccessible(true);
+
+                // 这里我们只是简单地将所有的字段设置为null，你可以根据需要来设置字段的值
+                field.set(instance, null);
+            }
+
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
