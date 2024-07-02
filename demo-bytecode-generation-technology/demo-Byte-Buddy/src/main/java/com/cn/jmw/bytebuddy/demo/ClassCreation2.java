@@ -1,8 +1,8 @@
 package com.cn.jmw.bytebuddy.demo;
 
-import cn.jt.bds.module.assets.bytebuddy.ClassGenerator;
-import cn.jt.bds.module.assets.bytebuddy.FileDeleter;
-import cn.jt.bds.module.assets.bytebuddy.Tests;
+import com.cn.jmw.bytebuddy.ClassGenerator;
+import com.cn.jmw.bytebuddy.FileDeleter;
+import com.cn.jmw.bytebuddy.Tests;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.description.type.TypeDescription;

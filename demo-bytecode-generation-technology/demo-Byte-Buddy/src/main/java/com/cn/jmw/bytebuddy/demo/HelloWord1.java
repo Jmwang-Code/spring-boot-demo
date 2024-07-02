@@ -1,31 +1,24 @@
 package com.cn.jmw.bytebuddy.demo;
 
+import com.cn.jmw.bytebuddy.Tests;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.matcher.ElementMatchers;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class HelloWord1 {
+public class HelloWord1 implements Tests {
 
-    public static void main(String[] args) {
-        try {
-            new HelloWord1().hh();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        new HelloWord1().test();
     }
 
-    public void hh() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    @Override
+    public void test() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
         Class<?> dynamicType = new ByteBuddy()
                 // 创建一个类
                 .subclass(Object.class)
