@@ -1,4 +1,4 @@
-package processor.datasource.jdbc.adapter;//package cn.jt.bds.framework.processor.jdbc.adapter;
+package com.cn.jmw.processor.datasource.jdbc.adapter;//package cn.jt.bds.framework.processor.jdbc.adapter;
 //
 //import cn.jt.bds.framework.processor.jdbc.JDBCAdapter;
 //

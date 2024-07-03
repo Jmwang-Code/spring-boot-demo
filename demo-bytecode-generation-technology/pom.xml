@@ -19,7 +19,7 @@
         <module>demo-Javassist</module>
         <module>demo-code-generator</module>
         <module>demo-CGLIB</module>
-        <module>demo-Byte-Buddy</module>
+        <module>byte-buddy</module>
     </modules>
 
     <properties>

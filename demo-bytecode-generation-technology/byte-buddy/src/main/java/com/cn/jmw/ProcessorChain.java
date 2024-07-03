@@ -1,6 +1,6 @@
 package com.cn.jmw;
 
-import common.util.bean.BeanUtils;
+import com.cn.jmw.common.util.bean.BeanUtils;
 import com.cn.jmw.pojo.Context;
 import com.cn.jmw.processor.Processor;
 

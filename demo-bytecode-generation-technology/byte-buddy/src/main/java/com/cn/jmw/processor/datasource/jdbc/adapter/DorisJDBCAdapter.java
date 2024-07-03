@@ -191,7 +191,7 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
     }
 
     @Override
-    public Object instantiate(String databaseName,String tableName) throws SQLException {
+    public Object instantiate(String databaseName,String tableName)  {
 
         try {
             DatabaseMetaData metaData = pool.getConnection(hostname+port+databaseName).getMetaData();
@@ -220,11 +220,20 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
                         .intercept(FieldAccessor.ofBeanProperty());
             }
 
-            DynamicType.Unloaded<?> unloadedType = builder.make();
-//            unloadedType.saveIn(new File("./demo-bytecode-generation-technology/demo-Byte-Buddy/target/classes")); // Save the .class file in target/classes directory
-            Object o = unloadedType.load(getClass().getClassLoader()).getLoaded().newInstance();
+            Class<?> loadedClass;
+            try {
+                loadedClass = Class.forName(tableName);
+            } catch (ClassNotFoundException e) {
+                DynamicType.Unloaded<?> unloadedType = builder.make();
+                unloadedType.saveIn(new File("./demo-bytecode-generation-technology/byte-buddy/target/classes")); // Save the .class file in target/classes directory
+                try {
+                    loadedClass = Class.forName(unloadedType.getTypeDescription().getName());
+                } catch (ClassNotFoundException ex) {
+                    loadedClass = unloadedType.load(getClass().getClassLoader()).getLoaded();
+                }
+            }
 
-            return o;
+            return loadedClass.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
