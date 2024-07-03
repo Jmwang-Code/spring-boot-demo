@@ -191,11 +191,11 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
     }
 
     @Override
-    public Object instantiate(String tableName) throws SQLException {
+    public Object instantiate(String databaseName,String tableName) throws SQLException {
 
         try {
             DatabaseMetaData metaData = pool.getConnection(hostname+port+databaseName).getMetaData();
-            ResultSet resultSet = metaData.getColumns(null, null, tableName, null);
+            ResultSet resultSet = metaData.getColumns(databaseName, null, tableName, null);
 
             // 创建ByteBuddy对象
             ByteBuddy byteBuddy = new ByteBuddy();
@@ -221,7 +221,7 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
             }
 
             DynamicType.Unloaded<?> unloadedType = builder.make();
-            unloadedType.saveIn(new File("./demo-bytecode-generation-technology/demo-Byte-Buddy/target/classes")); // Save the .class file in target/classes directory
+//            unloadedType.saveIn(new File("./demo-bytecode-generation-technology/demo-Byte-Buddy/target/classes")); // Save the .class file in target/classes directory
             Object o = unloadedType.load(getClass().getClassLoader()).getLoaded().newInstance();
 
             return o;

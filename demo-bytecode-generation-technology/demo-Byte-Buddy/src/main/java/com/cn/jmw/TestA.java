@@ -5,11 +5,20 @@ import com.cn.jmw.processor.base.Error608Processor;
 import com.cn.jmw.processor.base.NumericalCalculationProcessor;
 import com.cn.jmw.processor.base.NumericalToBusinessString;
 import com.cn.jmw.processor.base.RegularProcessor;
+import com.cn.jmw.processor.datasource.DatabaseAdapter;
+import com.cn.jmw.processor.datasource.JDBCAdapter;
+import com.cn.jmw.processor.datasource.enums.DatabaseEnum;
+import com.cn.jmw.processor.datasource.factory.DatabaseAdapterFactory;
+import com.cn.jmw.processor.datasource.jdbc.adapter.DorisJDBCAdapter;
+import com.cn.jmw.processor.datasource.pojo.JDBCConnectionEntity;
+import org.junit.Test;
 
-public class Test {
+import java.sql.SQLException;
+
+public class TestA {
 
     //单长链条测试
-    @org.junit.Test
+    @Test
     public void singleLongChainTest() throws Exception {
         // 创建责任链
         ProcessorChain chain = new ProcessorChain.Builder()
@@ -36,7 +45,7 @@ public class Test {
     }
 
     //继承 processor.BaseProcessor 时必须提供类型参数测试
-    @org.junit.Test
+    @Test
     public void error608Test() throws Exception {
         ProcessorChain build = new ProcessorChain.Builder()
                 .addProcessor(Error608Processor.class)
@@ -47,7 +56,7 @@ public class Test {
     }
 
     //输入类型与处理器的输入类型不匹配
-    @org.junit.Test
+    @Test
     public void error607Test() throws Exception {
         ProcessorChain chain = new ProcessorChain.Builder()
                 .addProcessor(NumericalCalculationProcessor.class)
@@ -60,7 +69,7 @@ public class Test {
     }
 
     //继承 Context<?,?> 时必须提供类型参数测试
-    @org.junit.Test
+    @Test
     public void error609Test() throws Exception {
         ProcessorChain chain = new ProcessorChain.Builder()
                 .addProcessor(NumericalCalculationProcessor.class)
@@ -69,4 +78,5 @@ public class Test {
         Context<Integer, String> voidVoidContext = new Context<>(null);
         chain.execute(voidVoidContext);
     }
+
 }

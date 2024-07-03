@@ -132,6 +132,21 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
       </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid</artifactId>
+        <version>1.2.21</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-sync</artifactId>
+      </dependency>
     </dependencies>
     <packaging>pom</packaging>
 
