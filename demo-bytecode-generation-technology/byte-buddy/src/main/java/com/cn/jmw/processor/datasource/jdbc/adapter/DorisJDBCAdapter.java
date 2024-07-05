@@ -9,8 +9,26 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.InstrumentedType;
+import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.This;
+import net.bytebuddy.implementation.bytecode.ByteCodeAppender;
+import net.bytebuddy.implementation.bytecode.StackManipulation;
+import net.bytebuddy.implementation.bytecode.member.FieldAccess;
+import net.bytebuddy.implementation.bytecode.member.MethodInvocation;
+import net.bytebuddy.implementation.bytecode.member.MethodReturn;
+import net.bytebuddy.implementation.bytecode.member.MethodVariableAccess;
+import net.bytebuddy.jar.asm.MethodVisitor;
+import net.bytebuddy.matcher.ElementMatchers;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -21,24 +39,27 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.commons.codec.binary.Base64;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
 
 public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
 
     // DORIS HTTP PORT
     private static final int DORIS_HTTP_PORT = 8030;
+
+    // 定义一个静态字段来存储fieldNames
+//    private List<String> fieldNames = new ArrayList<>();
 
     public DorisJDBCAdapter(String hostname, Integer port, String databaseName, String username, String password) {
         super(hostname, port, databaseName, username, password);
@@ -192,7 +213,6 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
 
     @Override
     public Object instantiate(String databaseName,String tableName)  {
-
         try {
             DatabaseMetaData metaData = pool.getConnection(hostname+port+databaseName).getMetaData();
             ResultSet resultSet = metaData.getColumns(databaseName, null, tableName, null);
@@ -201,23 +221,35 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
             ByteBuddy byteBuddy = new ByteBuddy();
 
             // 开始构建类
-            DynamicType.Builder<?> builder = byteBuddy.subclass(Object.class).name(tableName);
+            tableName = toCamelCase(tableName);
+            //默认没有构造器
+            DynamicType.Builder<?> builder = byteBuddy.subclass(Object.class)
+                    .name(tableName);
+
+            //记录字段名 fieldNames
+            List<String> fieldNames = new ArrayList<>();
+            //记录字段类型 fieldTypes
+            List<Class<?>> fieldTypes = new ArrayList<>();
 
             // 使用反射来设置字段的值
             while (resultSet.next()) {
                 String columnName = resultSet.getString("COLUMN_NAME");
+                String camelCaseColumnName = toCamelCase(columnName);
+                fieldNames.add(camelCaseColumnName);
                 String columnType = resultSet.getString("TYPE_NAME");
+                fieldTypes.add(sqlTypeToJavaType(columnType));
 
                 // 将SQL类型转换为Java类型
                 Class<?> javaType = sqlTypeToJavaType(columnType);
 
                 // 将字段添加到类中
-                builder = builder.defineField(columnName, javaType, Modifier.PUBLIC)
-                        .defineMethod("get" + capitalize(columnName), javaType, Modifier.PUBLIC)
+                builder = builder.defineField(camelCaseColumnName, javaType, Modifier.PUBLIC)
+                        .defineMethod("get" + capitalize(camelCaseColumnName), javaType, Modifier.PUBLIC)
                         .intercept(FieldAccessor.ofBeanProperty())
-                        .defineMethod("set" + capitalize(columnName), void.class, Modifier.PUBLIC)
+                        .defineMethod("set" + capitalize(camelCaseColumnName), void.class, Modifier.PUBLIC)
                         .withParameter(javaType)
                         .intercept(FieldAccessor.ofBeanProperty());
+
             }
 
             Class<?> loadedClass;
@@ -285,4 +317,17 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
 
+    public static String toCamelCase(String s) {
+        String[] parts = s.split("_");
+        StringBuilder camelCaseString = new StringBuilder(parts[0].toLowerCase());
+        for (int i = 1; i < parts.length; i++) {
+            camelCaseString.append(toProperCase(parts[i]));
+        }
+        return camelCaseString.toString();
+    }
+
+    public static String toProperCase(String s) {
+        return s.substring(0, 1).toUpperCase() +
+                s.substring(1).toLowerCase();
+    }
 }
