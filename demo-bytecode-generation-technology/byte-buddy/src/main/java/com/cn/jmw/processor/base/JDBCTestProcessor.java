@@ -2,11 +2,17 @@ package com.cn.jmw.processor.base;
 
 import com.cn.jmw.processor.BaseProcessor;
 import com.cn.jmw.processor.datasource.DatabaseAdapter;
+import com.cn.jmw.processor.datasource.JDBCAdapter;
+import com.cn.jmw.processor.datasource.enums.DatabaseTypeEnum;
 import com.cn.jmw.processor.datasource.factory.DatabaseAdapterFactory;
 import com.cn.jmw.processor.datasource.pojo.JDBCConnectionEntity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+
+import static com.cn.jmw.common.exception.enums.StructuredErrorCodeConstants.INPUT_GET_DB_TYPE_IS_NULL;
+import static com.cn.jmw.common.exception.enums.StructuredErrorCodeConstants.INPUT_IS_NULL;
+import static com.cn.jmw.common.exception.util.ServiceExceptionUtil.exception;
 
 /**
  * JDBC 测试处理器
@@ -21,7 +27,17 @@ public class JDBCTestProcessor extends BaseProcessor<JDBCConnectionEntity, Boole
 
     @Override
     public Boolean process(JDBCConnectionEntity input, Object... data) throws Exception {
-        DatabaseAdapter adapter = DatabaseAdapterFactory.getSQLAdapter(input);
+        if (input == null) {
+            throw exception(INPUT_IS_NULL);
+        }
+        if (input.getDbType() == null) {
+            throw exception(INPUT_GET_DB_TYPE_IS_NULL);
+        }
+        if (input.getDbType().getDatabaseCategory().equals(DatabaseTypeEnum.SQL.getDatabaseCategory())){
+            JDBCAdapter sqlAdapter = DatabaseAdapterFactory.getSQLAdapter(input);
+            return sqlAdapter.testConnection();
+        }
+        DatabaseAdapter adapter = DatabaseAdapterFactory.getNoSQLAdapter(input);
         return adapter.testConnection();
     }
 }

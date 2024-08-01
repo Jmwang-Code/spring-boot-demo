@@ -3,33 +3,25 @@ package com.cn.jmw.processor.datasource.jdbc.adapter;
 import com.cn.jmw.processor.datasource.JDBCAdapter;
 import com.cn.jmw.processor.datasource.enums.DatabaseEnum;
 import com.cn.jmw.processor.datasource.instantiation.Instantiation;
+import com.cn.jmw.processor.datasource.jdbc.dialect.Dialect;
+import com.cn.jmw.processor.datasource.jdbc.dialect.SQLQueryBuilder;
+import com.cn.jmw.processor.datasource.jdbc.dialect.enums.SQLFunctionEnum;
+import com.cn.jmw.processor.datasource.jdbc.dialect.enums.SQLOperatorEnum;
+import com.cn.jmw.processor.datasource.jdbc.dialect.pojo.*;
 import com.cn.jmw.processor.datasource.pojo.StreamLoadResult;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
-import net.bytebuddy.dynamic.scaffold.InstrumentedType;
-import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.FieldAccessor;
-import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.AllArguments;
-import net.bytebuddy.implementation.bind.annotation.This;
-import net.bytebuddy.implementation.bytecode.ByteCodeAppender;
-import net.bytebuddy.implementation.bytecode.StackManipulation;
-import net.bytebuddy.implementation.bytecode.member.FieldAccess;
-import net.bytebuddy.implementation.bytecode.member.MethodInvocation;
-import net.bytebuddy.implementation.bytecode.member.MethodReturn;
-import net.bytebuddy.implementation.bytecode.member.MethodVariableAccess;
-import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.matcher.ElementMatchers;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPut;
@@ -39,32 +31,42 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jooq.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
-import java.sql.Date;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
-
-
-public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
+@Slf4j
+public class DorisJDBCAdapter extends JDBCAdapter implements Dialect, Instantiation {
 
     // DORIS HTTP PORT
     private static final int DORIS_HTTP_PORT = 8030;
 
-    // 定义一个静态字段来存储fieldNames
-//    private List<String> fieldNames = new ArrayList<>();
-
+    /**
+     * 构造函数用于创建DorisJDBCAdapter实例。
+     *
+     * @param hostname     Doris服务器的主机名
+     * @param port         Doris服务器的端口号
+     * @param databaseName 数据库名称
+     * @param username     用户名
+     * @param password     密码
+     */
     public DorisJDBCAdapter(String hostname, Integer port, String databaseName, String username, String password) {
         super(hostname, port, databaseName, username, password);
     }
 
+    /**
+     * 获取Doris的连接字符串。
+     *
+     * @return 返回连接字符串，包含连接所需的参数
+     */
     @Override
     public String getConnectionString() {
         return "jdbc:mysql://" + super.hostname + ":" + super.port + "/" + super.databaseName
@@ -72,10 +74,15 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
     }
 
     /**
-     * Query data using batch
+     * 使用批量查询数据。
+     *
+     * @param sql    执行的SQL语句
+     * @param params SQL语句的参数
+     * @return 查询结果，返回一个Map列表
+     * @throws SQLException 如果发生SQL错误
      */
     public List<Map<String, Object>> queryBatch(String sql, Object[] params) throws SQLException {
-        return super.runner.query(pool.getConnection(hostname+port+databaseName), sql, new MapListHandler(), params);
+        return super.runner.query(pool.getConnection(hostname + port + databaseName), sql, new MapListHandler(), params);
     }
 
     @Override
@@ -88,7 +95,11 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
         return DatabaseEnum.DORIS;
     }
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    //非全字段映射
+    public static final ObjectMapper objectMapper = new ObjectMapper();
+
+    //全字段映射
+    private static final ObjectMapper fullFieldObjectMapper = new ObjectMapper();
 
     /**
      * 在将 LocalDateTime 对象转换为 JSON 时，ObjectMapper 默认会将其转换为一个包含年、月、日、小时、分钟、秒和纳秒的数组。
@@ -102,6 +113,10 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
         module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         objectMapper.registerModule(module);
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+
+        fullFieldObjectMapper.registerModule(module);
+        fullFieldObjectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
 
     private final static HttpClientBuilder httpClientBuilder = HttpClients
@@ -113,14 +128,16 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
                     return true;
                 }
             });
+
     /**
      * 使用流加载将数据加载到 Doris 中。
      *
-     * @param json 要加载的 JSON 数据
+     * @param json      要加载的 JSON 数据
      * @param tableName 要将数据加载到其中的表的名称
+     * @param columns   列的名称关系
      * @throws IOException 如果发生 IO 错误
      */
-    private StreamLoadResult streamLoad(String json, String tableName) throws IOException {
+    private StreamLoadResult streamLoad(String json, String tableName, String columns) throws IOException {
         String url = "http://" + super.hostname + ":" + DORIS_HTTP_PORT + "/api/" + super.databaseName + "/" + tableName + "/_stream_load";
 
         String loadResult = "";
@@ -136,15 +153,31 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
                     calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
                     calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND),
                     UUID.randomUUID().toString().replaceAll("-", ""));
+            //指定导入数据格式 csv, json, arrow, csv_with_names
             put.setHeader("format", "json");
+            // 用于指定 Doris 该次导入的标签，标签相同的数据无法多次导入
             put.setHeader("label", label);
+            // 用于指定导入文件中的列分隔符
             put.setHeader("column_separator", ",");
             // strip_outer_array: 布尔类型，为true表示json数据以数组对象开始且将数组对象中进行展平，默认值是false
             put.setHeader("strip_outer_array", "true");
+            if (StringUtils.isNotBlank(columns)) {
+                /**
+                 * 部分列更新
+                 *
+                 * Doris 在主键模型的导入更新，提供了可以直接插入或者更新部分列数据的功能，不需要先读取整行数据，这样更新效率就大幅提升了。
+                 */
+                put.setHeader("partial_columns", "true");
+                /**
+                 * 设置 columns
+                 * 指定导入文件中的列和 table 中的列的对应关系。
+                 */
+                put.setHeader("columns", columns);
+            }
 
             // 设置导入文件。
             // 这里也可以使用 StringEntity 来传输任意数据。
-            StringEntity entity = new StringEntity(json,StandardCharsets.UTF_8);
+            StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
             put.setEntity(entity);
 
             try (CloseableHttpResponse response = client.execute(put)) {
@@ -167,6 +200,13 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
         return streamLoadResult;
     }
 
+    /**
+     * 生成基本认证的HTTP头部。
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 返回基本认证的HTTP头部字符串
+     */
     private String basicAuthHeader(String username, String password) {
         final String tobeEncode = username + ":" + password;
         byte[] encoded = Base64.encodeBase64(tobeEncode.getBytes(StandardCharsets.UTF_8));
@@ -185,30 +225,61 @@ public class DorisJDBCAdapter extends JDBCAdapter implements Instantiation {
     }
 
     /**
-     * 将一个大列表分成size份进行streamLoad
+     * 将一个大列表分成指定大小进行流加载。
+     *
+     * @param list     要加载的对象列表
+     * @param tableName 要将数据加载到其中的表的名称
+     * @param size     每批次的大小
+     * @param columns  列的名称关系
+     * @return StreamLoadResult数组
+     * @throws IOException 如果发生 IO 错误
      */
-    public StreamLoadResult[] streamLoadBatch(List<?> list, String tableName, int size) throws IOException {
+    public StreamLoadResult[] streamLoadBatch(List<?> list, String tableName, int size, String columns) throws IOException {
         int total = list.size();
-        if (list==null || total==0){
+        if (list == null || total == 0) {
             return new StreamLoadResult[0];
         }
+
         int batch = total / size;
         StreamLoadResult[] results = new StreamLoadResult[batch + 1];
         int remainder = total % size;
         int start = 0;
         for (int i = 0; i < batch; i++) {
             List<?> subList = list.subList(start, start + size);
-            StreamLoadResult streamLoadResult = streamLoad(listToJson(subList), tableName);
+            StreamLoadResult streamLoadResult = streamLoad(listToJson(subList), tableName, columns);
             results[i] = streamLoadResult;
             start += size;
         }
         if (remainder > 0) {
             List<?> subList = list.subList(start, start + remainder);
-            StreamLoadResult streamLoadResult = streamLoad(listToJson(subList), tableName);
+            StreamLoadResult streamLoadResult = streamLoad(listToJson(subList), tableName, columns);
             results[batch] = streamLoadResult;
         }
 
         return results;
+    }
+
+    /**
+     * 将驼峰命名转换为下划线命名。
+     *
+     * @param str 输入的字符串
+     * @return 转换后的字符串
+     */
+    public static String camelCaseToUnderScore(String str) {
+        String regex = "([a-z])([A-Z]+)";
+        String replacement = "$1_$2";
+        str = str.replaceAll(regex, replacement).toLowerCase();
+        return str;
+    }
+
+    @Override
+    public String getDialectSQL(SQLQueryBuilder queryBuilder) {
+        long l = System.currentTimeMillis();
+        String sql = queryBuilder.buildSQL();
+        log.info("执行耗时：" + (System.currentTimeMillis() - l) + "ms");
+        System.out.println();
+        System.out.println(sql);
+        return sql;
     }
 
     @Override

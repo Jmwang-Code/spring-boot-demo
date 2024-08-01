@@ -27,6 +27,7 @@ public interface StructuredErrorCodeConstants {
      * 617 - 入参input不允许为空 - 一般是入参校验失败
      * 618 - input 为 null - 一般是入参校验失败
      * 619 - input.getDbType（） 为 null - 一般是入参校验失败
+     * 620 - 无法连接数据库。（请检查数据库连接信息是否正确） - 一般是数据库连接失败
      */
     ErrorCode INVALID_INPUT = new ErrorCode(600, "输入数据不正确");
     ErrorCode INVALID_OUTPUT = new ErrorCode(601, "输出数据不正确");
@@ -48,5 +49,6 @@ public interface StructuredErrorCodeConstants {
     ErrorCode INPUT_NOT_ALLOWED_EMPTY = new ErrorCode(617, "入参input不允许为空");
     ErrorCode INPUT_IS_NULL = new ErrorCode(618, "input 为 null");
     ErrorCode INPUT_GET_DB_TYPE_IS_NULL = new ErrorCode(619, "input.getDbType（） 为 null");
+    ErrorCode UNABLE_TO_CONNECT_DATABASE = new ErrorCode(620, "无法连接数据库。（请检查数据库连接信息是否正确）");
 
 }
