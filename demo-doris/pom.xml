@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.cn.jmw</groupId>
+        <artifactId>spring-boot-demo</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>demo-doris</artifactId>
+    <name>Archetype - demo-doris</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <adbc.version>0.12.0</adbc.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.arrow.adbc</groupId>
+            <artifactId>adbc-driver-jdbc</artifactId>
+            <version>${adbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.arrow.adbc</groupId>
+            <artifactId>adbc-core</artifactId>
+            <version>${adbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.arrow.adbc</groupId>
+            <artifactId>adbc-driver-manager</artifactId>
+            <version>${adbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.arrow.adbc</groupId>
+            <artifactId>adbc-sql</artifactId>
+            <version>${adbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.arrow.adbc</groupId>
+            <artifactId>adbc-driver-flight-sql</artifactId>
+            <version>${adbc.version}</version>
+        </dependency>
+    </dependencies>
+</project>

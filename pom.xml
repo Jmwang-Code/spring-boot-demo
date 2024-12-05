@@ -103,6 +103,7 @@
     <module>demo-Dynamic-Bytecode</module>
       <module>demo-reflex</module>
     <module>demo-bytecode-generation-technology</module>
+      <module>demo-doris</module>
       <!--    <module>demo-activiti7</module>-->
   </modules>
     <dependencies>
