@@ -24,16 +24,22 @@ import org.junit.Test;
 public class DorisArrowFlightSQL {
 
     /**
-     * 前置要求 再 be 和 fe分别配置
-     * 比如FE arrow_flight_sql_port = 8815
-     *    BE arrow_flight_sql_port = 8816
+     * <h1>一、前置要求：be和fe分别配置</h1>
+     * <br>
+     * 比如FE arrow_flight_sql_port = 8815 <br>
+     *    BE arrow_flight_sql_port = 8816 <br>
+     * <br>
+     * <h2>二、idea上配置</h2>
+     * <h3>2.1 虚拟机选项上增加这个命令 </h3>
+     * --add-opens=java.base/java.nio=ALL-UNNAMED <br>
+     * <h3>2.2 环境变量上增加 </h3>
+     * JDK_JAVA_OPTIONS="--add-opens=java.base/java.nio=ALL-UNNAMED"<br><br>
      *
-     * 在运行的配置中增加
-     * --add-opens=java.base/java.nio=ALL-UNNAMED
-     *
-     * jar包运行的命令中增加
-     * 直接在命令行上
+     * <h2>三、jar包运行的命令中增加</h2>
+     * <h3>3.1 直接JVM虚拟机命令</h3>
      * java --add-opens=java.base/java.nio=ALL-UNNAMED -jar xxx.jar
+     * <h3>3.2 环境变量命令</h3>
+     * env JDK_JAVA_OPTIONS="--add-reads=org.apache.arrow.flight.core=ALL-UNNAMED --add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED" java -jar xxx.jar
      */
     //--add-opens=java.base/java.nio=ALL-UNNAMED
     @Test
