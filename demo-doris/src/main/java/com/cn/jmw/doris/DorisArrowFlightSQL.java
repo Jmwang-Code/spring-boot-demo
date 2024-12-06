@@ -48,17 +48,17 @@ public class DorisArrowFlightSQL {
         AdbcDriver.PARAM_PASSWORD.set(parameters, "123456aA!@");
         AdbcDatabase adbcDatabase = driver.open(parameters);
 
-// 2. new connection
+        // 2. new connection
         AdbcConnection connection = adbcDatabase.connect();
         AdbcStatement stmt = connection.createStatement();
 
-// 3. execute query
+        // 3. execute query
         stmt.setSqlQuery("select * from bds_log.bds_wangc_log;");
         AdbcStatement.QueryResult queryResult = stmt.executeQuery();
         ArrowReader reader = queryResult.getReader();
 
         int i = 0;
-// 4. load result
+        // 4. load result
         List<String> result = new ArrayList<>();
         while (reader.loadNextBatch()) {
             VectorSchemaRoot root = reader.getVectorSchemaRoot();
@@ -93,7 +93,7 @@ public class DorisArrowFlightSQL {
         System.out.printf("batchs %d\n", result.size());
 
         System.out.println("最后时间:" + (System.currentTimeMillis() - start) / 1000);
-// 5. close
+        // 5. close
         reader.close();
         queryResult.close();
         stmt.close();
