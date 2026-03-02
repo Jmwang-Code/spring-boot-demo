@@ -1,5 +1,6 @@
 import java.nio.ByteBuffer;
 
+//-XX:MaxDirectMemorySize=512m
 public class JNIJava_native_interface {
 
 
